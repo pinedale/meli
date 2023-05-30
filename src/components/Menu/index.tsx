@@ -7,12 +7,6 @@ const Menu = () => {
     <div className="mx-auto border-gray-300 border-b border-t items-center flex justify-center">
       <ul className="flex">
         <li className="w-40 text-center">
-          <Link className="py-3 text-slate-600 font-semibold inline-block" to="/clients">Client</Link>
-        </li>
-        <li className="w-40 text-center">
-          <Link className="py-3 text-slate-600 font-semibold inline-block" to="/users">Users</Link>
-        </li>
-        <li className="w-40 text-center">
           <Link className="py-3 text-slate-600 font-semibold inline-block" to="/roster">Roster</Link>
         </li>
         <li className="w-40 text-center">

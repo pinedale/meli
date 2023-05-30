@@ -4,7 +4,7 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import { useReducer, useState } from 'react'
+import { useState } from 'react'
 
 type Person = {
   title: string
@@ -76,7 +76,8 @@ const columns = [
 const Table = () => {
 
   const [data, setData] = useState(() => [...defaultData])
-  const rerender = useReducer(() => ({}), {})[1]
+
+  console.log(setData)
 
   const table = useReactTable({
     data,

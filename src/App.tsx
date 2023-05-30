@@ -1,21 +1,15 @@
 
 import { Outlet, useRoutes } from 'react-router-dom'
 
-import Header from './components/Header'
-import Results from './components/Results';
-import Product from './components/Product';
+import Header from './components/Header';
 import Menu from './components/Menu';
-import Summary from './components/Summary';
-import Table from './components/Table';
+import Checklist from './views/Checklist';
+import Roster from './views/Roster';
 
 const Layout = () => (
   <>
     <Header />
     <Menu />
-    <Summary />
-    <div className="max-w-6xl mx-auto">
-      <Table />
-    </div>
     <Outlet />
   </>
 );
@@ -26,12 +20,12 @@ const routes = [
     element: <Layout />,
     children: [
       {
-        path: "/items",
-        element: <Results />
+        path: "/checklist",
+        element: <Checklist />
       },
       {
-        path: "/items/:id",
-        element: <Product />
+        path: "/roster",
+        element: <Roster />
       },
     ]
   }
