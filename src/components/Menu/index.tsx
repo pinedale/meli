@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom"
+import { NavLink } from "react-router-dom"
 
 
 
@@ -7,22 +7,22 @@ const Menu = () => {
     <div className="mx-auto border-gray-300 border-b border-t items-center flex justify-center">
       <ul className="flex">
         <li className="w-40 text-center">
-          <Link className="py-3 text-slate-600 font-semibold inline-block" to="/roster">Roster</Link>
+          <NavLink className={({ isActive }) => (isActive ? "text-red-app py-3 font-semibold block border-b-2 border-red-app hover:text-red-app" : "py-3 text-slate-600 font-semibold hover:text-red-app w-full block border-b-2 border-white")} to="/roster">Roster</NavLink>
         </li>
         <li className="w-40 text-center">
-          <Link className="py-3 text-slate-600 font-semibold inline-block" to="/test">Test</Link>
+          <NavLink className={({ isActive }) => (isActive ? "text-red-app py-3 font-semibold block border-b-2 border-red-app hover:text-red-app" : "py-3 text-slate-600 font-semibold hover:text-red-app w-full block border-b-2 border-white")} to="/test">Test</NavLink>
         </li>
         <li className="w-40 text-center">
-          <Link className="py-3 text-slate-600 font-semibold inline-block" to="/checklist">Checklist</Link>
+          <NavLink className={({ isActive }) => (isActive ? "text-red-app py-3 font-semibold block border-b-2 border-red-app hover:text-red-app" : "py-3 text-slate-600 font-semibold hover:text-red-app w-full block border-b-2 border-white")} to="/checklist">Checklist</NavLink>
         </li>
         <li className="w-40 text-center">
-          <Link className="py-3 text-slate-600 font-semibold inline-block" to="/mandatories">Mandatories</Link>
+          <NavLink className={({ isActive }) => (isActive ? "text-red-app py-3 font-semibold block border-b-2 border-red-app hover:text-red-app" : "py-3 text-slate-600 font-semibold hover:text-red-app w-full block border-b-2 border-white")} to="/mandatories">Mandatories</NavLink>
         </li>
         <li className="w-40 text-center">
-          <Link className="py-3 text-slate-600 font-semibold inline-block" to="/docuements">Documents</Link>
+          <NavLink className={({ isActive }) => (isActive ? "text-red-app py-3 font-semibold block border-b-2 border-red-app hover:text-red-app" : "py-3 text-slate-600 font-semibold hover:text-red-app w-full block border-b-2 border-white")} to="/docuements">Documents</NavLink>
         </li>
         <li className="w-40 text-center">
-          <Link className="py-3 text-slate-600 font-semibold inline-block" to="/roster">Bundles</Link>
+          <NavLink className={({ isActive }) => (isActive ? "text-red-app py-3 font-semibold block border-b-2 border-red-app hover:text-red-app" : "py-3 text-slate-600 font-semibold hover:text-red-app w-full block border-b-2 border-white")} to="/bundles">Bundles</NavLink>
         </li>
       </ul>
     </div>

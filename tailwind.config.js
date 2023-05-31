@@ -10,8 +10,9 @@ export default {
     extend: {
       colors: {
         ...colors,
-        "primary-yellow": "#FFE600",
-        "primary-gray": "#EEEEEE"
+        "primary-gray": "#EEEEEE",
+        "green-app": "#008489",
+        "red-app": "#FF5A5F",
       },
       maxWidth: {
         'default': '980px',
