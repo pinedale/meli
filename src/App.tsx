@@ -8,6 +8,8 @@ import Roster from './views/Roster';
 import Login from './views/authenticated/Login';
 import Test from './views/Test';
 import Mandatories from './views/Mandatories';
+import Documents from './views/Documents';
+import Bundles from './views/Bundles';
 
 const Layout = () => (
   <>
@@ -43,6 +45,14 @@ const routes = [
       {
         path: "/mandatories",
         element: <Mandatories />
+      },
+      {
+        path: "/documents",
+        element: <Documents />
+      },
+      {
+        path: "/bundles",
+        element: <Bundles />
       },
     ]
   },

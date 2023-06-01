@@ -19,7 +19,7 @@ const Menu = () => {
           <NavLink className={({ isActive }) => (isActive ? "text-red-app py-3 font-semibold block border-b-2 border-red-app hover:text-red-app" : "py-3 text-slate-600 font-semibold hover:text-red-app w-full block border-b-2 border-white")} to="/mandatories">Mandatories</NavLink>
         </li>
         <li className="w-40 text-center">
-          <NavLink className={({ isActive }) => (isActive ? "text-red-app py-3 font-semibold block border-b-2 border-red-app hover:text-red-app" : "py-3 text-slate-600 font-semibold hover:text-red-app w-full block border-b-2 border-white")} to="/docuements">Documents</NavLink>
+          <NavLink className={({ isActive }) => (isActive ? "text-red-app py-3 font-semibold block border-b-2 border-red-app hover:text-red-app" : "py-3 text-slate-600 font-semibold hover:text-red-app w-full block border-b-2 border-white")} to="/documents">Documents</NavLink>
         </li>
         <li className="w-40 text-center">
           <NavLink className={({ isActive }) => (isActive ? "text-red-app py-3 font-semibold block border-b-2 border-red-app hover:text-red-app" : "py-3 text-slate-600 font-semibold hover:text-red-app w-full block border-b-2 border-white")} to="/bundles">Bundles</NavLink>
