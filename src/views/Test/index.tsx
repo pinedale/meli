@@ -4,7 +4,7 @@ import Table from "../../components/Table";
 import Modal from "../../components/Modal";
 import RostertFields from "./TestFields";
 
-const Test = () =>{
+const Test = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => {

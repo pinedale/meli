@@ -2,7 +2,7 @@ import { useState } from "react";
 import Summary from "../../components/Summary";
 import Table from "../../components/Table";
 import Modal from "../../components/Modal";
-import MandatoriesFields from "./TestFields";
+import MandatoriesFields from "./MandatoriesFields";
 
 const Mandatories = () =>{
   const [isModalOpen, setIsModalOpen] = useState(false);

@@ -1,6 +1,15 @@
 import { unaLogo } from "../../../assets/images";
 import { useForm } from 'react-hook-form';
 import useLogin from './service';
+import useUser from "../../../hooks/useUser";
+import { Navigate, useNavigate } from "react-router-dom";
+// import { yupResolver } from "@hookform/resolvers";
+import * as yup from "yup";
+
+const schema = yup.object({
+  email: yup.string().email("please enter a valid email").required("Required field"),
+  password: yup.string().required("Required field"),
+})
 
 type LoginForm = {
   email: string;
@@ -8,12 +17,22 @@ type LoginForm = {
 }
 
 const Login: React.FC = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm<LoginForm>();
-  const { login, isLoading, isError, data } = useLogin();
-  console.log("🚀 ~ file: index.tsx:13 ~ data:", data)
+  const navigate = useNavigate()
+  const { register, handleSubmit, formState: { errors } } = useForm<LoginForm>({
+    defaultValues: {
+      email: "",
+      password: "",
+    }
+  });
+  const { mutate } = useLogin({
+    onSettled: (data) => {
+      console.log("🚀 ~ file: index.tsx:20 ~ data:", data)
+      navigate('/roster')
+    }
+  });
 
-  const onSubmit = handleSubmit(({ email, password }) => {
-    login(email, password);
+  const onSubmit = handleSubmit((values) => {
+    mutate(values)
   });
 
   return (
@@ -32,6 +51,7 @@ const Login: React.FC = () => {
                 placeholder="Email"
                 {...register('email', { required: 'Email es requerido' })}
               />
+              <p>{errors.email?.message}</p>
             </div>
             <div>
               <input
