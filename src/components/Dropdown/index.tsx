@@ -3,7 +3,7 @@ import { AiFillCaretDown } from "react-icons/Ai";
 import Modal from "../Modal";
 import ProfileFields from "../../views/Profile/ProfileFields";
 
-const Dropdown = ({userData}) =>{
+const Dropdown = () =>{
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const toggleDropdown = () =>{
     setIsOpen(!isOpen);
@@ -25,7 +25,7 @@ const Dropdown = ({userData}) =>{
       <div onClick={toggleDropdown} className="text-gray-700 flex items-center cursor-pointer gap-1">
         <div className="text-xs text-right">
           <p>Leandro Pineda</p>
-          <p className="text-red-app">{userData?.name}</p>
+          <p className="text-red-app">Corporate</p>
         </div>
         <div className="text-sm">
           <AiFillCaretDown />

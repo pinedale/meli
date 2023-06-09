@@ -1,12 +1,10 @@
-import { Modal } from "flowbite"
+
 import { useState } from "react";
+import Modal from "../../components/Modal";
+import MandatoriesFields from "../Mandatories/MandatoriesFields";
 
 const Profile = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
 
   const closeModal = () => {
     setIsModalOpen(false);

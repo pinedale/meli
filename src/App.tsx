@@ -1,5 +1,5 @@
 
-import { Outlet, Route, Routes } from 'react-router-dom'
+import { Outlet, Route, Routes, useNavigate } from 'react-router-dom'
 import Checklist from './views/Checklist';
 import Roster from './views/roster';
 import Login from './views/unauthenticated/Login';
@@ -8,35 +8,24 @@ import Mandatories from './views/Mandatories';
 import Documents from './views/Documents';
 import Bundles from './views/Bundles';
 import RequiredAuthRoute from './routes/RequiredRoute';
+import { useEffect } from 'react';
 
 const Layout = () => {
+  const navigate = useNavigate()
+  const token = sessionStorage.getItem("token");
+  console.log("🚀 ~ file: App.tsx:15 ~ Layout ~ tokenssss:", token)
+
+  useEffect(() => {
+    if (token) {
+      navigate('/roster')
+    }
+  }, [token]);
+
   return(
   <>
     <Outlet />
   </>
 )};
-
-const PublicLayout = () => (
-  <>
-    <Outlet />
-  </>
-);
-
-const UnAuthenticatedViews = () => {
-  return(
-    <Routes>
-      <Route path='/login' element={<Login />}/>
-    </Routes>
-  )
-}
-
-const AuthenticatedViews = () => {
-  return(
-    <Routes>
-      <Route path='/roster' element={<Roster />}/>
-    </Routes>
-  )
-}
 
 const App = () => {
   
