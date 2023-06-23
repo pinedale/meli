@@ -1,10 +1,12 @@
 import { useState } from "react"
-import { AiFillCaretDown } from "react-icons/Ai";
+// import { AiFillCaretDown } from "react-icons/Ai";
 import Modal from "../Modal";
-import ProfileFields from "../../views/Profile/ProfileFields";
+import ProfileFields from "../../views/Profile/profile-fields";
+import { useNavigate } from "react-router-dom";
 
 const Dropdown = () =>{
   const [isOpen, setIsOpen] = useState<boolean>(false)
+  const navigate = useNavigate()
   const toggleDropdown = () =>{
     setIsOpen(!isOpen);
   }
@@ -20,6 +22,12 @@ const Dropdown = () =>{
     setIsModalOpen(false);
   };
 
+  const logout = () =>{
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("roles");
+    navigate("/")
+  }
+
   return(
     <div className="relative">
       <div onClick={toggleDropdown} className="text-gray-700 flex items-center cursor-pointer gap-1">
@@ -28,7 +36,7 @@ const Dropdown = () =>{
           <p className="text-red-app">Corporate</p>
         </div>
         <div className="text-sm">
-          <AiFillCaretDown />
+          {/* <AiFillCaretDown /> */}
         </div>
       </div>
       {isOpen && (
@@ -38,7 +46,7 @@ const Dropdown = () =>{
               <a className="px-10 py-1 inline-block" onClick={openModal}>Profile</a>
             </li>
             <li>
-              <a className="px-10 py-1 inline-block" href="">Logout</a>
+              <a className="px-10 py-1 inline-block" onClick={logout}>Logout</a>
             </li>
           </ul>
         </nav>

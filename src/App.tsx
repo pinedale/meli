@@ -13,7 +13,6 @@ import { useEffect } from 'react';
 const Layout = () => {
   const navigate = useNavigate()
   const token = sessionStorage.getItem("token");
-  console.log("🚀 ~ file: App.tsx:15 ~ Layout ~ tokenssss:", token)
 
   useEffect(() => {
     if (token) {

@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import Modal from "../../components/Modal";
-import MandatoriesFields from "../Mandatories/MandatoriesFields";
+import MandatoriesFields from "../Mandatories/components/mandatories-fields";
 
 const Profile = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);

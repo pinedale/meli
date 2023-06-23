@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react';
+import { createContext } from 'react';
 
 export const UserContext = createContext("");
 
@@ -7,17 +7,17 @@ type Props = {
 }
 
 const AuthProvider = ({ children }: Props) => {
-  const [user, setUser] = useState()
+  // const [user, setUser] = useState()
 
 
-  const userInfo = {
-    user,
-    setUser,
-  };
+  // const userInfo = {
+  //   user,
+  //   setUser,
+  // };
 
 
   return (
-    <UserContext.Provider value={userInfo}>
+    <UserContext.Provider value="">
       {children}
     </UserContext.Provider>
   );

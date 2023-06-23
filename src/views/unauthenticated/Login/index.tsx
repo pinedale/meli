@@ -32,7 +32,10 @@ const Login: React.FC = () => {
       const token = data?.access
       if (token){
         sessionStorage.setItem('token', token)
+        sessionStorage.setItem("roles", JSON.stringify(data.roles))
       }
+      const roleList = sessionStorage.getItem("roles")
+      console.log("🚀 ~ file: index.tsx:38 ~ roleList:", roleList)
       navigate('/roster')
     },
     onError: (error) => {

@@ -1,8 +1,9 @@
 import { useState } from "react";
 import Summary from "../../components/Summary";
-import Table from "../../components/Table";
+
 import Modal from "../../components/Modal";
-import ChecklistFields from "./ChecklistFields";
+import ChecklistFields from "./components/checklist-fields";
+import Table from "./components/table";
 
 const Checklist = () =>{
   const [isModalOpen, setIsModalOpen] = useState(false);
