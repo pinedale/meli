@@ -5,7 +5,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 import useChecklist from './service'
-import {type ChecklistItem} from "./service"
+import { type ChecklistItem } from "./service"
 
 const defaultData: ChecklistItem[] = []
 
@@ -51,17 +51,14 @@ const columns = [
 ]
 const Table = () => {
 
-  const { data, error, isLoading, isSuccess  } = useChecklist({params: {page: 1, items: 20}})
+  const { data = [], error, isLoading, isSuccess } = useChecklist({ params: { page: 1, items: 20 } })
   console.log("🚀 ~ file: index.tsx:56 ~ Table ~ data:", data)
 
   const table = useReactTable({
-    data: isSuccess ? data : [],
+    data,
     columns,
     getCoreRowModel: getCoreRowModel(),
   })
-
-  const aaa = table.getRowModel().rows
-  console.log("🚀 ~ file: index.tsx:63 ~ Table ~ aaa:", aaa)
 
   return (
     <div className="overflow-hidden border rounded-lg">
@@ -74,9 +71,9 @@ const Table = () => {
                   {header.isPlaceholder
                     ? null
                     : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
+                      header.column.columnDef.header,
+                      header.getContext()
+                    )}
                 </th>
               ))}
             </tr>

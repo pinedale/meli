@@ -31,7 +31,7 @@ a:hover {
 body {
   margin: 0;
   background-color: #FFF;
-  height: 100vh;
+  min-height: 100vh;
 }
 
 h1 {

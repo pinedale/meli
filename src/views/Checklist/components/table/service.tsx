@@ -25,7 +25,7 @@ const token = sessionStorage.getItem("token");
 
 const useChecklist = ({ params }: { params: Params }): UseQueryResult<Checklist, AxiosError> => {
   return useQuery<Checklist, AxiosError>(['list', params.page, params.items], async () => {
-    const response = await axios.get<Checklist>('https://backend-v2-sandbox.unatest.com/api/v2/checklists', {
+    const response = await axios.get<{checklists: Checklist}>('https://backend-v2-sandbox.unatest.com/api/v2/checklists', {
       params,
       headers: {
         'Accept': '*/*',
@@ -34,7 +34,7 @@ const useChecklist = ({ params }: { params: Params }): UseQueryResult<Checklist,
       }
     });
 
-    return response.data; // Asumiendo que la respuesta contiene los datos en la propiedad "data"
+    return response.data.checklists; // Asumiendo que la respuesta contiene los datos en la propiedad "data"
   });
 };
 export default useChecklist;

@@ -85,7 +85,7 @@ const Table = () => {
     columns,
     getCoreRowModel: getCoreRowModel(),
   })
-    console.log("🚀 ~ file: index.tsx:90 ~ Table ~ data:", data)
+  console.log("🚀 ~ file: index.tsx:88 ~ Table ~ table:", table)
 
   return (
     <div className="overflow-hidden border rounded-lg">
