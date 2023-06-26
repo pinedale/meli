@@ -77,8 +77,6 @@ const Table = () => {
 
   const [data, setData] = useState(() => [...defaultData])
 
-  console.log(setData)
-
   const table = useReactTable({
     data,
     columns,

@@ -1,5 +1,5 @@
 import axios, { AxiosError } from "axios"
-import { UseQueryResult, useQuery } from "react-query"
+import { UseMutationOptions, UseMutationResult, UseQueryResult, useMutation, useQuery } from "react-query"
 
 
 type Roles = {
@@ -12,11 +12,11 @@ type Roles = {
 }
 
 type ProfileInfoAttr = {
-    first_name: string,
-    last_name: string,
-    email: string,
-    phone_number: string,
-    roles: Array<Roles>
+  first_name: string,
+  last_name: string,
+  email: string,
+  phone_number?: string,
+  roles?: Array<Roles>
 }
 const token = sessionStorage.getItem("token");
 
@@ -33,4 +33,23 @@ const useProfile = (): UseQueryResult<ProfileInfoAttr, AxiosError> =>{
   })
 }
 
-export default useProfile;
+
+
+const useUpdateProfile = (
+  options: UseMutationOptions<ProfileInfoAttr, AxiosError, ProfileInfoAttr, unknown>
+): UseMutationResult<ProfileInfoAttr, AxiosError, ProfileInfoAttr, unknown> => useMutation(
+  async (data) => {
+    const response = await axios.put('https://backend-v2-sandbox.unatest.com/api/v2/profile', {profile: data}, {
+      headers: {
+        'Accept': '*/*',
+        'X-Current-Organization': '01GEFTPWQ9M8PGXR4JVVRYKGSX',
+        'Authorization': `Bearer ${token}`,
+      }
+    })
+
+    return response.data;
+  },
+  options
+)
+
+export { useProfile, useUpdateProfile };

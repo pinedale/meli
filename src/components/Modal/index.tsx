@@ -10,9 +10,7 @@ type ModalProps = {
   
     return (
       <div className="left-0 fixed h-screen w-full top-0 bottom-0 bg-white">
-        <form>
-          {children}
-        </form>
+        {children}
       </div>
     )
   }
