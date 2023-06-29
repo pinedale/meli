@@ -34,8 +34,9 @@ const useChecklist = ({ params }: { params: Params }): UseQueryResult<Checklist,
       }
     });
 
-    return response.data.checklists; // Asumiendo que la respuesta contiene los datos en la propiedad "data"
+    return response.data.checklists;
   });
 };
+
 export default useChecklist;
 export type {ChecklistItem} 

@@ -1,7 +1,7 @@
 
 import { Outlet, Route, Routes, useNavigate } from 'react-router-dom'
 import Checklist from './views/Checklist';
-import Roster from './views/roster';
+import Roster from './views/Roster';
 import Login from './views/unauthenticated/Login';
 import Test from './views/Test';
 import Mandatories from './views/Mandatories';

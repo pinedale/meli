@@ -6,37 +6,51 @@ type Params = {
   items: number;
 }
 
-type ChecklistItem = {
-  id: number;
-  color: string;
-  duration_mins: number | null;
-  kind: string;
-  status: string;
-  title: string;
-  categories_count: number;
-  sections_count: number;
-  questions_count: number;
-  updated_at: string;
+type Test = {
+  untaken: number;
+  finished: number;
+  started: number;
 }
 
-type Checklist = Array<ChecklistItem>
+type Checklist = {
+  untaken: number;
+  finished: number;
+  started: number;
+}
 
-// const useChecklist = ({ params }:{ params: Params}): UseQueryResult<Checklist, Error> => {
-//   return useQuery<Checklist, Error>({
-//     queryKey: ['list', params.page, params.items],
-//     queryFn: async () => {
-//       const response = await axios.get<Checklist>('https://backend-v2-sandbox.unatest.com/', { params })
-//       return response
-//     },
-//     keepPreviousData: true,
-//     staleTime: 5000,
-//   })
-// }
+type Courses = {
+  untaken: number;
+  finished: number;
+  started: number;
+}
+
+type Attachment = {
+  id: number;
+  label: string;
+  url: string;
+}
+
+type UserItem = {
+  id: number;
+  first_name: string;
+  last_name: string;
+  email: string;
+  bio: string;
+  role: string;
+  status: string;
+  tests: Test;
+  checklists: Checklist;
+  courses: Courses;
+  attachment: Attachment;
+}
+
+type Userlist = Array<UserItem>
+
 const token = sessionStorage.getItem("token");
 
-const useChecklist = ({ params }: { params: Params }): UseQueryResult<Checklist, AxiosError> => {
-  return useQuery<Checklist, AxiosError>(['list', params.page, params.items], async () => {
-    const response = await axios.get<Checklist>('https://backend-v2-sandbox.unatest.com/api/v2/checklists', {
+const useUsers = ({ params }: { params: Params }): UseQueryResult<Userlist, AxiosError> => {
+  return useQuery<Userlist, AxiosError>(['list', params.page, params.items], async () => {
+    const response = await axios.get<{ users: Userlist }>('https://backend-v2-sandbox.unatest.com/api/v2/users', {
       params,
       headers: {
         'Accept': '*/*',
@@ -45,11 +59,11 @@ const useChecklist = ({ params }: { params: Params }): UseQueryResult<Checklist,
       }
     });
 
-    return response.data; // Asumiendo que la respuesta contiene los datos en la propiedad "data"
+    return response.data.users;
   }, {
     keepPreviousData: true,
     staleTime: 5000,
   });
 };
-export default useChecklist;
-export type {ChecklistItem} 
+export default useUsers;
+export type { UserItem } 

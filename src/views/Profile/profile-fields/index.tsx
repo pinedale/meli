@@ -24,7 +24,7 @@ type ProfileForm = {
 }
 
 const ProfileFields: React.FC<ProfileFieldsProps> = ({ onClose }) => {
-  const { data, isSuccess } = useProfile()
+  const { data } = useProfile()
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const { register, handleSubmit, formState: { errors }, reset } = useForm<ProfileForm>({
     defaultValues: {
@@ -36,15 +36,12 @@ const ProfileFields: React.FC<ProfileFieldsProps> = ({ onClose }) => {
     resolver: yupResolver(schema),
   });
 
-  console.log("🚀 ~ file: index.tsx:10 ~ datassss:", data)
-
   const editProfile = () => {
     setIsEditing(true)
   }
 
-  const {mutate, isSuccess: updatedSuccess} = useUpdateProfile({
+  const {mutate} = useUpdateProfile({
     onError: (error) =>{
-      debugger;
       const errorMessage = error.message
       toast.error(`${errorMessage}`);
     },
@@ -56,7 +53,7 @@ const ProfileFields: React.FC<ProfileFieldsProps> = ({ onClose }) => {
 
   useEffect(() => {
     reset(data)
-  }, [data]);
+  }, [data, reset]);
 
   const onSubmit = handleSubmit((values) => {
     console.log("🚀 ~ file: index.tsx:47 ~ onSubmit ~ values:", values)

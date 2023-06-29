@@ -1,8 +1,8 @@
 import { useState } from "react";
 import Summary from "../../components/Summary";
-import Table from "../../components/Table";
 import Modal from "../../components/Modal";
-import RostertFields from "./TestFields";
+import RostertFields from "./components/test-fields";
+import Table from "./components/table";
 
 const Test = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);

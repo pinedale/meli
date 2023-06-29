@@ -4,8 +4,10 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import { useMemo } from 'react'
-import useBundleList, {type BundleItem } from "./service"
+
+import useBundleList, { type BundleItem } from "./service"
+import { BeatLoader } from 'react-spinners';
+import { format } from 'date-fns';
 
 const columnHelper = createColumnHelper<BundleItem>()
 
@@ -37,24 +39,23 @@ const columns = [
   }),
   columnHelper.accessor(row => row.updated_at, {
     id: 'updated_at',
-    cell: info => <i>{info.getValue()}</i>,
+    cell: info => <span>{format(new Date(info.getValue()), 'PP')}</span>,
     header: () => <span>Date Modified</span>,
     footer: info => info.column.id,
   }),
-  
+
 ];
 
 const Table = () => {
 
-  const { data, error } = useBundleList({params: {page: 1, items: 20}})
-  console.log("🚀 ~ file: index.tsx:12 ~ Bundles ~ data:", data)
+  const { data, isLoading } = useBundleList({ params: { page: 1, items: 20 } })
 
   const table = useReactTable({
     data: data || [],
     columns,
     getCoreRowModel: getCoreRowModel(),
   })
-  
+
   console.log("🚀 ~ file: index.tsx:90 ~ Table ~ data:", data)
 
   return (
@@ -68,24 +69,27 @@ const Table = () => {
                   {header.isPlaceholder
                     ? null
                     : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
+                      header.column.columnDef.header,
+                      header.getContext()
+                    )}
                 </th>
               ))}
             </tr>
           ))}
         </thead>
-        <tbody className=''>
-          {table.getRowModel().rows.map(row => (
-            <tr key={row.id} className="even:bg-gray-100">
-              {row.getVisibleCells().map(cell => (
-                <td key={cell.id} className="py-3 px-2">
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
-              ))}
-            </tr>
-          ))}
+        <tbody>
+          {isLoading
+            ? <tr><td className="text-center p-3" colSpan={8}><div className="flex items-center"><BeatLoader color="#F98080" className="mx-auto block" /></div></td></tr>
+            : table.getRowModel().rows.map(row => (
+              <tr key={row.id} className="even:bg-gray-100">
+                {row.getVisibleCells().map(cell => (
+                  <td key={cell.id} className="py-3 px-2">
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </td>
+                ))}
+              </tr>
+            ))
+          }
         </tbody>
       </table>
     </div>

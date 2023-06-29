@@ -2,7 +2,7 @@ import { useState } from "react";
 import Summary from "../../components/Summary";
 import Modal from "../../components/Modal";
 import RostertFields from "./components/roster-fields";
-import Table from "../../components/Table";
+import Table from "./components/table";
 
 
 const Roster = () =>{
@@ -25,7 +25,7 @@ const Roster = () =>{
         </div>
       </div>
       <div className="max-w-6xl mx-auto">
-        <Table/>
+        {/* <Table /> */}
       </div>
       <Modal onClose={closeModal} isOpen={isModalOpen}>
         <RostertFields onClose={closeModal}/>

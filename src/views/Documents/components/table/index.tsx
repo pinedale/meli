@@ -4,7 +4,6 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import { useState } from 'react'
 import useChecklist from './service'
 
 type Person = {
@@ -15,33 +14,6 @@ type Person = {
   status: string
   mandatories: number
 }
-
-const defaultData: Person[] = [
-  {
-    title: 'tanner',
-    type: 'linsley',
-    test: 24,
-    checklist: 100,
-    status: 'In Relationship',
-    mandatories: 50,
-  },
-  {
-    title: 'tandy',
-    type: 'miller',
-    test: 40,
-    checklist: 40,
-    status: 'Single',
-    mandatories: 80,
-  },
-  {
-    title: 'joe',
-    type: 'dirte',
-    test: 45,
-    checklist: 20,
-    status: 'Complicated',
-    mandatories: 10,
-  },
-]
 
 const columnHelper = createColumnHelper<Person>()
 
@@ -76,12 +48,10 @@ const columns = [
 ]
 const Table = () => {
 
-  const [data, setData] = useState(() => [...defaultData])
-  const { data: requestData, error  } = useChecklist({params: {page: 1, items: 20}})
-  console.log("🚀 ~ file: index.tsx:81 ~ Table ~ requestData:", requestData)
+  const { data  } = useChecklist({params: {page: 1, items: 20}})
 
   const table = useReactTable({
-    data,
+    data: [],
     columns,
     getCoreRowModel: getCoreRowModel(),
   })

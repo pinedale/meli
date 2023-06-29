@@ -3,62 +3,54 @@ import {
   flexRender,
   getCoreRowModel,
   useReactTable,
-} from '@tanstack/react-table'
-import useUsers, { UserItem } from './service'
+} from '@tanstack/react-table';
+import useTestList, { type TestItem } from "./service";
+import { format } from 'date-fns';
 import { BeatLoader } from 'react-spinners';
 
-const columnHelper = createColumnHelper<UserItem>()
+const columnHelper = createColumnHelper<TestItem>()
 
 const columns = [
-  columnHelper.accessor(row => row.first_name, {
-    id: 'first_name',
+  columnHelper.accessor(row => row.title, {
+    id: 'title',
+    cell: info => <b>{info.getValue()}</b>,
+    header: () => <span>Title</span>,
+    footer: info => info.column.id,
+  }),
+  columnHelper.accessor(row => row.passing_score, {
+    id: 'passing_score',
+    cell: info => <span>{info.getValue()}%</span>,
+    header: () => <span>Passing Score</span>,
+    footer: info => info.column.id,
+  }),
+  columnHelper.accessor(row => row.categories_count, {
+    id: 'categories_count',
     cell: info => <span>{info.getValue()}</span>,
-    header: () => <span>Name</span>,
+    header: () => <span>Categories</span>,
     footer: info => info.column.id,
   }),
-  columnHelper.accessor(row => row.role, {
-    id: 'role',
-    cell: info => <i>{info.getValue()}</i>,
-    header: () => <span>Role</span>,
+  columnHelper.accessor(row => row.questions_count, {
+    id: 'questions_count',
+    cell: info => <span>{info.getValue()}</span>,
+    header: () => <span>Questions</span>,
     footer: info => info.column.id,
   }),
-  columnHelper.accessor(row => row.email, {
-    id: 'email',
-    cell: info => <i>{info.getValue()}</i>,
-    header: () => <span>Email</span>,
-    footer: info => info.column.id,
-  }),
-  columnHelper.accessor(row => row.checklists, {
-    id: 'row.checklists',
-    cell: info => <span>{info.getValue().finished}</span>,
-    header: () => <span>Skills Checklist</span>,
-    footer: info => info.column.id,
-  }),
-  columnHelper.accessor(row => row.tests, {
-    id: 'row.tests',
-    cell: info => <span>{info.getValue().finished}</span>,
-    header: () => <span>tests</span>,
-    footer: info => info.column.id,
-  }),
-  columnHelper.accessor(row => row.courses, {
-    id: 'row.courses',
-    cell: info => <span>{info.getValue().finished}</span>,
-    header: () => <span>Mandatories</span>,
+  columnHelper.accessor(row => row.updated_at, {
+    id: 'updated_at',
+    cell: info => <span>{format(new Date(info.getValue()), 'PP')}</span>,
+    header: () => <span>Date Modified</span>,
     footer: info => info.column.id,
   }),
   columnHelper.accessor(row => row.status, {
-    id: 'row.status',
-    cell: info => <span>{info.getValue()}</span>,
+    id: 'status',
+    cell: info => <span className={info.getValue() === "active" ? "text-green-app" : "text-gray-600"}>{info.getValue()}</span>,
     header: () => <span>Status</span>,
-    footer: info => info.column.id,
-  }),
-  columnHelper.accessor('status', {
-    header: 'Status',
     footer: info => info.column.id,
   }),
 ]
 const Table = () => {
-  const { data, isLoading } = useUsers({ params: { page: 1, items: 20 } })
+
+  const { data, isLoading } = useTestList({ params: { page: 1, items: 20 } })
 
   const table = useReactTable({
     data: data ? data : [],
@@ -85,9 +77,10 @@ const Table = () => {
             </tr>
           ))}
         </thead>
-        <tbody className=''>
+        
+        <tbody>
           {isLoading
-            ? <tr><td className="text-center p-3" colSpan={6}><div className="flex items-center"><BeatLoader color="#F98080" className="mx-auto block" /></div></td></tr>
+            ? <tr><td className="text-center p-3" colSpan={6}><div className="flex items-center"><BeatLoader color="#F98080" className="mx-auto block"/></div></td></tr>
             : table.getRowModel().rows.map(row => (
               <tr key={row.id} className="even:bg-gray-100">
                 {row.getVisibleCells().map(cell => (

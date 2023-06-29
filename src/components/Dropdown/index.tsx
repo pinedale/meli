@@ -1,5 +1,5 @@
 import { useState } from "react"
-// import { AiFillCaretDown } from "react-icons/Ai";
+import { AiFillCaretDown } from "react-icons/ai";
 import Modal from "../Modal";
 import ProfileFields from "../../views/Profile/profile-fields";
 import { useNavigate } from "react-router-dom";
@@ -36,7 +36,7 @@ const Dropdown = () =>{
           <p className="text-red-app">Corporate</p>
         </div>
         <div className="text-sm">
-          {/* <AiFillCaretDown /> */}
+          <AiFillCaretDown />
         </div>
       </div>
       {isOpen && (

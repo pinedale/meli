@@ -3,59 +3,58 @@ import {
   flexRender,
   getCoreRowModel,
   useReactTable,
-} from '@tanstack/react-table'
-import useChecklist from './service'
-import { type ChecklistItem } from "./service"
-
-const defaultData: ChecklistItem[] = []
+} from '@tanstack/react-table';
+import useChecklist from './service';
+import { type ChecklistItem } from "./service";
+import { format } from 'date-fns';
+import { BeatLoader } from 'react-spinners';
 
 const columnHelper = createColumnHelper<ChecklistItem>()
 
 const columns = [
   columnHelper.accessor(row => row.title, {
     id: 'title',
-    cell: info => <i>{info.getValue()}</i>,
+    cell: info => <b>{info.getValue()}</b>,
     header: () => <span>Title</span>,
     footer: info => info.column.id,
   }),
   columnHelper.accessor(row => row.categories_count, {
     id: 'categories_count',
-    cell: info => <i>{info.getValue()}</i>,
+    cell: info => <span>{info.getValue()}</span>,
     header: () => <span>Categories</span>,
     footer: info => info.column.id,
   }),
   columnHelper.accessor(row => row.sections_count, {
     id: 'sections_count',
-    cell: info => <i>{info.getValue()}</i>,
+    cell: info => <span>{info.getValue()}</span>,
     header: () => <span>Setions</span>,
     footer: info => info.column.id,
   }),
   columnHelper.accessor(row => row.questions_count, {
     id: 'questions_count',
-    cell: info => <i>{info.getValue()}</i>,
+    cell: info => <span>{info.getValue()}</span>,
     header: () => <span>Questions</span>,
     footer: info => info.column.id,
   }),
   columnHelper.accessor(row => row.updated_at, {
     id: 'updated_at',
-    cell: info => <i>{info.getValue()}</i>,
+    cell: info => <span>{format(new Date(info.getValue()), 'PP')}</span>,
     header: () => <span>Date Modified</span>,
     footer: info => info.column.id,
   }),
   columnHelper.accessor(row => row.status, {
     id: 'status',
-    cell: info => <i>{info.getValue()}</i>,
+    cell: info => <span className={info.getValue() === "active" ? "text-green-app" : "text-gray-600"}>{info.getValue()}</span>,
     header: () => <span>Status</span>,
     footer: info => info.column.id,
   }),
 ]
 const Table = () => {
 
-  const { data = [], error, isLoading, isSuccess } = useChecklist({ params: { page: 1, items: 20 } })
-  console.log("🚀 ~ file: index.tsx:56 ~ Table ~ data:", data)
+  const { data, isLoading } = useChecklist({ params: { page: 1, items: 20 } })
 
   const table = useReactTable({
-    data,
+    data: data ? data : [],
     columns,
     getCoreRowModel: getCoreRowModel(),
   })
@@ -79,16 +78,20 @@ const Table = () => {
             </tr>
           ))}
         </thead>
-        <tbody className=''>
-          {table.getRowModel().rows.map(row => (
-            <tr key={row.id} className="even:bg-gray-100">
-              {row.getVisibleCells().map(cell => (
-                <td key={cell.id} className="py-3 px-2">
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
-              ))}
-            </tr>
-          ))}
+        
+        <tbody>
+          {isLoading
+            ? <tr><td className="text-center p-3" colSpan={6}><div className="flex items-center"><BeatLoader color="#F98080" className="mx-auto block"/></div></td></tr>
+            : table.getRowModel().rows.map(row => (
+              <tr key={row.id} className="even:bg-gray-100">
+                {row.getVisibleCells().map(cell => (
+                  <td key={cell.id} className="py-3 px-2">
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </td>
+                ))}
+              </tr>
+            ))
+          }
         </tbody>
       </table>
     </div>
