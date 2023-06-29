@@ -4,13 +4,10 @@ import Menu from "../components/Menu";
 
 
 const RequiredAuthRoute = () => {
-
   const location = useLocation()
-
   const token = sessionStorage.getItem('token');
 
   return (
-
     token
       ? 
         <>

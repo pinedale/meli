@@ -37,7 +37,7 @@ const columns = [
   }),
   columnHelper.accessor(row => row.updated_at, {
     id: 'updated_at',
-    cell: info => <span>{format(new Date(info.getValue()), 'PP')}</span>,
+    cell: info => <span>{info.getValue() ? format(new Date(info.getValue()), 'PP') : ''}</span>,
     header: () => <span>Date Modified</span>,
     footer: info => info.column.id,
   }),
@@ -77,10 +77,10 @@ const Table = () => {
             </tr>
           ))}
         </thead>
-        
+
         <tbody>
           {isLoading
-            ? <tr><td className="text-center p-3" colSpan={6}><div className="flex items-center"><BeatLoader color="#F98080" className="mx-auto block"/></div></td></tr>
+            ? <tr><td className="text-center p-3" colSpan={6}><div className="flex items-center"><BeatLoader color="#F98080" className="mx-auto block" /></div></td></tr>
             : table.getRowModel().rows.map(row => (
               <tr key={row.id} className="even:bg-gray-100">
                 {row.getVisibleCells().map(cell => (

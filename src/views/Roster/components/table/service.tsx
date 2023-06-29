@@ -49,7 +49,7 @@ type Userlist = Array<UserItem>
 const token = sessionStorage.getItem("token");
 
 const useUsers = ({ params }: { params: Params }): UseQueryResult<Userlist, AxiosError> => {
-  return useQuery<Userlist, AxiosError>(['list', params.page, params.items], async () => {
+  return useQuery<Userlist, AxiosError>(['users', params.page, params.items], async () => {
     const response = await axios.get<{ users: Userlist }>('https://backend-v2-sandbox.unatest.com/api/v2/users', {
       params,
       headers: {

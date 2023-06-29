@@ -10,61 +10,43 @@ import { BeatLoader } from 'react-spinners';
 const columnHelper = createColumnHelper<UserItem>()
 
 const columns = [
-  columnHelper.accessor(row => row.first_name, {
-    id: 'first_name',
-    cell: info => <span>{info.getValue()}</span>,
-    header: () => <span>Name</span>,
-    footer: info => info.column.id,
+  columnHelper.accessor('first_name', {
+    header: 'Name',
   }),
-  columnHelper.accessor(row => row.role, {
-    id: 'role',
-    cell: info => <i>{info.getValue()}</i>,
-    header: () => <span>Role</span>,
-    footer: info => info.column.id,
+  columnHelper.accessor('role', {
+    header: 'Role',
   }),
-  columnHelper.accessor(row => row.email, {
-    id: 'email',
-    cell: info => <i>{info.getValue()}</i>,
-    header: () => <span>Email</span>,
-    footer: info => info.column.id,
+  columnHelper.accessor('email', {
+    header: 'Email',
   }),
-  columnHelper.accessor(row => row.checklists, {
-    id: 'row.checklists',
-    cell: info => <span>{info.getValue().finished}</span>,
-    header: () => <span>Skills Checklist</span>,
-    footer: info => info.column.id,
+  columnHelper.accessor('checklists.finished', {
+    header: 'Skills Checklist',
   }),
-  columnHelper.accessor(row => row.tests, {
-    id: 'row.tests',
-    cell: info => <span>{info.getValue().finished}</span>,
-    header: () => <span>tests</span>,
-    footer: info => info.column.id,
+  columnHelper.accessor('tests.finished', {
+    header: 'Tests',
   }),
-  columnHelper.accessor(row => row.courses, {
-    id: 'row.courses',
-    cell: info => <span>{info.getValue().finished}</span>,
-    header: () => <span>Mandatories</span>,
-    footer: info => info.column.id,
-  }),
-  columnHelper.accessor(row => row.status, {
-    id: 'row.status',
-    cell: info => <span>{info.getValue()}</span>,
-    header: () => <span>Status</span>,
-    footer: info => info.column.id,
+  columnHelper.accessor('courses.finished', {
+    header: 'Mandatories',
   }),
   columnHelper.accessor('status', {
     header: 'Status',
-    footer: info => info.column.id,
+  }),
+  columnHelper.display({
+    id: 'ladale',
+    cell: () => 'Leandro la deja sequita!'
   }),
 ]
 const Table = () => {
-  const { data, isLoading } = useUsers({ params: { page: 1, items: 20 } })
+  const { data = [], isLoading } = useUsers({ params: { page: 1, items: 20 } })
 
+  
   const table = useReactTable({
-    data: data ? data : [],
+    data: data,
     columns,
     getCoreRowModel: getCoreRowModel(),
   })
+
+  if (isLoading) return <div className="flex items-center"><BeatLoader color="#F98080" className="mx-auto block" /></div>
 
   return (
     <div className="overflow-hidden border rounded-lg">
@@ -86,18 +68,15 @@ const Table = () => {
           ))}
         </thead>
         <tbody className=''>
-          {isLoading
-            ? <tr><td className="text-center p-3" colSpan={6}><div className="flex items-center"><BeatLoader color="#F98080" className="mx-auto block" /></div></td></tr>
-            : table.getRowModel().rows.map(row => (
-              <tr key={row.id} className="even:bg-gray-100">
-                {row.getVisibleCells().map(cell => (
-                  <td key={cell.id} className="py-3 px-2">
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                ))}
-              </tr>
-            ))
-          }
+          {table.getRowModel().rows.map(row => (
+            <tr key={row.id} className="even:bg-gray-100">
+              {row.getVisibleCells().map(cell => (
+                <td key={cell.id} className="py-3 px-2">
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </td>
+              ))}
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>

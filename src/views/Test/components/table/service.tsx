@@ -21,7 +21,7 @@ type Tests = Array<TestItem>
 const token = sessionStorage.getItem("token");
 
 const useTestList = ({ params }: { params: Params }): UseQueryResult<Tests, AxiosError> => {
-  return useQuery<Tests, AxiosError>(['list', params.page, params.items], async () => {
+  return useQuery<Tests, AxiosError>(['tests', params.page, params.items], async () => {
     const response = await axios.get<{tests: Tests}>('https://backend-v2-sandbox.unatest.com/api/v2/tests', {
       params,
       headers: {

@@ -24,7 +24,7 @@ type Checklist = Array<ChecklistItem>
 const token = sessionStorage.getItem("token");
 
 const useChecklist = ({ params }: { params: Params }): UseQueryResult<Checklist, AxiosError> => {
-  return useQuery<Checklist, AxiosError>(['list', params.page, params.items], async () => {
+  return useQuery<Checklist, AxiosError>(['checklist', params.page, params.items], async () => {
     const response = await axios.get<{checklists: Checklist}>('https://backend-v2-sandbox.unatest.com/api/v2/checklists', {
       params,
       headers: {

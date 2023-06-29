@@ -6,7 +6,7 @@ import {
 } from '@tanstack/react-table'
 import useChecklist from './service'
 import { format } from 'date-fns';
-import {type CourseItem} from "./service"
+import { type CourseItem } from "./service"
 import { BeatLoader } from 'react-spinners';
 
 const columnHelper = createColumnHelper<CourseItem>()
@@ -29,7 +29,7 @@ const columns = [
   }),
   columnHelper.accessor(row => row.updated_at, {
     id: 'updated_at',
-    cell: info => <span>{format(new Date(info.getValue()), 'PP')}</span>,
+    cell: info => <span>{info.getValue() ? format(new Date(info.getValue()), 'PP') : ''}</span>,
     header: () => <span>Date Modified</span>,
   }),
   columnHelper.accessor(row => row.status, {
@@ -40,7 +40,7 @@ const columns = [
 ]
 const Table = () => {
 
-  const { data, isLoading  } = useChecklist({params: {page: 1, items: 20}})
+  const { data, isLoading } = useChecklist({ params: { page: 1, items: 20 } })
   console.log("🚀 ~ file: index.tsx:81 ~ Table ~ requestData:", data)
 
   const table = useReactTable({
@@ -60,17 +60,17 @@ const Table = () => {
                   {header.isPlaceholder
                     ? null
                     : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
+                      header.column.columnDef.header,
+                      header.getContext()
+                    )}
                 </th>
               ))}
             </tr>
           ))}
         </thead>
         <tbody>
-        {isLoading
-            ? <tr><td className="text-center p-3" colSpan={6}><div className="flex items-center"><BeatLoader color="#F98080" className="mx-auto block"/></div></td></tr>
+          {isLoading
+            ? <tr><td className="text-center p-3" colSpan={6}><div className="flex items-center"><BeatLoader color="#F98080" className="mx-auto block" /></div></td></tr>
             : table.getRowModel().rows.map(row => (
               <tr key={row.id} className="even:bg-gray-100">
                 {row.getVisibleCells().map(cell => (

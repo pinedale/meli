@@ -21,7 +21,7 @@ type Courses = Array<CourseItem>
 const token = sessionStorage.getItem("token");
 
 const useGetCourses = ({ params }: { params: Params }): UseQueryResult<Courses, AxiosError> => {
-  return useQuery<Courses, AxiosError>(['list', params.page, params.items], async () => {
+  return useQuery<Courses, AxiosError>(['madatories', params.page, params.items], async () => {
     const response = await axios.get<{courses: Courses}>('https://backend-v2-sandbox.unatest.com/api/v2/courses', {
       params,
       headers: {

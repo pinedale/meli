@@ -20,31 +20,27 @@ const Layout = () => {
     }
   }, [token]);
 
-  return(
-  <>
-    <Outlet />
-  </>
-)};
-
-const App = () => {
-  
-  return(
+  return (
     <>
-      <Routes>
-        <Route  path='/' element={<Layout />}>
-          <Route path='/' element={<Login />}/>
-        <Route element={<RequiredAuthRoute />}>
-          <Route path='/roster' element={<Roster />}/>
-          <Route path='/checklist' element={<Checklist />}/>
-          <Route path='/test' element={<Test />}/>
-          <Route path='/mandatories' element={<Mandatories />}/>
-          <Route path='/documents' element={<Documents />}/>
-          <Route path='/bundles' element={<Bundles />}/>
-        </Route>
-        </Route>
-      </Routes>
+      <Outlet />
     </>
   )
 };
+
+const App = () => (
+  <Routes>
+    <Route path='/' element={<Layout />}>
+      <Route path='/' element={<Login />} />
+      <Route element={<RequiredAuthRoute />}>
+        <Route path='/roster' element={<Roster />} />
+        <Route path='/checklist' element={<Checklist />} />
+        <Route path='/test' element={<Test />} />
+        <Route path='/mandatories' element={<Mandatories />} />
+        <Route path='/documents' element={<Documents />} />
+        <Route path='/bundles' element={<Bundles />} />
+      </Route>
+    </Route>
+  </Routes>
+);
 
 export default App

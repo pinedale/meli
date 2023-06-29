@@ -25,7 +25,7 @@ const Roster = () =>{
         </div>
       </div>
       <div className="max-w-6xl mx-auto">
-        {/* <Table /> */}
+        <Table />
       </div>
       <Modal onClose={closeModal} isOpen={isModalOpen}>
         <RostertFields onClose={closeModal}/>

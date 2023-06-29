@@ -39,7 +39,7 @@ const columns = [
   }),
   columnHelper.accessor(row => row.updated_at, {
     id: 'updated_at',
-    cell: info => <span>{format(new Date(info.getValue()), 'PP')}</span>,
+    cell: info => <span>{info.getValue() ? format(new Date(info.getValue()), 'PP') : ''}</span>,
     header: () => <span>Date Modified</span>,
     footer: info => info.column.id,
   }),

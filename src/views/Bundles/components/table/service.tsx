@@ -20,7 +20,7 @@ type Bundlelist = Array<BundleItem>
 const token = sessionStorage.getItem("token");
 
 const useBundleList = ({ params }: { params: Params }): UseQueryResult<Bundlelist, AxiosError> => {
-  return useQuery<Bundlelist, AxiosError>(['list', params.page, params.items], async () => {
+  return useQuery<Bundlelist, AxiosError>(['bundles', params.page, params.items], async () => {
     const response = await axios.get<{bundles: Bundlelist}>('https://backend-v2-sandbox.unatest.com/api/v2/bundles', {
       params,
       headers: {
