@@ -19,7 +19,7 @@ type ChecklistFieldsProps = {
 
 const ChecklistFields: React.FC<ChecklistFieldsProps> = ({ onClose }) => {
 
-  const { register, handleSubmit, formState: { errors }, reset } = useForm<ChecklistFormAttr>({
+  const { register, handleSubmit, formState: { errors } } = useForm<ChecklistFormAttr>({
     defaultValues: {
       title: "",
       desc: "",
@@ -35,14 +35,12 @@ const ChecklistFields: React.FC<ChecklistFieldsProps> = ({ onClose }) => {
       toast.error(`${errorMessage}`);
     },
     onSuccess: (response) => {
-      console.log("🚀 ~ file: index.tsx:52 ~ response:", response)
       toast.success("The Checklist has been created successfully");
     }
   })
 
 
   const onSubmit = handleSubmit((values) => {
-    console.log("🚀 ~ file: index.tsx:47 ~ onSubmit ~ values:", values);
     mutate(values);
   });
 

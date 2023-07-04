@@ -30,11 +30,10 @@ const Login: React.FC = () => {
     onSuccess: (data) => {
       console.log("🚀 ~ file: index.tsx:20 ~ datssssa:", data)
       const token = data?.access
-      if (token){
-        sessionStorage.setItem('token', token)
-        sessionStorage.setItem("roles", JSON.stringify(data.roles))
-        navigate('/roster')
-      }
+      console.log("🚀 ~ file: index.tsx:33 ~ token:", token)
+      sessionStorage.setItem('token', token)
+      sessionStorage.setItem("roles", JSON.stringify(data.roles))
+      navigate('/roster')
       const roleList = sessionStorage.getItem("roles")
       console.log("🚀 ~ file: index.tsx:38 ~ roleList:", roleList)
       

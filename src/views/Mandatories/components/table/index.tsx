@@ -49,6 +49,8 @@ const Table = () => {
     getCoreRowModel: getCoreRowModel(),
   })
 
+  if (isLoading) return <div className="flex items-center"><BeatLoader color="#F98080" className="mx-auto block" /></div>
+
   return (
     <div className="overflow-hidden border rounded-lg">
       <table className="table-fixed w-full border-gray-400 text-slate-500 border-collapse text-xs divide-y divide-gray-200">
@@ -69,18 +71,15 @@ const Table = () => {
           ))}
         </thead>
         <tbody>
-          {isLoading
-            ? <tr><td className="text-center p-3" colSpan={6}><div className="flex items-center"><BeatLoader color="#F98080" className="mx-auto block" /></div></td></tr>
-            : table.getRowModel().rows.map(row => (
-              <tr key={row.id} className="even:bg-gray-100">
-                {row.getVisibleCells().map(cell => (
-                  <td key={cell.id} className="py-3 px-2">
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                ))}
-              </tr>
-            ))
-          }
+          {table.getRowModel().rows.map(row => (
+            <tr key={row.id} className="even:bg-gray-100">
+              {row.getVisibleCells().map(cell => (
+                <td key={cell.id} className="py-3 px-2">
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </td>
+              ))}
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>

@@ -22,6 +22,7 @@ type ChecklistItem = {
 type Checklist = Array<ChecklistItem>
 
 const token = sessionStorage.getItem("token");
+console.log("🚀 ~ file: service.tsx:25 ~ token:", token)
 
 const useChecklist = ({ params }: { params: Params }): UseQueryResult<Checklist, AxiosError> => {
   return useQuery<Checklist, AxiosError>(['documents', params.page, params.items], async () => {

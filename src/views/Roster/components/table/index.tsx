@@ -6,34 +6,46 @@ import {
 } from '@tanstack/react-table'
 import useUsers, { UserItem } from './service'
 import { BeatLoader } from 'react-spinners';
+import { FaTrash } from 'react-icons/fa';
+import { HiEye } from 'react-icons/hi';
+import { LuSend } from 'react-icons/lu'
 
 const columnHelper = createColumnHelper<UserItem>()
 
 const columns = [
   columnHelper.accessor('first_name', {
     header: 'Name',
+    size: 150,
   }),
   columnHelper.accessor('role', {
     header: 'Role',
+    size: 120,
   }),
   columnHelper.accessor('email', {
     header: 'Email',
+    size: 220,
   }),
   columnHelper.accessor('checklists.finished', {
     header: 'Skills Checklist',
+    size: 120,
   }),
   columnHelper.accessor('tests.finished', {
     header: 'Tests',
+    size: 100,
   }),
   columnHelper.accessor('courses.finished', {
     header: 'Mandatories',
+    size: 120,
   }),
   columnHelper.accessor('status', {
     header: 'Status',
+    size: 100,
   }),
   columnHelper.display({
     id: 'ladale',
-    cell: () => 'Leandro la deja sequita!'
+    header: 'Actions',
+    size: 120,
+    cell: () => <div className='flex justify-center text-base gap-2'><HiEye /><LuSend /><FaTrash /></div>
   }),
 ]
 const Table = () => {
@@ -55,7 +67,14 @@ const Table = () => {
           {table.getHeaderGroups().map(headerGroup => (
             <tr key={headerGroup.id}>
               {headerGroup.headers.map(header => (
-                <th className="py-3 bg-slate-100 text-left px-2" key={header.id}>
+                <th
+                  className="py-3 bg-slate-100 text-left px-2"
+                  key={header.id}
+                  style={{
+                    width:
+                      header.getSize() ? header.getSize() : undefined,
+                  }}
+                >
                   {header.isPlaceholder
                     ? null
                     : flexRender(
