@@ -3,8 +3,9 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
-import { ChecklistFormAttr, useCreateChecklist } from "./service";
+import { ChecklistFormAttr, useCreateChecklist, useGetChecklist } from "./service";
 import { ToastContainer, toast } from "react-toastify";
+import { useEffect } from "react";
 
 const schema = yup.object({
   title: yup.string().required("Required field"),
@@ -15,16 +16,21 @@ const schema = yup.object({
 
 type ChecklistFieldsProps = {
   onClose: () => void;
+  id?: number | undefined;
 }
 
-const ChecklistFields: React.FC<ChecklistFieldsProps> = ({ onClose }) => {
+const ChecklistFields: React.FC<ChecklistFieldsProps> = ({ onClose, id }) => {
 
-  const { register, handleSubmit, formState: { errors } } = useForm<ChecklistFormAttr>({
+  const {data} = useGetChecklist(id);
+
+  console.log("🚀 ~ file: index.tsx:24 ~ datasdsda:", data)
+
+  const { register, handleSubmit, formState: { errors }, reset } = useForm<ChecklistFormAttr>({
     defaultValues: {
-      title: "",
-      desc: "",
-      color: "",
-      kind: "",
+      title: data?.title,
+      desc: data?.desc,
+      color: data?.color,
+      kind: data?.color,
     },
     resolver: yupResolver(schema),
   });
@@ -34,11 +40,14 @@ const ChecklistFields: React.FC<ChecklistFieldsProps> = ({ onClose }) => {
       const errorMessage = error.message
       toast.error(`${errorMessage}`);
     },
-    onSuccess: (response) => {
+    onSuccess: () => {
       toast.success("The Checklist has been created successfully");
     }
   })
 
+  useEffect(() => {
+    reset(data)
+  }, [data, reset]);
 
   const onSubmit = handleSubmit((values) => {
     mutate(values);

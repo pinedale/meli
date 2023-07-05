@@ -1,5 +1,6 @@
 import axios, { AxiosError } from "axios";
-import { UseQueryResult, useQuery } from "react-query";
+import { UseMutationResult, UseQueryResult, useMutation, useQuery, useQueryClient } from "react-query";
+import Checklist from "../..";
 
 type Params = {
   page: number;
@@ -38,5 +39,24 @@ const useChecklist = ({ params }: { params: Params }): UseQueryResult<Checklist,
   });
 };
 
-export default useChecklist;
+const useDeleteChecklist = (): UseMutationResult<void, AxiosError, number> => {
+
+  const queryClient = useQueryClient()
+
+  return useMutation<void, AxiosError, number>(async (checklistId: number) => {
+    await axios.delete(`https://backend-v2-sandbox.unatest.com/api/v2/checklists/${checklistId}`, {
+      headers: {
+        'Accept': '*/*',
+        'X-Current-Organization': '01GEFTPWQ9M8PGXR4JVVRYKGSX',
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+  },
+  {
+    onSuccess: () => queryClient.invalidateQueries(['checklist'])
+  }
+);};
+
+
+export {useChecklist, useDeleteChecklist};
 export type {ChecklistItem} 

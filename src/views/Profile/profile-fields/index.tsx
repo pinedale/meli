@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import {useProfile, useUpdateProfile} from "./service";
+import { useUpdateProfile} from "./service";
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import { ToastContainer, toast } from "react-toastify";
+import { ProfileInfoAttr } from "../../../components/Dropdown/service";
 
 const schema = yup.object({
   first_name: yup.string().required("Required field"),
@@ -14,6 +15,7 @@ const schema = yup.object({
 
 type ProfileFieldsProps = {
   onClose: () => void;
+  data: ProfileInfoAttr;
 }
 
 type ProfileForm = {
@@ -23,8 +25,7 @@ type ProfileForm = {
   phone_number: string;
 }
 
-const ProfileFields: React.FC<ProfileFieldsProps> = ({ onClose }) => {
-  const { data } = useProfile()
+const ProfileFields: React.FC<ProfileFieldsProps> = ({ onClose, data }) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const { register, handleSubmit, formState: { errors }, reset } = useForm<ProfileForm>({
     defaultValues: {

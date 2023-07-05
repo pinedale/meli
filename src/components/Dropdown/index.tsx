@@ -3,6 +3,7 @@ import { AiFillCaretDown } from "react-icons/ai";
 import Modal from "../Modal";
 import ProfileFields from "../../views/Profile/profile-fields";
 import { useNavigate } from "react-router-dom";
+import { useProfile } from "./service";
 
 const Dropdown = () =>{
   const [isOpen, setIsOpen] = useState<boolean>(false)
@@ -12,6 +13,8 @@ const Dropdown = () =>{
   }
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { data } = useProfile()
+  console.log("🚀 ~ file: index.tsx:17 ~ Dropdown ~ data:", data)
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -32,7 +35,7 @@ const Dropdown = () =>{
     <div className="relative">
       <div onClick={toggleDropdown} className="text-gray-700 flex items-center cursor-pointer gap-1">
         <div className="text-xs text-right">
-          <p>Leandro Pineda</p>
+          <p>{data?.first_name} {data?.last_name}</p>
           <p className="text-red-app">Corporate</p>
         </div>
         <div className="text-sm">
@@ -52,7 +55,7 @@ const Dropdown = () =>{
         </nav>
       )}
       <Modal onClose={closeModal} isOpen={isModalOpen}>
-        <ProfileFields onClose={closeModal}/>
+        <ProfileFields onClose={closeModal} data={data}/>
       </Modal>
     </div>
   )

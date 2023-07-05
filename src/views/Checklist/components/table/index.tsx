@@ -4,60 +4,73 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import useChecklist from './service';
+import  { useDeleteChecklist, useChecklist } from './service';
 import { type ChecklistItem } from "./service";
 import { format } from 'date-fns';
 import { BeatLoader } from 'react-spinners';
+import { HiEye } from 'react-icons/hi';
+import { FaTrash } from 'react-icons/fa';
+import { BiDuplicate } from 'react-icons/bi';
+import { useState } from 'react';
 
 const columnHelper = createColumnHelper<ChecklistItem>()
 
-const columns = [
-  columnHelper.accessor(row => row.title, {
-    id: 'title',
-    cell: info => <b>{info.getValue()}</b>,
-    header: () => <span>Title</span>,
-    footer: info => info.column.id,
-  }),
-  columnHelper.accessor(row => row.categories_count, {
-    id: 'categories_count',
-    cell: info => <span>{info.getValue()}</span>,
-    header: () => <span>Categories</span>,
-    footer: info => info.column.id,
-  }),
-  columnHelper.accessor(row => row.sections_count, {
-    id: 'sections_count',
-    cell: info => <span>{info.getValue()}</span>,
-    header: () => <span>Setions</span>,
-    footer: info => info.column.id,
-  }),
-  columnHelper.accessor(row => row.questions_count, {
-    id: 'questions_count',
-    cell: info => <span>{info.getValue()}</span>,
-    header: () => <span>Questions</span>,
-    footer: info => info.column.id,
-  }),
-  columnHelper.accessor(row => row.updated_at, {
-    id: 'updated_at',
-    cell: info => <span>{info.getValue() ? format(new Date(info.getValue()), 'PP') : ''}</span>,
-    header: () => <span>Date Modified</span>,
-    footer: info => info.column.id,
-  }),
-  columnHelper.accessor(row => row.status, {
-    id: 'status',
-    cell: info => <span className={info.getValue() === "active" ? "text-green-app" : "text-gray-600"}>{info.getValue()}</span>,
-    header: () => <span>Status</span>,
-    footer: info => info.column.id,
-  }),
-]
-const Table = () => {
+type TableProps = {
+  onOpenModal: (arg: number) => void;
+}
+
+
+const Table: React.FC<TableProps> = ({ onOpenModal }) => {
 
   const { data, isLoading } = useChecklist({ params: { page: 1, items: 20 } })
+
+  const columns = [
+    columnHelper.accessor('title', {
+      header: 'Title',
+    }),
+    columnHelper.accessor('categories_count', {
+      header: 'Categories',
+    }),
+    columnHelper.accessor('sections_count', {
+      header: 'Setions',
+    }),
+    columnHelper.accessor('questions_count', {
+      header: 'Questions',
+    }),
+    columnHelper.accessor('updated_at', {
+      header: 'Date Modified',
+    }),
+    columnHelper.accessor(row => row.status, {
+      id: 'status',
+      cell: info => <span className={info.getValue() === "active" ? "text-green-app" : "text-gray-600"}>{info.getValue()}</span>,
+      header: () => <span>Status</span>,
+      footer: info => info.column.id,
+    }),
+    columnHelper.accessor(row => row.id, {
+      id: 'actions',
+      header: 'Actions',
+      size: 70,
+      cell: (info) =>
+        <div className='flex justify-center text-base gap-2'>
+          <button type="button" className='px-1' onClick={() => handleOpenModal(info.row.original.id)}>
+            <HiEye />
+          </button>
+          <button type="button" className='px-1' onClick={() => deleteChecklist(info.row.original.id)}><FaTrash /></button>
+        </div>
+    }),
+  ]
 
   const table = useReactTable({
     data: data ? data : [],
     columns,
     getCoreRowModel: getCoreRowModel(),
   })
+
+  const handleOpenModal = (itemId: number) => {
+    onOpenModal(itemId);
+  };
+  
+  const {mutateAsync:deleteChecklist} = useDeleteChecklist()
 
   if (isLoading) return <div className="flex items-center"><BeatLoader color="#F98080" className="mx-auto block" /></div>
 
@@ -68,7 +81,14 @@ const Table = () => {
           {table.getHeaderGroups().map(headerGroup => (
             <tr key={headerGroup.id}>
               {headerGroup.headers.map(header => (
-                <th className="py-3 bg-slate-100 text-left px-2" key={header.id}>
+                <th
+                  className="py-3 bg-slate-100 text-left px-2"
+                  key={header.id}
+                  style={{
+                    width:
+                      header.getSize() ? header.getSize() : undefined,
+                  }}
+                >
                   {header.isPlaceholder
                     ? null
                     : flexRender(

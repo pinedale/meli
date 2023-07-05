@@ -1,5 +1,5 @@
 import axios, { AxiosError } from "axios"
-import { UseMutationOptions, UseMutationResult, UseQueryResult, useMutation, useQuery } from "react-query"
+import { UseMutationOptions, UseMutationResult, UseQueryResult, useMutation, useQuery, useQueryClient } from "react-query"
 
 
 type Roles = {
@@ -37,7 +37,10 @@ const useProfile = (): UseQueryResult<ProfileInfoAttr, AxiosError> =>{
 
 const useUpdateProfile = (
   options: UseMutationOptions<ProfileInfoAttr, AxiosError, ProfileInfoAttr, unknown>
-): UseMutationResult<ProfileInfoAttr, AxiosError, ProfileInfoAttr, unknown> => useMutation(
+): UseMutationResult<ProfileInfoAttr, AxiosError, ProfileInfoAttr, unknown> => {
+  const queryClient = useQueryClient();
+  return useMutation(
+
   async (data) => {
     const response = await axios.put('https://backend-v2-sandbox.unatest.com/api/v2/profile', {profile: data}, {
       headers: {
@@ -46,10 +49,10 @@ const useUpdateProfile = (
         'Authorization': `Bearer ${token}`,
       }
     })
-
+    queryClient.invalidateQueries('profile')
     return response.data;
   },
   options
-)
+)}
 
 export { useProfile, useUpdateProfile };

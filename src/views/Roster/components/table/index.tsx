@@ -42,7 +42,7 @@ const columns = [
     size: 100,
   }),
   columnHelper.display({
-    id: 'ladale',
+    id: 'a',
     header: 'Actions',
     size: 120,
     cell: () => <div className='flex justify-center text-base gap-2'><HiEye /><LuSend /><FaTrash /></div>

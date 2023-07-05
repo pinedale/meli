@@ -1,5 +1,5 @@
 import axios, { AxiosError } from "axios";
-import { UseMutationOptions, UseMutationResult, useMutation } from "react-query";
+import { UseMutationOptions, UseMutationResult, UseQueryResult, useMutation, useQuery } from "react-query";
 
 const token = sessionStorage.getItem("token");
 
@@ -27,6 +27,20 @@ const useCreateChecklist = (
   options
 )
 
-export { useCreateChecklist };
+const useGetChecklist = (id: number): UseQueryResult<ChecklistFormAttr, AxiosError> =>{
+  return useQuery<ChecklistFormAttr, AxiosError>(['checklist-details'], async() =>{
+    const response = await axios.get<ChecklistFormAttr>(`https://backend-v2-sandbox.unatest.com/api/v2/checklists/${id}`, {
+      headers: {
+        'Accept': '*/*',
+        'X-Current-Organization': '01GEFTPWQ9M8PGXR4JVVRYKGSX',
+        'Authorization': `Bearer ${token}`,
+      }
+    });
+    return response.data
+  })
+}
+
+
+export { useCreateChecklist, useGetChecklist };
 
 export type { ChecklistFormAttr };
