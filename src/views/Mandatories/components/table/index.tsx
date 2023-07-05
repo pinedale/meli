@@ -41,7 +41,6 @@ const columns = [
 const Table = () => {
 
   const { data, isLoading } = useChecklist({ params: { page: 1, items: 20 } })
-  console.log("🚀 ~ file: index.tsx:81 ~ Table ~ requestData:", data)
 
   const table = useReactTable({
     data: data ? data : [],

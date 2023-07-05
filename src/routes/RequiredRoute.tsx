@@ -6,6 +6,7 @@ import Menu from "../components/Menu";
 const RequiredAuthRoute = () => {
   const location = useLocation()
   const token = sessionStorage.getItem('token');
+  console.log("🚀 ~ file: RequiredRoute.tsx:9 ~ RequiredAuthRoute ~ tokenssss:", token)
 
   return (
     token

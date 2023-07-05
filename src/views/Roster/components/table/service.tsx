@@ -65,5 +65,6 @@ const useUsers = ({ params }: { params: Params }): UseQueryResult<Userlist, Axio
     staleTime: 5000,
   });
 };
+
 export default useUsers;
 export type { UserItem } 

@@ -12,6 +12,7 @@ import { HiEye } from 'react-icons/hi';
 import { FaTrash } from 'react-icons/fa';
 import { BiDuplicate } from 'react-icons/bi';
 import { useState } from 'react';
+import { Tooltip } from 'flowbite-react';
 
 const columnHelper = createColumnHelper<ChecklistItem>()
 
@@ -37,8 +38,10 @@ const Table: React.FC<TableProps> = ({ onOpenModal }) => {
     columnHelper.accessor('questions_count', {
       header: 'Questions',
     }),
-    columnHelper.accessor('updated_at', {
-      header: 'Date Modified',
+    columnHelper.accessor(row => row.updated_at, {
+      id: 'updated_at',
+      cell: info => <span>{info.getValue() ? format(new Date(info.getValue()), 'PP') : ''}</span>,
+      header: () => <span>Date Modified</span>,
     }),
     columnHelper.accessor(row => row.status, {
       id: 'status',
@@ -52,10 +55,14 @@ const Table: React.FC<TableProps> = ({ onOpenModal }) => {
       size: 70,
       cell: (info) =>
         <div className='flex justify-center text-base gap-2'>
-          <button type="button" className='px-1' onClick={() => handleOpenModal(info.row.original.id)}>
-            <HiEye />
-          </button>
-          <button type="button" className='px-1' onClick={() => deleteChecklist(info.row.original.id)}><FaTrash /></button>
+          <Tooltip content="View checklist">
+            <button data-tooltip-target="tooltip-dark" type="button" className='px-1' onClick={() => handleOpenModal(info.row.original.id)}>
+              <HiEye />
+            </button>
+          </Tooltip>
+          <Tooltip content="Delete checklist">
+            <button type="button" className='px-1' onClick={() => deleteChecklist(info.row.original.id)}><FaTrash /></button>
+          </Tooltip>
         </div>
     }),
   ]
@@ -75,7 +82,7 @@ const Table: React.FC<TableProps> = ({ onOpenModal }) => {
   if (isLoading) return <div className="flex items-center"><BeatLoader color="#F98080" className="mx-auto block" /></div>
 
   return (
-    <div className="overflow-hidden border rounded-lg">
+    <div className="overflow-hidden border rounded-lg mb-10">
       <table className="table-fixed w-full border-gray-400 text-slate-500 border-collapse text-xs divide-y divide-gray-200">
         <thead>
           {table.getHeaderGroups().map(headerGroup => (
