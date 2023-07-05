@@ -3,9 +3,11 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
-import { ChecklistFormAttr, useCreateChecklist, useGetChecklist } from "./service";
+import { useCreateChecklist, useGetChecklist } from "./service";
 import { ToastContainer, toast } from "react-toastify";
 import { useEffect } from "react";
+import { type ChecklistFormAttr } from "./service";
+import TableDetails from "../table-details";
 
 const schema = yup.object({
   title: yup.string().required("Required field"),
@@ -16,16 +18,14 @@ const schema = yup.object({
 
 type ChecklistFieldsProps = {
   onClose: () => void;
-  id?: number | undefined;
+  id?: number | null;
 }
 
 const ChecklistFields: React.FC<ChecklistFieldsProps> = ({ onClose, id }) => {
 
   const {data} = useGetChecklist(id);
 
-  console.log("🚀 ~ file: index.tsx:24 ~ datasdsda:", data)
-
-  const { register, handleSubmit, formState: { errors }, reset } = useForm<ChecklistFormAttr>({
+  const { register, handleSubmit, reset } = useForm<ChecklistFormAttr>({
     defaultValues: {
       title: data?.title,
       desc: data?.desc,
@@ -105,6 +105,9 @@ const ChecklistFields: React.FC<ChecklistFieldsProps> = ({ onClose, id }) => {
             </div>
           </div>
 
+        </div>
+        <div>
+          <TableDetails data={data?.categories}/>
         </div>
       </form>
     </>

@@ -10,8 +10,6 @@ import { format } from 'date-fns';
 import { BeatLoader } from 'react-spinners';
 import { HiEye } from 'react-icons/hi';
 import { FaTrash } from 'react-icons/fa';
-import { BiDuplicate } from 'react-icons/bi';
-import { useState } from 'react';
 import { Tooltip } from 'flowbite-react';
 
 const columnHelper = createColumnHelper<ChecklistItem>()

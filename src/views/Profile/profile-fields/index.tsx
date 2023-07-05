@@ -15,7 +15,7 @@ const schema = yup.object({
 
 type ProfileFieldsProps = {
   onClose: () => void;
-  data: ProfileInfoAttr;
+  data: ProfileInfoAttr | undefined;
 }
 
 type ProfileForm = {

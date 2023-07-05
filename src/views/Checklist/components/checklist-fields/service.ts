@@ -3,11 +3,18 @@ import { UseMutationOptions, UseMutationResult, UseQueryResult, useMutation, use
 
 const token = sessionStorage.getItem("token");
 
+type Category = {
+  id: string;
+  rank: string;
+  title: string;
+}
+
 type ChecklistFormAttr = {
   title: string;
   desc: string;
   color: string;
   kind: string;
+  categories?: Array<Category>;
 }
 
 const useCreateChecklist = (
@@ -27,7 +34,7 @@ const useCreateChecklist = (
   options
 )
 
-const useGetChecklist = (id: number): UseQueryResult<ChecklistFormAttr, AxiosError> =>{
+const useGetChecklist = (id: any): UseQueryResult<ChecklistFormAttr, AxiosError> =>{
   return useQuery<ChecklistFormAttr, AxiosError>(['checklist-details'], async() =>{
     const response = await axios.get<ChecklistFormAttr>(`https://backend-v2-sandbox.unatest.com/api/v2/checklists/${id}`, {
       headers: {
@@ -43,4 +50,4 @@ const useGetChecklist = (id: number): UseQueryResult<ChecklistFormAttr, AxiosErr
 
 export { useCreateChecklist, useGetChecklist };
 
-export type { ChecklistFormAttr };
+export type { ChecklistFormAttr, Category };
