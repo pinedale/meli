@@ -14,7 +14,6 @@ const Dropdown = () =>{
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { data } = useProfile()
-  console.log("🚀 ~ file: index.tsx:17 ~ Dropdown ~ data:", data)
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -26,8 +25,7 @@ const Dropdown = () =>{
   };
 
   const logout = () =>{
-    sessionStorage.removeItem("token");
-    sessionStorage.removeItem("roles");
+    sessionStorage.clear();
     navigate("/")
   }
 

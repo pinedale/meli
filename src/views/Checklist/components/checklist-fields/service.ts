@@ -1,7 +1,6 @@
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
 import { UseMutationOptions, UseMutationResult, UseQueryResult, useMutation, useQuery } from "react-query";
-
-const token = sessionStorage.getItem("token");
+import { useFetch } from "../../../../contexts/fetchProvider";
 
 type Category = {
   id: string;
@@ -19,30 +18,24 @@ type ChecklistFormAttr = {
 
 const useCreateChecklist = (
   options: UseMutationOptions<ChecklistFormAttr, AxiosError, ChecklistFormAttr, unknown>
-): UseMutationResult<ChecklistFormAttr, AxiosError, ChecklistFormAttr, unknown> => useMutation(
-  async (data) => {
-    const response = await axios.post('https://backend-v2-sandbox.unatest.com/api/v2/checklists', data, {
-      headers: {
-        'Accept': '*/*',
-        'X-Current-Organization': '01GEFTPWQ9M8PGXR4JVVRYKGSX',
-        'Authorization': `Bearer ${token}`,
-      }
-    })
+): UseMutationResult<ChecklistFormAttr, AxiosError, ChecklistFormAttr, unknown> => {
+  const { authRequest } = useFetch();
 
-    return response.data;
-  },
-  options
-)
+  return useMutation(
+    async (data) => {
+      const response = await authRequest.post('/checklists', data)
 
-const useGetChecklist = (id: any): UseQueryResult<ChecklistFormAttr, AxiosError> =>{
-  return useQuery<ChecklistFormAttr, AxiosError>(['checklist-details'], async() =>{
-    const response = await axios.get<ChecklistFormAttr>(`https://backend-v2-sandbox.unatest.com/api/v2/checklists/${id}`, {
-      headers: {
-        'Accept': '*/*',
-        'X-Current-Organization': '01GEFTPWQ9M8PGXR4JVVRYKGSX',
-        'Authorization': `Bearer ${token}`,
-      }
-    });
+      return response.data;
+    },
+    options
+  )
+}
+
+const useGetChecklist = (id: any): UseQueryResult<ChecklistFormAttr, AxiosError> => {
+  const { authRequest } = useFetch();
+
+  return useQuery<ChecklistFormAttr, AxiosError>(['checklist-details'], async () => {
+    const response = await authRequest.get<ChecklistFormAttr>(`/checklists/${id}`);
     return response.data
   })
 }

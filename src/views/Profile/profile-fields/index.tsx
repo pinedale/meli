@@ -46,8 +46,7 @@ const ProfileFields: React.FC<ProfileFieldsProps> = ({ onClose, data }) => {
       const errorMessage = error.message
       toast.error(`${errorMessage}`);
     },
-    onSuccess: (response) => {
-      console.log("🚀 ~ file: index.tsx:52 ~ response:", response)
+    onSuccess: () => {
       toast.success("Profile has been updated");
     }
   })
@@ -57,7 +56,6 @@ const ProfileFields: React.FC<ProfileFieldsProps> = ({ onClose, data }) => {
   }, [data, reset]);
 
   const onSubmit = handleSubmit((values) => {
-    console.log("🚀 ~ file: index.tsx:47 ~ onSubmit ~ values:", values)
     mutate(values)
   });
 

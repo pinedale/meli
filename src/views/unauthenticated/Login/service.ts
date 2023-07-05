@@ -1,5 +1,6 @@
 import { UseMutationOptions, UseMutationResult, useMutation } from 'react-query';
-import axios, { AxiosError } from 'axios';
+import { AxiosError } from 'axios';
+import { useFetch } from '../../../contexts/fetchProvider';
 
 type LoginData = {
   email: string;
@@ -28,19 +29,18 @@ type LoginResult = {
 
 const useLogin = (
   options: UseMutationOptions<LoginResult, AxiosError, LoginData, unknown>
-): UseMutationResult<LoginResult, AxiosError, LoginData, unknown> => useMutation(
-  async (data) => {
-    const response = await axios.post('https://backend-v2-sandbox.unatest.com/api/v2/sign_in', data, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': '*/*'
-      }
-    })
+): UseMutationResult<LoginResult, AxiosError, LoginData, unknown> => {
+  const { authRequest } = useFetch();
 
-    return response.data;
-  },
-  options
-)
+  return useMutation(
+    async (data) => {
+      const response = await authRequest.post(`${import.meta.env.VITE_API_ENDPOINT}/sign_in`, data)
+
+      return response.data;
+    },
+    options
+  )
+}
 
 
 export default useLogin;

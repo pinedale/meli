@@ -4,7 +4,8 @@ import useLogin from './service';
 import { useNavigate } from "react-router-dom";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
+import { useFetch } from "../../../contexts/fetchProvider";
 
 const schema = yup.object({
   email: yup.string().email("please enter a valid email").required("Required field"),
@@ -17,6 +18,7 @@ type LoginForm = {
 }
 
 const Login: React.FC = () => {
+  const { saveToken } = useFetch()
   const navigate = useNavigate()
   const { register, handleSubmit, formState: { errors } } = useForm<LoginForm>({
     defaultValues: {
@@ -28,15 +30,10 @@ const Login: React.FC = () => {
 
   const { mutate } = useLogin({
     onSuccess: (data) => {
-      console.log("🚀 ~ file: index.tsx:20 ~ datssssa:", data)
-      const token = data?.access
-      console.log("🚀 ~ file: index.tsx:33 ~ token:", token)
-      sessionStorage.setItem('token', token)
+      const token = data.access
+      saveToken(token)
       sessionStorage.setItem("roles", JSON.stringify(data.roles))
       navigate('/roster')
-      const roleList = sessionStorage.getItem("roles")
-      console.log("🚀 ~ file: index.tsx:38 ~ roleList:", roleList)
-      
     },
     onError: (error) => {
       const errorMessage = error.message
@@ -51,7 +48,6 @@ const Login: React.FC = () => {
 
   return (
     <div className="h-screen flex justify-center items-center">
-      <ToastContainer />
       <div className="w-full max-w-md shadow-md mx-auto p-14 rounded-md border border-gray-100">
         <div className="w-24 mx-auto mb-10">
           <img src={unaLogo} alt="Meli" className="w-full block" />
@@ -60,7 +56,7 @@ const Login: React.FC = () => {
         <form onSubmit={onSubmit}>
           <div className="grid grid-rows-1 gap-3">
             <div className="flex gap-1 flex-col">
-              <input 
+              <input
                 className="w-full bg-gray-100 border rounded px-3 py-2 text-xs text-gray-700"
                 type="text"
                 placeholder="Email"
@@ -78,7 +74,7 @@ const Login: React.FC = () => {
               <p className="text-xs text-red-app">{errors?.password?.message}</p>
             </div>
             <div>
-              
+
             </div>
             <div>
               <button type="submit" className="text-white bg-green-app focus:ring-4 focus:ring-blue-300 font-medium rounded-md text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 w-full">Login</button>

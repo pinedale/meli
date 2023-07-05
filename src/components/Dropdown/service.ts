@@ -1,6 +1,6 @@
-import axios, { AxiosError } from "axios"
+import { AxiosError } from "axios"
 import { UseQueryResult, useQuery } from "react-query"
-
+import { useFetch } from "../../contexts/fetchProvider"
 
 type Roles = {
   name:string,
@@ -18,17 +18,12 @@ type ProfileInfoAttr = {
   phone_number?: string,
   roles?: Array<Roles>
 }
-const token = sessionStorage.getItem("token");
 
 const useProfile = (): UseQueryResult<ProfileInfoAttr, AxiosError> =>{
+  const { authRequest, setOrganization } = useFetch();
+  setOrganization('01GEFTPWQ9M8PGXR4JVVRYKGSX')
   return useQuery<ProfileInfoAttr, AxiosError>(['profile'], async() =>{
-    const response = await axios.get<ProfileInfoAttr>('https://backend-v2-sandbox.unatest.com/api/v2/profile', {
-      headers: {
-        'Accept': '*/*',
-        'X-Current-Organization': '01GEFTPWQ9M8PGXR4JVVRYKGSX',
-        'Authorization': `Bearer ${token}`,
-      }
-    });
+    const response = await authRequest.get<ProfileInfoAttr>('/profile');
     return response.data
   })
 }

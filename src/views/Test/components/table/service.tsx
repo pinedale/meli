@@ -1,5 +1,6 @@
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
 import { UseQueryResult, useQuery } from "react-query";
+import { useFetch } from "../../../../contexts/fetchProvider";
 
 type Params = {
   page: number;
@@ -18,17 +19,12 @@ type TestItem = {
 
 type Tests = Array<TestItem>
 
-const token = sessionStorage.getItem("token");
-
 const useTestList = ({ params }: { params: Params }): UseQueryResult<Tests, AxiosError> => {
+  const { authRequest } = useFetch();
+
   return useQuery<Tests, AxiosError>(['tests', params.page, params.items], async () => {
-    const response = await axios.get<{tests: Tests}>('https://backend-v2-sandbox.unatest.com/api/v2/tests', {
+    const response = await authRequest.get<{tests: Tests}>('/tests', {
       params,
-      headers: {
-        'Accept': '*/*',
-        'X-Current-Organization': '01GEFTPWQ9M8PGXR4JVVRYKGSX',
-        'Authorization': `Bearer ${token}`,
-      }
     });
 
     return response.data.tests;

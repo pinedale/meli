@@ -1,5 +1,6 @@
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
 import { UseQueryResult, useQuery } from "react-query";
+import { useFetch } from "../../../../contexts/fetchProvider";
 
 type Params = {
   page: number;
@@ -21,18 +22,12 @@ type ChecklistItem = {
 
 type Checklist = Array<ChecklistItem>
 
-const token = sessionStorage.getItem("token");
-console.log("🚀 ~ file: service.tsx:25 ~ token:", token)
-
 const useChecklist = ({ params }: { params: Params }): UseQueryResult<Checklist, AxiosError> => {
+  const { authRequest } = useFetch();
+
   return useQuery<Checklist, AxiosError>(['documents', params.page, params.items], async () => {
-    const response = await axios.get<Checklist>('https://backend-v2-sandbox.unatest.com/api/v2/checklists', {
+    const response = await authRequest.get<Checklist>('/checklists', {
       params,
-      headers: {
-        'Accept': '*/*',
-        'X-Current-Organization': '01GEFTPWQ9M8PGXR4JVVRYKGSX',
-        'Authorization': `Bearer ${token}`,
-      }
     });
 
     return response.data; // Asumiendo que la respuesta contiene los datos en la propiedad "data"

@@ -1,21 +1,21 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom"
 import Header from "../components/Header";
 import Menu from "../components/Menu";
-
+import { useFetch } from "../contexts/fetchProvider";
 
 const RequiredAuthRoute = () => {
   const location = useLocation()
-  const token = sessionStorage.getItem('token');
-  console.log("🚀 ~ file: RequiredRoute.tsx:9 ~ RequiredAuthRoute ~ tokenssss:", token)
+  const { getToken } = useFetch()
+  const token = getToken();
 
   return (
     token
-      ? 
-        <>
-          <Header />
-          <Menu />
-          <Outlet />
-        </>
+      ?
+      <>
+        <Header />
+        <Menu />
+        <Outlet />
+      </>
       : <Navigate to="/" state={{ from: location }} replace />
   )
 }
