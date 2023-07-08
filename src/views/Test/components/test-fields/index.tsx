@@ -1,8 +1,13 @@
+import { useGetTest } from "./services";
 
 type TestFieldsProps = {
   onClose: () => void;
+  id?: number | null;
 }
-const TestFields: React.FC<TestFieldsProps> = ({ onClose }) => {
+const TestFields: React.FC<TestFieldsProps> = ({ onClose, id }) => {
+
+  const {data} = useGetTest(id);
+  console.log("🚀 ~ file: index.tsx:10 ~ datawww:", data)
 
   return (
     <>

@@ -4,9 +4,11 @@ import Modal from "../Modal";
 import ProfileFields from "../../views/Profile/profile-fields";
 import { useNavigate } from "react-router-dom";
 import { useProfile } from "./service";
+import { useFetch } from "../../contexts/fetchProvider";
 
 const Dropdown = () =>{
   const [isOpen, setIsOpen] = useState<boolean>(false)
+  const { roleType } = useFetch()
   const navigate = useNavigate()
   const toggleDropdown = () =>{
     setIsOpen(!isOpen);
@@ -34,7 +36,7 @@ const Dropdown = () =>{
       <div onClick={toggleDropdown} className="text-gray-700 flex items-center cursor-pointer gap-1">
         <div className="text-xs text-right">
           <p>{data?.first_name} {data?.last_name}</p>
-          <p className="text-red-app">Corporate</p>
+          <p className="text-red-app capitalize">{roleType}</p>
         </div>
         <div className="text-sm">
           <AiFillCaretDown />

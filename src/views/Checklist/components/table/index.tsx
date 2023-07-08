@@ -11,6 +11,7 @@ import { BeatLoader } from 'react-spinners';
 import { HiEye } from 'react-icons/hi';
 import { FaTrash } from 'react-icons/fa';
 import { Tooltip } from 'flowbite-react';
+import { useNavigate } from 'react-router-dom';
 
 const columnHelper = createColumnHelper<ChecklistItem>()
 
@@ -20,7 +21,7 @@ type TableProps = {
 
 
 const Table: React.FC<TableProps> = ({ onOpenModal }) => {
-
+  const navigate = useNavigate();
   const { data, isLoading } = useChecklist({ params: { page: 1, items: 20 } })
 
   const columns = [
@@ -72,6 +73,7 @@ const Table: React.FC<TableProps> = ({ onOpenModal }) => {
   })
 
   const handleOpenModal = (itemId: number) => {
+    navigate(`/checklist/${itemId}`)
     onOpenModal(itemId);
   };
   
@@ -105,7 +107,6 @@ const Table: React.FC<TableProps> = ({ onOpenModal }) => {
             </tr>
           ))}
         </thead>
-
         <tbody>
           {table.getRowModel().rows.map(row => (
             <tr key={row.id} className="even:bg-gray-100">

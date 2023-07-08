@@ -7,7 +7,8 @@ import { useCreateChecklist, useGetChecklist } from "./service";
 import { ToastContainer, toast } from "react-toastify";
 import { useEffect } from "react";
 import { type ChecklistFormAttr } from "./service";
-import TableDetails from "../table-details";
+import TableCategory from "../table-category";
+// import TableDetails from "../table-details";
 
 const schema = yup.object({
   title: yup.string().required("Required field"),
@@ -22,6 +23,7 @@ type ChecklistFieldsProps = {
 }
 
 const ChecklistFields: React.FC<ChecklistFieldsProps> = ({ onClose, id }) => {
+console.log("🚀 ~ file: index.tsx:26 ~ idsss:", id)
 
   const {data} = useGetChecklist(id);
 
@@ -67,7 +69,7 @@ const ChecklistFields: React.FC<ChecklistFieldsProps> = ({ onClose, id }) => {
           </div>
         </div>
         <div className="max-w-6xl mx-auto pt-14">
-          <h2 className=" text-2xl text-gray-700 mb-8">Checkist Details</h2>
+          <h2 className=" text-2xl text-gray-700 mb-8">Checklist Details</h2>
           <div className=" w-full grid gap-4 grid-cols-3">
             <div>
               <label className="text-gray-700 text-xs mb-1 block">Title</label>
@@ -106,8 +108,9 @@ const ChecklistFields: React.FC<ChecklistFieldsProps> = ({ onClose, id }) => {
           </div>
 
         </div>
-        <div>
-          <TableDetails data={data?.categories}/>
+        <div className="max-w-6xl mx-auto pt-14">
+          <h2 className="text-2xl text-gray-700 mb-8">Categories ({data?.categories?.length})</h2>
+          <TableCategory data={data?.categories} checklistId={id}/>
         </div>
       </form>
     </>

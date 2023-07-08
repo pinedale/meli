@@ -5,47 +5,55 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 
-import useBundleList, { type BundleItem } from "./service"
+import {useBundleList, useDeleteBundle} from "./service"
+import { type BundleItem } from "./service"
 import { BeatLoader } from 'react-spinners';
 import { format } from 'date-fns';
 import { FaTrash } from "react-icons/fa";
+import { Tooltip } from 'flowbite-react';
 
 const columnHelper = createColumnHelper<BundleItem>()
 
-
-const columns = [
-  columnHelper.accessor('title', {
-    header: 'Title',
-  }),
-  columnHelper.accessor('tests_count', {
-    header: 'Test',
-  }),
-  columnHelper.accessor('checklists_count', {
-    header: 'Checklist',
-  }),
-  columnHelper.accessor('courses_count', {
-    header: () => 'Mandatories',
-  }),
-  columnHelper.accessor('updated_at', {
-    header: 'Date Modified',
-    cell: info => <span>{info.getValue() ? format(new Date(info.getValue()), 'PP') : ''}</span>,
-  }),
-  columnHelper.display({
-    id: 'd',
-    size: 80,
-    cell: () => <div className='flex justify-center text-base'><FaTrash title="Delete"/></div>
-  }),
-];
-
 const Table = () => {
-
   const { data, isLoading } = useBundleList({ params: { page: 1, items: 20 } })
+
+  const columns = [
+    columnHelper.accessor('title', {
+      header: 'Title',
+    }),
+    columnHelper.accessor('tests_count', {
+      header: 'Test',
+    }),
+    columnHelper.accessor('checklists_count', {
+      header: 'Checklist',
+    }),
+    columnHelper.accessor('courses_count', {
+      header: () => 'Mandatories',
+    }),
+    columnHelper.accessor('updated_at', {
+      header: 'Date Modified',
+      cell: info => <span>{info.getValue() ? format(new Date(info.getValue()), 'PP') : ''}</span>,
+    }),
+    columnHelper.accessor(row => row.id, {
+      id: 'actions',
+      header: 'Actions',
+      size: 70,
+      cell: (info) =>
+        <div className='flex text-base gap-2'>
+          <Tooltip content="Delete checklist">
+            <button type="button" className='px-1' onClick={() => deleteBundle(info.row.original.id)}><FaTrash /></button>
+          </Tooltip>
+        </div>
+    }),
+  ];
 
   const table = useReactTable({
     data: data || [],
     columns,
     getCoreRowModel: getCoreRowModel(),
   })
+
+  const {mutateAsync:deleteBundle} = useDeleteBundle()
 
   if (isLoading) return <div className="flex items-center"><BeatLoader color="#F98080" className="mx-auto block" /></div>
 

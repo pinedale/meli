@@ -9,6 +9,7 @@ import Documents from './views/Documents';
 import Bundles from './views/Bundles';
 import RequiredAuthRoute from './routes/RequiredRoute';
 import { useEffect } from 'react';
+import ChecklistSection from './views/checklist-section';
 
 const Layout = () => {
   const navigate = useNavigate()
@@ -33,7 +34,10 @@ const App = () => (
       <Route path='/' element={<Login />} />
       <Route element={<RequiredAuthRoute />}>
         <Route path='/roster' element={<Roster />} />
+        <Route path="/roster/:id" element={<Roster />} />
         <Route path='/checklist' element={<Checklist />} />
+        <Route path='/checklist/:id' element={<Checklist />} />
+        <Route path='/checklist/:id/:id' element={<ChecklistSection />} />
         <Route path='/test' element={<Test />} />
         <Route path='/mandatories' element={<Mandatories />} />
         <Route path='/documents' element={<Documents />} />

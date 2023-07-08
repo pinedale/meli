@@ -4,28 +4,21 @@ import {
 	getCoreRowModel,
 	useReactTable,
 } from '@tanstack/react-table';
-import { format } from 'date-fns';
-import { BeatLoader } from 'react-spinners';
+
+
 import { HiEye } from 'react-icons/hi';
 import { FaTrash } from 'react-icons/fa';
 import { Tooltip } from 'flowbite-react';
-import { ChecklistItem } from '../table/service';
 import { Category } from '../checklist-fields/service';
-
-type CategoryItem = {
-	id: string;
-	rank: string;
-	title: string;
-}
 
 const columnHelper = createColumnHelper<Category>()
 
-type TableDetailsProps = {
+type TableSectionProps = {
 	data?: Array<Category>;
 }
 
 
-const TableDetails: React.FC<TableDetailsProps> = ({ data }) => {
+const TableSection: React.FC<TableSectionProps> = ({ data }) => {
 
 	const columns = [
 		columnHelper.accessor('title', {
@@ -42,9 +35,9 @@ const TableDetails: React.FC<TableDetailsProps> = ({ data }) => {
 			id: 'actions',
 			header: 'Actions',
 			size: 70,
-			cell: (info) =>
+			cell: () =>
 				<div className='flex justify-center text-base gap-2'>
-					<Tooltip content="View checklist">
+					<Tooltip content="View details">
 						<button
 
 							data-tooltip-target="tooltip-dark"
@@ -53,7 +46,7 @@ const TableDetails: React.FC<TableDetailsProps> = ({ data }) => {
 							<HiEye />
 						</button>
 					</Tooltip>
-					<Tooltip content="Delete checklist">
+					<Tooltip content="Delete">
 						<button type="button" className='px-1'><FaTrash /></button>
 					</Tooltip>
 				</div>
@@ -61,7 +54,7 @@ const TableDetails: React.FC<TableDetailsProps> = ({ data }) => {
 	]
 
 	const table = useReactTable({
-		data: data,
+		data: data || [],
 		columns,
 		getCoreRowModel: getCoreRowModel(),
 	})
@@ -109,4 +102,4 @@ const TableDetails: React.FC<TableDetailsProps> = ({ data }) => {
 	)
 };
 
-export default TableDetails
+export default TableSection;

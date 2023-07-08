@@ -3,10 +3,14 @@ import Summary from "../../components/Summary";
 import Modal from "../../components/Modal";
 import RostertFields from "./components/roster-fields";
 import Table from "./components/table";
+import { useNavigate } from "react-router-dom";
 
 
 const Roster = () =>{
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
+  const [isEditing, setIsEditing] = useState<boolean | undefined>(false);
+  const navigate = useNavigate();
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -14,7 +18,16 @@ const Roster = () =>{
 
   const closeModal = () => {
     setIsModalOpen(false);
+    setIsEditing(false);
+    navigate("/roster");
   };
+
+  const handleOpenModal = (itemId: string) =>{
+    debugger;
+    setIsEditing(true);
+    setSelectedItemId(itemId);
+    openModal();
+  }
 
   return(
     <>
@@ -25,10 +38,10 @@ const Roster = () =>{
         </div>
       </div>
       <div className="max-w-6xl mx-auto">
-        <Table />
+        <Table onOpenModal={handleOpenModal}/>
       </div>
       <Modal onClose={closeModal} isOpen={isModalOpen}>
-        <RostertFields onClose={closeModal}/>
+        <RostertFields onClose={closeModal} id={selectedItemId} isEditing={isEditing}/>
       </Modal>
     </>
   )

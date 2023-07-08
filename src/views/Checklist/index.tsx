@@ -4,10 +4,12 @@ import Summary from "../../components/Summary";
 import Modal from "../../components/Modal";
 import ChecklistFields from "./components/checklist-fields";
 import Table from "./components/table";
+import { useNavigate } from "react-router-dom";
 
 const Checklist = () =>{
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
+  const navigate = useNavigate();
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -16,6 +18,7 @@ const Checklist = () =>{
 
   const closeModal = () => {
     setIsModalOpen(false);
+    navigate("/checklist");
   };
 
   const handleOpenModal = (itemId: number) =>{

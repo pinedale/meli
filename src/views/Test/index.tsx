@@ -1,11 +1,12 @@
 import { useState } from "react";
 import Summary from "../../components/Summary";
 import Modal from "../../components/Modal";
-import RostertFields from "./components/test-fields";
+import TestFields from "./components/test-fields";
 import Table from "./components/table";
 
 const Test = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -14,6 +15,11 @@ const Test = () => {
   const closeModal = () => {
     setIsModalOpen(false);
   };
+
+  const handleOpenModal = (itemId: number) =>{
+    setSelectedItemId(itemId);
+    openModal();
+  }
 
   return(
     <>
@@ -24,10 +30,10 @@ const Test = () => {
         </div>
       </div>
       <div className="max-w-6xl mx-auto">
-        <Table />
+        <Table onOpenModal={handleOpenModal}/>
       </div>
       <Modal onClose={closeModal} isOpen={isModalOpen}>
-        <RostertFields onClose={closeModal}/>
+        <TestFields onClose={closeModal} id={selectedItemId}/>
       </Modal>
     </>
   )

@@ -4,7 +4,6 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import useChecklist from './service'
 
 type Person = {
   title: string
@@ -47,8 +46,6 @@ const columns = [
   }),
 ]
 const Table = () => {
-
-  const { data  } = useChecklist({params: {page: 1, items: 20}})
 
   const table = useReactTable({
     data: [],

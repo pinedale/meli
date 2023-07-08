@@ -30,9 +30,9 @@ const Login: React.FC = () => {
 
   const { mutate } = useLogin({
     onSuccess: (data) => {
-      const token = data.access
-      saveToken(token)
-      sessionStorage.setItem("roles", JSON.stringify(data.roles))
+      const token = data.access;
+      const roles = data.roles;
+      saveToken(token, roles)
       navigate('/roster')
     },
     onError: (error) => {
