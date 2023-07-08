@@ -32,17 +32,17 @@ const App = () => (
   <Routes>
     <Route path='/' element={<Layout />}>
       <Route path='/' element={<Login />} />
-      <Route element={<RequiredAuthRoute />}>
-        <Route path='/roster' element={<Roster />} />
-        <Route path="/roster/:id" element={<Roster />} />
-        <Route path='/checklist' element={<Checklist />} />
-        <Route path='/checklist/:id' element={<Checklist />} />
-        <Route path='/checklist/:id/:id' element={<ChecklistSection />} />
-        <Route path='/test' element={<Test />} />
-        <Route path='/mandatories' element={<Mandatories />} />
-        <Route path='/documents' element={<Documents />} />
-        <Route path='/bundles' element={<Bundles />} />
-      </Route>
+    </Route>
+    <Route element={<RequiredAuthRoute />}>
+      <Route path='/roster' element={<Roster />} />
+      <Route path="/roster/:id" element={<Roster />} />
+      <Route path='/checklist' element={<Checklist />} />
+      <Route path='/checklist/:id' element={<Checklist />} />
+      <Route path='/checklist/:id/:id' element={<ChecklistSection />} />
+      <Route path='/test' element={<Test />} />
+      <Route path='/mandatories' element={<Mandatories />} />
+      <Route path='/documents' element={<Documents />} />
+      <Route path='/bundles' element={<Bundles />} />
     </Route>
   </Routes>
 );
