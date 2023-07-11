@@ -9,16 +9,17 @@ import {
 import { HiEye } from 'react-icons/hi';
 import { FaTrash } from 'react-icons/fa';
 import { Tooltip } from 'flowbite-react';
-import { Category } from '../checklist-fields/service';
+import { Category } from '../../../Checklist/components/checklist-fields/service';
+import { useParams } from 'react-router-dom';
+import { useGetChecklistInfo } from './services';
 
-const columnHelper = createColumnHelper<Category>()
+const columnHelper = createColumnHelper<Category>();
 
-type TableSectionProps = {
-	data?: Array<Category>;
-}
+const TableSection: React.FC = () => {
+	const { checklistId, categoryId } = useParams()
 
-
-const TableSection: React.FC<TableSectionProps> = ({ data }) => {
+	const {data} = useGetChecklistInfo(checklistId, categoryId);
+	console.log("🚀 ~ file: index.tsx:28 ~ data:", data)
 
 	const columns = [
 		columnHelper.accessor('title', {
@@ -54,7 +55,7 @@ const TableSection: React.FC<TableSectionProps> = ({ data }) => {
 	]
 
 	const table = useReactTable({
-		data: data || [],
+		data: data?.sections || [],
 		columns,
 		getCoreRowModel: getCoreRowModel(),
 	})

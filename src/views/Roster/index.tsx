@@ -4,9 +4,11 @@ import Modal from "../../components/Modal";
 import RostertFields from "./components/roster-fields";
 import Table from "./components/table";
 import { useNavigate } from "react-router-dom";
+import { useFetch } from "../../contexts/fetchProvider";
 
 
 const Roster = () =>{
+  const {organization} = useFetch()
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
   const [isEditing, setIsEditing] = useState<boolean | undefined>(false);
@@ -19,11 +21,10 @@ const Roster = () =>{
   const closeModal = () => {
     setIsModalOpen(false);
     setIsEditing(false);
-    navigate("/roster");
+    navigate(`${organization}/roster`);
   };
 
   const handleOpenModal = (itemId: string) =>{
-    debugger;
     setIsEditing(true);
     setSelectedItemId(itemId);
     openModal();

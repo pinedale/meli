@@ -42,7 +42,7 @@ const TableCategory: React.FC<TableCategoryProps> = ({ data, checklistId}) => {
 				<div className='flex justify-center text-base gap-2'>
 					<Tooltip content="View details">
 						<button
-							onClick={() => navigate(`/checklist/${checklistId}/${info.row.original.id}`)}
+							onClick={() => navigate(`/checklist/${checklistId}/categories/${info.row.original.id}`)}
 							data-tooltip-target="tooltip-dark"
 							type="button" className='px-1'
 						>

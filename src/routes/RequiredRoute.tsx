@@ -4,6 +4,7 @@ import Menu from "../components/Menu";
 import { useFetch } from "../contexts/fetchProvider";
 
 const RequiredAuthRoute = () => {
+  const { organization} = useFetch()
   const location = useLocation()
   const { getToken } = useFetch()
   const token = getToken();
@@ -16,7 +17,7 @@ const RequiredAuthRoute = () => {
         <Menu />
         <Outlet />
       </>
-      : <Navigate to="/" state={{ from: location }} replace />
+      : <Navigate to={`/organization/${organization}`} state={{ from: location }} replace />
   )
 }
 

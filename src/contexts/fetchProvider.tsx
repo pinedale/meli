@@ -33,11 +33,9 @@ const getRoles = () => sessionStorage.getItem(ROLE_KEY);
 const rolesArray = JSON.parse(getRoles() as string);
 console.log("🚀 ~ file: fetchProvider.tsx:41 ~ rolesArray:", rolesArray)
 
-
 const FetchProvider: FunctionComponent<PropsWithChildren> = ({ children }) => {
   const [token, setToken] = useState(getToken());
   const [role, setRole] = useState(rolesArray);
-  console.log("🚀 ~ file: fetchProvider.tsx:47 ~ rolesss:", role[0].organization.id)
 
   const [organization, setOrganization] = useState(role[0].organization.id);
   const [roleType, setRoleType] = useState(role[0].name)

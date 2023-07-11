@@ -23,7 +23,6 @@ type ChecklistFieldsProps = {
 }
 
 const ChecklistFields: React.FC<ChecklistFieldsProps> = ({ onClose, id }) => {
-console.log("🚀 ~ file: index.tsx:26 ~ idsss:", id)
 
   const {data} = useGetChecklist(id);
 
@@ -61,7 +60,7 @@ console.log("🚀 ~ file: index.tsx:26 ~ idsss:", id)
         <ToastContainer />
         <div className=" flex justify-between align-middle h-12 border-b border-gray-200 items-center px-5">
           <div>
-            <button onClick={onClose} className=" bg-gray-400 hover:bg-gray-500 text-white w-20">Cancel</button>
+            <button onClick={onClose} className="bg-gray-400 hover:bg-gray-500 text-white w-20">Cancel</button>
           </div>
           <div><h1 className=" text-base text-gray-700">Add new Skills Checklist</h1></div>
           <div>

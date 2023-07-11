@@ -33,7 +33,7 @@ const Login: React.FC = () => {
       const token = data.access;
       const roles = data.roles;
       saveToken(token, roles)
-      navigate('/roster')
+      navigate(`/organization/${roles[0].organization.id}/roster`)
     },
     onError: (error) => {
       const errorMessage = error.message

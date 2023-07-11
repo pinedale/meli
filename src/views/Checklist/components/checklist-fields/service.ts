@@ -9,7 +9,7 @@ type Section = {
 }
 
 type Category = {
-  id: number;
+  id: string;
   rank: number;
   title: string;
   sections?: Array<Section>;

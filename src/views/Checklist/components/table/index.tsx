@@ -12,16 +12,14 @@ import { HiEye } from 'react-icons/hi';
 import { FaTrash } from 'react-icons/fa';
 import { Tooltip } from 'flowbite-react';
 import { useNavigate } from 'react-router-dom';
+import { useFetch } from '../../../../contexts/fetchProvider';
 
 const columnHelper = createColumnHelper<ChecklistItem>()
 
-type TableProps = {
-  onOpenModal: (arg: number) => void;
-}
 
-
-const Table: React.FC<TableProps> = ({ onOpenModal }) => {
+const Table: React.FC = () => {
   const navigate = useNavigate();
+  const {organization} = useFetch()
   const { data, isLoading } = useChecklist({ params: { page: 1, items: 20 } })
 
   const columns = [
@@ -73,8 +71,7 @@ const Table: React.FC<TableProps> = ({ onOpenModal }) => {
   })
 
   const handleOpenModal = (itemId: number) => {
-    navigate(`/checklist/${itemId}`)
-    onOpenModal(itemId);
+    navigate(`/organization/${organization}/checklist/${itemId}`)
   };
   
   const {mutateAsync:deleteChecklist} = useDeleteChecklist()
