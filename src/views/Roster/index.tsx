@@ -21,7 +21,7 @@ const Roster = () =>{
   const closeModal = () => {
     setIsModalOpen(false);
     setIsEditing(false);
-    navigate(`${organization}/roster`);
+    navigate(`/organization/${organization}/roster`);
   };
 
   const handleOpenModal = (itemId: string) =>{

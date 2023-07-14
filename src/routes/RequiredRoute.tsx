@@ -5,6 +5,7 @@ import { useFetch } from "../contexts/fetchProvider";
 
 const RequiredAuthRoute = () => {
   const { organization} = useFetch()
+  console.log("🚀 ~ file: RequiredRoute.tsx:8 ~ RequiredAuthRoute ~ organization:", organization)
   const location = useLocation()
   const { getToken } = useFetch()
   const token = getToken();

@@ -10,6 +10,7 @@ import { FaTrash } from 'react-icons/fa';
 import { HiEye } from 'react-icons/hi';
 import { Tooltip } from 'flowbite-react';
 import { useNavigate } from 'react-router-dom';
+import { useFetch } from '../../../../contexts/fetchProvider';
 
 const columnHelper = createColumnHelper<UserItem>()
 
@@ -17,7 +18,8 @@ type TableProps = {
   onOpenModal: (arg: string) => void;
 }
 
-const Table: React.FC<TableProps> = ({onOpenModal}) => {
+const Table: React.FC<TableProps> = ({ onOpenModal }) => {
+  const { organization } = useFetch()
   const navigate = useNavigate();
   const { data = [], isLoading } = useUsers({ params: { page: 1, items: 20 } })
 
@@ -75,7 +77,7 @@ const Table: React.FC<TableProps> = ({onOpenModal}) => {
   })
 
   const handleOpenModal = (itemId: string) => {
-    navigate(`/roster/${itemId}`);
+    navigate(`/organization/${organization}/roster/${itemId}`);
     onOpenModal(itemId);
   };
 

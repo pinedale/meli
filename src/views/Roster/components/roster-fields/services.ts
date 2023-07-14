@@ -14,6 +14,19 @@ type RosterFormAttr = {
   attachment: string;
 }
 
+type RosterFormRequestAtrr = {
+  user:{
+    id: string;
+    first_name: string;
+    last_name: string;
+    email: string;
+    bio: string;
+    role: string;
+    phone_number?: string;
+    attachment: string;
+  }
+}
+
 type Error = {
   response: {
     data: {
@@ -25,8 +38,8 @@ type Error = {
 }
 
 const useCreateRoster = (
-  options: UseMutationOptions<RosterFormAttr, Error, RosterFormAttr, unknown>
-): UseMutationResult<RosterFormAttr, Error, RosterFormAttr, unknown> => {
+  options: UseMutationOptions<RosterFormAttr, Error, RosterFormRequestAtrr, unknown>
+): UseMutationResult<RosterFormAttr, Error, RosterFormRequestAtrr, unknown> => {
   const { authRequest } = useFetch();
 
   return useMutation(

@@ -1,6 +1,6 @@
 
 type MandatoriesFieldsProps = {
-  onClose: () => void;
+  onClose?: () => void;
 }
 
 const MandatoriesFields: React.FC<MandatoriesFieldsProps> = ({ onClose }) => {

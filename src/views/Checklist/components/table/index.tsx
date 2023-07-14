@@ -19,7 +19,7 @@ const columnHelper = createColumnHelper<ChecklistItem>()
 
 const Table: React.FC = () => {
   const navigate = useNavigate();
-  const {organization} = useFetch()
+  const {organization} = useFetch();
   const { data, isLoading } = useChecklist({ params: { page: 1, items: 20 } })
 
   const columns = [

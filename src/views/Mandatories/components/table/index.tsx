@@ -4,43 +4,70 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import useChecklist from './service'
 import { format } from 'date-fns';
-import { type CourseItem } from "./service"
+import { useGetCourses, type CourseItem } from "./service"
 import { BeatLoader } from 'react-spinners';
+import { Tooltip } from 'flowbite-react';
+import { HiEye } from 'react-icons/hi';
+import { FaTrash } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
+import { useFetch } from '../../../../contexts/fetchProvider';
 
 const columnHelper = createColumnHelper<CourseItem>()
 
-const columns = [
-  columnHelper.accessor(row => row.title, {
-    id: 'title',
-    cell: info => <span>{info.getValue()}</span>,
-    header: () => <span>Title</span>,
-  }),
-  columnHelper.accessor(row => row.chapters_count, {
-    id: 'chapters_count',
-    cell: info => <span>{info.getValue()}</span>,
-    header: () => <span>Chapters</span>,
-  }),
-  columnHelper.accessor(row => row.questions_count, {
-    id: 'questions_count',
-    cell: info => <span>{info.getValue()}</span>,
-    header: () => <span>Questions</span>,
-  }),
-  columnHelper.accessor(row => row.updated_at, {
-    id: 'updated_at',
-    cell: info => <span>{info.getValue() ? format(new Date(info.getValue()), 'PP') : ''}</span>,
-    header: () => <span>Date Modified</span>,
-  }),
-  columnHelper.accessor(row => row.status, {
-    id: 'status',
-    cell: info => <span className={info.getValue() === "active" ? "text-green-app" : "text-gray-600"}>{info.getValue()}</span>,
-    header: () => <span>Status</span>,
-  }),
-]
 const Table = () => {
+  const navigate = useNavigate();
+  const {organization} = useFetch();
 
-  const { data, isLoading } = useChecklist({ params: { page: 1, items: 20 } })
+  const columns = [
+    columnHelper.accessor(row => row.title, {
+      id: 'title',
+      cell: info => <span>{info.getValue()}</span>,
+      header: () => <span>Title</span>,
+    }),
+    columnHelper.accessor(row => row.chapters_count, {
+      id: 'chapters_count',
+      cell: info => <span>{info.getValue()}</span>,
+      header: () => <span>Chapters</span>,
+    }),
+    columnHelper.accessor(row => row.questions_count, {
+      id: 'questions_count',
+      cell: info => <span>{info.getValue()}</span>,
+      header: () => <span>Questions</span>,
+    }),
+    columnHelper.accessor(row => row.updated_at, {
+      id: 'updated_at',
+      cell: info => <span>{info.getValue() ? format(new Date(info.getValue()), 'PP') : ''}</span>,
+      header: () => <span>Date Modified</span>,
+    }),
+    columnHelper.accessor(row => row.status, {
+      id: 'status',
+      cell: info => <span className={info.getValue() === "active" ? "text-green-app" : "text-gray-600"}>{info.getValue()}</span>,
+      header: () => <span>Status</span>,
+    }),
+    columnHelper.display({
+      id: 'a',
+      header: 'Actions',
+      size: 120,
+      cell: (info) =>
+        <div className='flex text-base gap-2'>
+          <Tooltip content="View details">
+            <button
+              data-tooltip-target="tooltip-dark"
+              type="button"
+              className='px-1'
+              onClick={()=> navigate(`/organization/${organization}/mandatories/${info.row.original.id}`)}
+            >
+              <HiEye />
+            </button>
+          </Tooltip>
+          <Tooltip content="Remove">
+            <button type="button" className='px-1'><FaTrash /></button>
+          </Tooltip>
+        </div>
+    }),
+  ]
+  const { data, isLoading } = useGetCourses({ params: { page: 1, items: 20 } })
 
   const table = useReactTable({
     data: data ? data : [],

@@ -2,13 +2,23 @@ import axios from "axios";
 import type { AxiosInstance, AxiosRequestHeaders } from "axios";
 import { FunctionComponent, PropsWithChildren, createContext, useContext, useState } from "react";
 
+type Roles = {
+  name: string;
+  organization: {
+    id: string;
+    title: string;
+    logo_url: string;
+  }
+}
+
 type FetchState = {
   authRequest: AxiosInstance;
   removeToken: () => void;
-  saveToken: (token: string, roles: string) => void;
+  saveToken: (token: string, roles: Array<Roles>) => void;
   organization: string;
   setOrganization: (id: string) => void;
   getToken: () => string | null | undefined;
+  getRoles: () => string | null | undefined;
   roleType: string;
   setRoleType: (id: string) => void;
 };
@@ -22,7 +32,7 @@ const removeToken = () => {
   sessionStorage.removeItem(TOKEN_KEY);
 };
 
-const saveToken = (token: string, role: string) => {
+const saveToken = (token: string, role: Array<Roles>) => {
   sessionStorage.setItem(TOKEN_KEY, token);
   sessionStorage.setItem(ROLE_KEY, JSON.stringify(role));
 };
@@ -35,10 +45,9 @@ console.log("🚀 ~ file: fetchProvider.tsx:41 ~ rolesArray:", rolesArray)
 
 const FetchProvider: FunctionComponent<PropsWithChildren> = ({ children }) => {
   const [token, setToken] = useState(getToken());
-  const [role, setRole] = useState(rolesArray);
 
-  const [organization, setOrganization] = useState(role[0].organization.id);
-  const [roleType, setRoleType] = useState(role[0].name)
+  const [organization, setOrganization] = useState(rolesArray ? rolesArray[0].organization.id: "");
+  const [roleType, setRoleType] = useState(rolesArray ? rolesArray[0].name : "" )
 
   const authRequest = axios.create({
     baseURL: import.meta.env.VITE_API_ENDPOINT,
@@ -77,6 +86,7 @@ const FetchProvider: FunctionComponent<PropsWithChildren> = ({ children }) => {
         organization,
         setOrganization,
         getToken,
+        getRoles,
         roleType,
         setRoleType,
       }}

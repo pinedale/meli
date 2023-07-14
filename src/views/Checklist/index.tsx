@@ -8,7 +8,6 @@ import { useNavigate } from "react-router-dom";
 
 const Checklist = () =>{
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
   const navigate = useNavigate();
 
   const openModal = () => {
@@ -21,13 +20,7 @@ const Checklist = () =>{
     navigate("/checklist");
   };
 
-  const handleOpenModal = (itemId: number) =>{
-    setSelectedItemId(itemId);
-    openModal();
-  }
-
   const handleCreateNewChecklist = () => {
-    setSelectedItemId(null);
     openModal();
   };
 
@@ -40,11 +33,11 @@ const Checklist = () =>{
         </div>
       </div>
       <div className="max-w-6xl mx-auto">
-        <Table onOpenModal={handleOpenModal}/>
+        <Table />
       </div>
       
       <Modal onClose={closeModal} isOpen={isModalOpen}>
-        <ChecklistFields onClose={closeModal} id={selectedItemId}/>
+        <ChecklistFields onClose={closeModal} />
       </Modal>
     </>
   )

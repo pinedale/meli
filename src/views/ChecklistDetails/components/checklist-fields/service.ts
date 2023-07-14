@@ -43,7 +43,7 @@ const useCreateChecklist = (
   )
 }
 
-const useGetChecklist = (id: number | null | undefined): UseQueryResult<ChecklistFormAttr, AxiosError> => {
+const useGetChecklist = (id: string | null | undefined): UseQueryResult<ChecklistFormAttr, AxiosError> => {
   const { authRequest } = useFetch();
 
   return useQuery<ChecklistFormAttr, AxiosError>(['checklist-details'], async () => {

@@ -1,7 +1,5 @@
-import { AxiosError } from "axios"
 import { UseQueryResult, useQuery } from "react-query"
 import { useFetch } from "../../contexts/fetchProvider"
-import { toast } from "react-toastify"
 import { useNavigate } from "react-router-dom"
 
 type Roles = {

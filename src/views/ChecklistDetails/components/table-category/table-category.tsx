@@ -13,11 +13,11 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { CategoryAdd, useAddChecklistCategory, useDeleteChecklistCategory, useGetChecklistCategories } from './services';
 import { type CategoryAttr } from './services';
 import { BeatLoader } from 'react-spinners';
-import { useFetch } from '../../../contexts/fetchProvider';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { toast } from 'react-toastify';
+import { useFetch } from '../../../../contexts/fetchProvider';
 
 const columnHelper = createColumnHelper<CategoryAttr>()
 

@@ -3,9 +3,12 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
-import { useCreateChecklist } from "./service";
+import { useCreateChecklist, useGetChecklist } from "./service";
 import { toast } from "react-toastify";
+import { useEffect } from "react";
 import { type ChecklistFormAttr } from "./service";
+import { useParams } from "react-router-dom";
+import { BeatLoader } from "react-spinners";
 
 const schema = yup.object({
   title: yup.string().required("Required field"),
@@ -14,24 +17,22 @@ const schema = yup.object({
   kind: yup.string().required("Required field"),
 })
 
-type ChecklistFieldsProps = {
-  onClose: () => void;
-}
+const ChecklistFields = () => {
+  const { checklistId } = useParams()
+  const { data, isFetching } = useGetChecklist(checklistId);
 
-const ChecklistFields: React.FC<ChecklistFieldsProps> = ({ onClose }) => {
-
-  const { register, handleSubmit } = useForm<ChecklistFormAttr>({
+  const { register, handleSubmit, reset } = useForm<ChecklistFormAttr>({
     defaultValues: {
-      title: "",
-      desc: "",
-      color: "",
-      kind: "",
+      title: data?.title,
+      desc: data?.desc,
+      color: data?.color,
+      kind: data?.color,
     },
     resolver: yupResolver(schema),
   });
 
   const { mutate } = useCreateChecklist({
-    onError: (error) =>{
+    onError: (error) => {
       const errorMessage = error.message
       toast.error(`${errorMessage}`);
     },
@@ -40,22 +41,19 @@ const ChecklistFields: React.FC<ChecklistFieldsProps> = ({ onClose }) => {
     }
   })
 
+  useEffect(() => {
+    reset(data)
+  }, [data, reset]);
+
   const onSubmit = handleSubmit((values) => {
     mutate(values);
   });
 
+  if (isFetching) return <div className="flex items-center pt-10"><BeatLoader color="#F98080" className="mx-auto block" /></div>
+
   return (
     <>
       <form onSubmit={onSubmit}>
-        <div className=" flex justify-between align-middle h-12 border-b border-gray-200 items-center px-5">
-          <div>
-            <button onClick={onClose} className="bg-gray-400 hover:bg-gray-500 text-white w-20">Cancel</button>
-          </div>
-          <div><h1 className=" text-base text-gray-700">Add new Skills Checklist</h1></div>
-          <div>
-            <button className="bg-red-400 hover:border-red-600 text-white w-20">Save</button>
-          </div>
-        </div>
         <div className="max-w-6xl mx-auto pt-14">
           <h2 className=" text-2xl text-gray-700 mb-8">Checklist Details</h2>
           <div className=" w-full grid gap-4 grid-cols-3">
@@ -94,7 +92,6 @@ const ChecklistFields: React.FC<ChecklistFieldsProps> = ({ onClose }) => {
               />
             </div>
           </div>
-
         </div>
       </form>
     </>

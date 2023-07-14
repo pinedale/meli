@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useCreateRoster, useGetRoster } from "./services";
 import { type RosterFormAttr } from "./services";
 import { useForm } from "react-hook-form";
@@ -21,13 +21,13 @@ type RosterFieldsProps = {
 }
 const RosterFields: React.FC<RosterFieldsProps> = ({ onClose, id, isEditing }) => {
   console.log("🚀 ~ file: index.tsx:23 ~ isEditing:", isEditing)
-  const [file, setFile] = useState<string | undefined>();
+  // const [file, setFile] = useState<string | undefined>();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    if (e.target.files) {
-      setFile(URL.createObjectURL(e.target.files[0]));
-    }
-  };
+  // const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+  //   if (e.target.files) {
+  //     setFile(URL.createObjectURL(e.target.files[0]));
+  //   }
+  // };
 
   const {data} = useGetRoster(id);
 
@@ -46,7 +46,7 @@ const RosterFields: React.FC<RosterFieldsProps> = ({ onClose, id, isEditing }) =
         phone_number: "",
         role: "",
       },
-    resolver: yupResolver(schema),
+    resolver: yupResolver<yup.AnyObject>(schema),
   });
 
   const { mutate } = useCreateRoster({
@@ -92,7 +92,7 @@ const RosterFields: React.FC<RosterFieldsProps> = ({ onClose, id, isEditing }) =
                     className="hidden absolute"
                   />
                   <div className="line-flex items-center justify-center w-24 h-24 overflow-hidden rounded-full absolute top-0">
-                    <img src={file} className="w-full h-full object-cover" />
+                    {/* <img src={file} className="w-full h-full object-cover" /> */}
                   </div>
                 </div>
                 <span className="text-red-app">+ Add Photo</span>

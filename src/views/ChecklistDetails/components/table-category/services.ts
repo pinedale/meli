@@ -1,6 +1,6 @@
 import { AxiosError } from "axios";
 import { UseMutationOptions, UseMutationResult, UseQueryResult, useMutation, useQuery, useQueryClient } from "react-query";
-import { useFetch } from "../../../contexts/fetchProvider";
+import { useFetch } from "../../../../contexts/fetchProvider";
 import { toast } from "react-toastify";
 
 type Section = {

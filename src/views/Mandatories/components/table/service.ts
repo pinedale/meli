@@ -34,5 +34,5 @@ const useGetCourses = ({ params }: { params: Params }): UseQueryResult<Courses, 
   });
 };
 
-export default useGetCourses;
+export {useGetCourses};
 export type {CourseItem} 

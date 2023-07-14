@@ -39,7 +39,6 @@ const Login: React.FC = () => {
       const errorMessage = error.message
       toast.error(`${errorMessage}`);
     },
-
   });
 
   const onSubmit = handleSubmit((values) => {
