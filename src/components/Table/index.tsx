@@ -1,72 +1,47 @@
 import {
-  createColumnHelper,
+  ColumnDef,
   flexRender,
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table'
+import { BeatLoader } from 'react-spinners';
 
-type Person = {
-  title: string
-  type: string
-  test: number
-  checklist: number
-  status: string
-  mandatories: number
+type TableProps<Data extends object> = {
+  data: Array<Data>;
+  columns: Array<ColumnDef<Data>>;
+  isLoading: boolean;
 }
 
-const columnHelper = createColumnHelper<Person>()
-
-const columns = [
-  columnHelper.accessor('title', {
-    cell: info => info.getValue(),
-    footer: info => info.column.id,
-  }),
-  columnHelper.accessor(row => row.type, {
-    id: 'type',
-    cell: info => <i>{info.getValue()}</i>,
-    header: () => <span>Type</span>,
-    footer: info => info.column.id,
-  }),
-  columnHelper.accessor('test', {
-    header: () => 'Test',
-    cell: info => info.renderValue(),
-    footer: info => info.column.id,
-  }),
-  columnHelper.accessor('checklist', {
-    header: () => <span>Checklist</span>,
-    footer: info => info.column.id,
-  }),
-  columnHelper.accessor('mandatories', {
-    header: 'Mandatories',
-    footer: info => info.column.id,
-  }),
-  columnHelper.accessor('status', {
-    header: 'Status',
-    footer: info => info.column.id,
-  }),
-]
-const Table = () => {
-
+const Table = <Data extends object>({data, columns, isLoading }: TableProps<Data>): React.ReactElement => {
   const table = useReactTable({
-    data: [],
+    data,
     columns,
     getCoreRowModel: getCoreRowModel(),
   })
 
+  if (isLoading) return <div className="flex items-center"><BeatLoader color="#F98080" className="mx-auto block" /></div>
+
   return (
     <div className="overflow-hidden border rounded-lg">
-      <table className="table-fixed w-full border-gray-400 text-slate-500 border-collapse text-xs divide-y divide-gray-200">
+      <table className="table-fixed w-full border-gray-400 text-slate-500 border-collapse text-xs divide-y divide-gray-200 mb-4">
         <thead>
           {table.getHeaderGroups().map(headerGroup => (
             <tr key={headerGroup.id}>
               {headerGroup.headers.map(header => (
-                <th className="py-3 bg-slate-100 text-left px-2" key={header.id}>
+                <th
+                  className="py-3 bg-slate-100 text-left px-2"
+                  key={header.id}
+                  style={{
+                    width:
+                      header.getSize() ? header.getSize() : undefined,
+                  }}
+                >
                   {header.isPlaceholder
                     ? null
                     : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
+                      header.column.columnDef.header,
+                      header.getContext()
+                    )}
                 </th>
               ))}
             </tr>

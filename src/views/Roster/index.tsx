@@ -1,18 +1,23 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Summary from "../../components/Summary";
 import Modal from "../../components/Modal";
 import RostertFields from "./components/roster-fields";
-import Table from "./components/table";
 import { useNavigate } from "react-router-dom";
 import { useFetch } from "../../contexts/fetchProvider";
+import { ColumnDef } from "@tanstack/react-table";
+import useUsers, { type UserItem } from "./components/table/service";
+import { Tooltip } from "flowbite-react";
+import { HiEye } from "react-icons/hi";
+import { FaTrash } from "react-icons/fa";
+import Table from "../../components/Table";
 
-
-const Roster = () =>{
-  const {organization} = useFetch()
+const Roster = () => {
+  const { organization } = useFetch()
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
   const [isEditing, setIsEditing] = useState<boolean | undefined>(false);
   const navigate = useNavigate();
+  const { data, isLoading } = useUsers({ params: { page: 1, items: 20 } });
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -24,25 +29,75 @@ const Roster = () =>{
     navigate(`/organization/${organization}/roster`);
   };
 
-  const handleOpenModal = (itemId: string) =>{
-    setIsEditing(true);
-    setSelectedItemId(itemId);
-    openModal();
-  }
+  const columns = useMemo<ColumnDef<UserItem>[]>(() =>
+    [
+      {
+        accessorKey: 'first_name',
+        header: 'Name',
+        size: 150,
+      },
+      {
+        accessorKey: 'role',
+        header: 'Role',
+        size: 120,
+      },
+      {
+        accessorKey: 'email',
+        header: 'Email',
+        size: 220,
+      },
+      {
+        accessorKey: 'checklists.finished',
+        header: 'Skills Checklist',
+        size: 120,
+      },
+      {
+        accessorKey: 'tests.finished',
+        header: 'Tests',
+        size: 100,
+      },
+      {
+        accessorKey: 'courses.finished',
+        header: 'Mandatories',
+        size: 120,
+      },
+      {
+        accessorKey: 'status',
+        header: 'Status',
+        size: 100,
+      },
+      {
+        accessorKey: 'id',
+        header: 'Actions',
+        size: 120,
+        cell: () =>
+          <div className='flex justify-center text-base gap-2'>
+            <Tooltip content="View Profile">
+              <button data-tooltip-target="tooltip-dark" type="button" className='px-1'>
+                <HiEye />
+              </button>
+            </Tooltip>
+            <Tooltip content="Remove">
+              <button type="button" className='px-1'><FaTrash /></button>
+            </Tooltip>
+          </div>
+      },
+    ]
+    , []);
 
-  return(
+  return (
     <>
-      <Summary />
+      <Summary stats={data?.meta.stats} />
       <div className="py-4">
         <div className="max-w-6xl mx-auto flex justify-end">
           <button className="bg-white text-red-400 hover:border-red-400" onClick={openModal}> + Create New Member</button>
         </div>
       </div>
       <div className="max-w-6xl mx-auto">
-        <Table onOpenModal={handleOpenModal}/>
+        <Table data={data?.users || []} isLoading={isLoading} columns={columns} />
       </div>
       <Modal onClose={closeModal} isOpen={isModalOpen}>
-        <RostertFields onClose={closeModal} id={selectedItemId} isEditing={isEditing}/>
+        <RostertFields onClose={closeModal} id={selectedItemId} isEditing={isEditing} />
       </Modal>
     </>
   )

@@ -45,15 +45,32 @@ type UserItem = {
   attachment: Attachment;
 }
 
-type Userlist = Array<UserItem>
+type UserResponse = {
+  users: Array<UserItem>;
+  meta: {
+    pagination: {
+      count: number;
+      page: number;
+      prev: number | null;
+      next: number;
+      last: number;
+    };
+    stats: {
+      total: number;
+      active: number;
+      pending: number;
+      inactive: number;
+    };
+  };
+}
 
-const useUsers = ({ params }: { params: Params }): UseQueryResult<Userlist, AxiosError> => {
+const useUsers = ({ params }: { params: Params }): UseQueryResult<UserResponse, AxiosError> => {
   const { authRequest } = useFetch();
 
-  return useQuery<Userlist, AxiosError>(['users', params.page, params.items], async () => {
-    const response = await authRequest.get<{ users: Userlist }>('/users');
+  return useQuery<UserResponse, AxiosError>(['users', params.page, params.items], async () => {
+    const response = await authRequest.get<UserResponse>('/users');
 
-    return response.data.users;
+    return response.data;
   }, {
     keepPreviousData: true,
     staleTime: 5000,
