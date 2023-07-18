@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Summary from "../../components/Summary";
 import Modal from "../../components/Modal";
 import RostertFields from "./components/roster-fields";
@@ -6,18 +6,41 @@ import { useNavigate } from "react-router-dom";
 import { useFetch } from "../../contexts/fetchProvider";
 import { ColumnDef } from "@tanstack/react-table";
 import useUsers, { type UserItem } from "./components/table/service";
-import { Tooltip } from "flowbite-react";
+import { Pagination, Tooltip } from "flowbite-react";
 import { HiEye } from "react-icons/hi";
 import { FaTrash } from "react-icons/fa";
 import Table from "../../components/Table";
 
 const Roster = () => {
+  const [paginationParams, setPaginationParams] = useState({
+    page: 1,
+    totalPages: 1,
+  })
   const { organization } = useFetch()
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
   const [isEditing, setIsEditing] = useState<boolean | undefined>(false);
   const navigate = useNavigate();
-  const { data, isLoading } = useUsers({ params: { page: 1, items: 20 } });
+  const { data, isLoading } = useUsers({ params: { page: paginationParams.page, items: 20 } });
+
+  useEffect(() => {
+    if (data?.meta.pagination) {
+      setPaginationParams((prev) => ({
+        ...prev,
+        page: data.meta.pagination.page,
+        totalPages: data.meta.pagination.last,
+      }))
+    }
+
+  }, [data?.meta.pagination])
+
+  const onPageChange = (page: number) => {
+    setPaginationParams((prev) => ({
+      ...prev,
+      page: page,
+    }))
+
+  }
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -26,6 +49,7 @@ const Roster = () => {
   const closeModal = () => {
     setIsModalOpen(false);
     setIsEditing(false);
+    setSelectedItemId(null)
     navigate(`/organization/${organization}/roster`);
   };
 
@@ -95,6 +119,7 @@ const Roster = () => {
       </div>
       <div className="max-w-6xl mx-auto">
         <Table data={data?.users || []} isLoading={isLoading} columns={columns} />
+        <Pagination className="mb-8" currentPage={paginationParams.page} onPageChange={onPageChange} totalPages={paginationParams.totalPages} />
       </div>
       <Modal onClose={closeModal} isOpen={isModalOpen}>
         <RostertFields onClose={closeModal} id={selectedItemId} isEditing={isEditing} />

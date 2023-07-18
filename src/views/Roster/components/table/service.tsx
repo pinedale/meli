@@ -68,7 +68,7 @@ const useUsers = ({ params }: { params: Params }): UseQueryResult<UserResponse, 
   const { authRequest } = useFetch();
 
   return useQuery<UserResponse, AxiosError>(['users', params.page, params.items], async () => {
-    const response = await authRequest.get<UserResponse>('/users');
+    const response = await authRequest.get<UserResponse>('/users', { params });
 
     return response.data;
   }, {
