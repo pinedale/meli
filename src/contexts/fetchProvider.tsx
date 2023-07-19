@@ -60,12 +60,6 @@ const FetchProvider: FunctionComponent<PropsWithChildren> = ({ children }) => {
     baseURL: import.meta.env.VITE_API_ENDPOINT,
   });
 
-  useEffect(()=>{
-    if(TOKEN_KEY){
-      setToken(getToken());
-    }
-  }, [TOKEN_KEY])
-
   authRequest.interceptors.request.use(
     (config) => ({
       ...config,

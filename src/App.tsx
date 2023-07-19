@@ -10,6 +10,7 @@ import RequiredAuthRoute from './routes/RequiredRoute';
 import ChecklistSection from './views/ChecklistSection';
 import ChecklistDetails from './views/ChecklistDetails';
 import MandatoryDetails from './views/MandatoryDetails';
+import RosterDetails from './views/RosterDetails';
 
 const Layout = () => {
 
@@ -34,7 +35,7 @@ const App = () => (
     </Route>
     <Route element={<RequiredAuthRoute />}>
       <Route path='/organization/:orgId/roster' element={<Roster />} />
-      <Route path="/organization/:orgId/roster/:id" element={<Roster />} />
+      <Route path="/organization/:orgId/roster/:rosterId" element={<RosterDetails />} />
       <Route path='/organization/:orgId/checklist' element={<Checklist />} />
       <Route path='/organization/:orgId/checklist/:checklistId' element={<ChecklistDetails />} />
       <Route path='/organization/:orgId/checklist/:checklistId/categories/:categoryId' element={<ChecklistSection />} />

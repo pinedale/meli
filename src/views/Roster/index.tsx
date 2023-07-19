@@ -17,7 +17,6 @@ const Roster = () => {
     totalPages: 1,
   })
   const { organization } = useFetch()
-  console.log("🚀 ~ file: index.tsx:20 ~ Roster ~ organization:", organization)
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
   const [isEditing, setIsEditing] = useState<boolean | undefined>(false);
@@ -95,10 +94,15 @@ const Roster = () => {
         accessorKey: 'id',
         header: 'Actions',
         size: 120,
-        cell: () =>
+        cell: (info) =>
           <div className='flex justify-center text-base gap-2'>
             <Tooltip content="View Profile">
-              <button data-tooltip-target="tooltip-dark" type="button" className='px-1'>
+              <button
+                data-tooltip-target="tooltip-dark"
+                type="button"
+                className='px-1'
+                onClick={() => navigate(`/organization/${organization}/roster/${info.row.original.id}`)}
+              >
                 <HiEye />
               </button>
             </Tooltip>

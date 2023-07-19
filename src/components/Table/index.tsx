@@ -23,7 +23,7 @@ const Table = <Data extends object>({data, columns, isLoading }: TableProps<Data
 
   return (
     <div className="overflow-hidden border rounded-lg">
-      <table className="table-fixed w-full border-gray-400 text-slate-500 border-collapse text-xs divide-y divide-gray-200 mb-4">
+      <table className="table-fixed w-full border-gray-400 text-slate-500 border-collapse text-xs divide-y divide-gray-200">
         <thead>
           {table.getHeaderGroups().map(headerGroup => (
             <tr key={headerGroup.id}>
