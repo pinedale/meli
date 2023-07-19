@@ -5,7 +5,6 @@ import Roster from './views/Roster';
 import Login from './views/unauthenticated/Login';
 import Test from './views/Test';
 import Mandatories from './views/Mandatories';
-import Documents from './views/Documents';
 import Bundles from './views/Bundles';
 import RequiredAuthRoute from './routes/RequiredRoute';
 import ChecklistSection from './views/ChecklistSection';
@@ -42,7 +41,6 @@ const App = () => (
       <Route path='/organization/:orgId/test' element={<Test />} />
       <Route path='/organization/:orgId/mandatories' element={<Mandatories />} />
       <Route path='/organization/:orgId/mandatories/:mandatoryId' element={<MandatoryDetails />} />
-      <Route path='/organization/:orgId/documents' element={<Documents />} />
       <Route path='/organization/:orgId/bundles' element={<Bundles />} />
     </Route>
   </Routes>

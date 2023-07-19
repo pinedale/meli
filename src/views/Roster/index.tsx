@@ -17,6 +17,7 @@ const Roster = () => {
     totalPages: 1,
   })
   const { organization } = useFetch()
+  console.log("🚀 ~ file: index.tsx:20 ~ Roster ~ organization:", organization)
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
   const [isEditing, setIsEditing] = useState<boolean | undefined>(false);

@@ -1,6 +1,6 @@
 import axios from "axios";
 import type { AxiosInstance, AxiosRequestHeaders } from "axios";
-import { FunctionComponent, PropsWithChildren, createContext, useContext, useState } from "react";
+import { FunctionComponent, PropsWithChildren, createContext, useContext, useEffect, useState } from "react";
 
 type Roles = {
   name: string;
@@ -32,18 +32,25 @@ const removeToken = () => {
   sessionStorage.removeItem(TOKEN_KEY);
 };
 
-const saveToken = (token: string, role: Array<Roles>) => {
-  sessionStorage.setItem(TOKEN_KEY, token);
-  sessionStorage.setItem(ROLE_KEY, JSON.stringify(role));
-};
-
-const getToken = () => sessionStorage.getItem(TOKEN_KEY);
-const getRoles = () => sessionStorage.getItem(ROLE_KEY);
-
-const rolesArray = JSON.parse(getRoles() as string);
-console.log("🚀 ~ file: fetchProvider.tsx:41 ~ rolesArray:", rolesArray)
-
 const FetchProvider: FunctionComponent<PropsWithChildren> = ({ children }) => {
+
+  const saveToken = (token: string, role: Array<Roles>) => {
+    console.log("🚀 ~ file: fetchProvider.tsx:38 ~ saveToken ~ role:", role)
+    sessionStorage.setItem(TOKEN_KEY, token);
+
+    sessionStorage.setItem(ROLE_KEY, JSON.stringify(role));
+    // setsSelectedRole(role[0].organization.id)
+    setOrganization(role[0].organization.id)
+  };
+  
+  const getToken = () => sessionStorage.getItem(TOKEN_KEY);
+  console.log("🚀 ~ file: fetchProvider.tsx:41 ~ sessionStorage.getItem(TOKEN_KEY):", sessionStorage.getItem(TOKEN_KEY))
+  const getRoles = () => sessionStorage.getItem(ROLE_KEY);
+  console.log("🚀 ~ file: fetchProvider.tsx:42 ~ sessionStorage.getItem(ROLE_KEY):", sessionStorage.getItem(ROLE_KEY))
+  
+  const rolesArray = JSON.parse(getRoles() as string);
+  console.log("🚀 ~ file: fetchProvider.tsx:41 ~ rolesArray:", rolesArray)
+
   const [token, setToken] = useState(getToken());
 
   const [organization, setOrganization] = useState(rolesArray ? rolesArray[0].organization.id: "");
@@ -52,6 +59,12 @@ const FetchProvider: FunctionComponent<PropsWithChildren> = ({ children }) => {
   const authRequest = axios.create({
     baseURL: import.meta.env.VITE_API_ENDPOINT,
   });
+
+  useEffect(()=>{
+    if(TOKEN_KEY){
+      setToken(getToken());
+    }
+  }, [TOKEN_KEY])
 
   authRequest.interceptors.request.use(
     (config) => ({
