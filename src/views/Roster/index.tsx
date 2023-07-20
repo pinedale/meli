@@ -71,19 +71,31 @@ const Roster = () => {
         size: 220,
       },
       {
-        accessorKey: 'checklists.finished',
+        accessorKey: 'checklists',
         header: 'Skills Checklist',
         size: 120,
+        cell: (info) => 
+          <div className='flex justify-center gap-2'>
+            <span>{info.row.original.checklists.finished}-<span className=" text-red-600 text-xs">({info.row.original.checklists.untaken})</span></span>
+          </div>
       },
       {
-        accessorKey: 'tests.finished',
+        accessorKey: 'tests',
         header: 'Tests',
         size: 100,
+        cell: (info) => 
+          <div className='flex justify-center gap-2'>
+            <span>{info.row.original.tests.finished}-<span className=" text-red-600 text-xs">({info.row.original.tests.untaken})</span></span>
+          </div>
       },
       {
-        accessorKey: 'courses.finished',
+        accessorKey: 'courses',
         header: 'Mandatories',
         size: 120,
+        cell: (info) => 
+          <div className='flex justify-center gap-2'>
+            <span>{info.row.original.courses.finished}-<span className=" text-red-600 text-xs">({info.row.original.courses.untaken})</span></span>
+          </div>
       },
       {
         accessorKey: 'status',
@@ -112,7 +124,7 @@ const Roster = () => {
           </div>
       },
     ]
-    , []);
+    , [navigate, organization]);
 
   return (
     <>

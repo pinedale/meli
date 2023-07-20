@@ -48,7 +48,7 @@ const Table: React.FC<TableProps> = ({ onOpenModal }) => {
     }),
     columnHelper.accessor(row => row.updated_at, {
       id: 'updated_at',
-      cell: info => <span>{info.getValue() ? format(new Date(info.getValue()), 'PP') : ''}</span>,
+      cell: info => <span>{info.getValue() ? format(new Date(info.getValue()), 'PPpp') : ''}</span>,
       header: () => <span>Date Modified</span>,
       footer: info => info.column.id,
     }),

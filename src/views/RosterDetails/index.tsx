@@ -1,9 +1,10 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useFetch } from "../../contexts/fetchProvider";
-import { useGetUserTest, type TestItem, useGetUserChecklist, type ChecklistItem, useGetUserCourses,  type CourseItem } from "./services";
+import { useGetUserTest, type TestItem, useGetUserChecklist, type ChecklistItem, useGetUserCourses, type CourseItem } from "./services";
 import Table from "../../components/Table";
 import { useMemo } from "react";
 import { ColumnDef } from "@tanstack/react-table";
+import { format } from "date-fns";
 
 const RosterDetails: React.FC = () => {
   const { organization } = useFetch();
@@ -12,7 +13,7 @@ const RosterDetails: React.FC = () => {
   const { data: dataTest, isLoading: testLoading } = useGetUserTest(rosterId);
   const { data: dataChecklist, isLoading: checklistLoading } = useGetUserChecklist(rosterId);
   const { data: dataCourses, isLoading: coursesLoading } = useGetUserCourses(rosterId);
-
+  
   const columns = useMemo<ColumnDef<TestItem>[]>(() =>
     [
       {
@@ -21,19 +22,41 @@ const RosterDetails: React.FC = () => {
         size: 150,
       },
       {
-        accessorKey: 'status',
+        accessorKey: 'status, ended_at',
         header: 'Status',
         size: 120,
+        cell: (info) =>
+          <div className='flex gap-2'>
+            <span>
+              {info.row.original.status !== "untaken" ? info.row.original.status : <p><b className="text-red-600">Invite Sent</b> - {format(new Date(info.row.original.assigned_on), 'PPpp')}</p>}
+              {info.row.original.ended_at ? `- ${format(new Date(info.row.original.ended_at), 'PPpp')}`: ''}
+              {info.row.original.status == "started" ? `- ${format(new Date(info.row.original.started_at), 'PPpp')}`: ''}
+            </span>
+          </div>
       },
       {
-        accessorKey: 'score',
+        accessorKey: 'score, passed, status',
         header: 'Score',
         size: 220,
+        cell: (info) => {
+          const hasScore = info.row.original.score ?? '-'
+          const pass = info.row.original.passed ? (
+            <span className="text-green-400">Pass</span>
+          ) : (
+            <span className="text-red-600">Did Not Pass</span>
+          )
+          return (
+            <div className='flex gap-2'>
+              <b>
+                {info.row.original.status !== "untaken" ? <>{hasScore}% - {pass}</>: "-"} </b>
+            </div>
+          )
+        }
       }
     ]
     , []);
 
-    const columnsCourses = useMemo<ColumnDef<CourseItem>[]>(() =>
+  const columnsCourses = useMemo<ColumnDef<CourseItem>[]>(() =>
     [
       {
         accessorKey: 'title',
@@ -41,14 +64,36 @@ const RosterDetails: React.FC = () => {
         size: 150,
       },
       {
-        accessorKey: 'status',
+        accessorKey: 'status, ended_at',
         header: 'Status',
         size: 120,
+        cell: (info) =>
+          <div className='flex gap-2'>
+            <span>
+              {info.row.original.status !== "untaken" ? info.row.original.status : <p><b className="text-red-600">Invite Sent</b> - {format(new Date(info.row.original.assigned_on), 'PPpp')}</p>}
+              {info.row.original.ended_at ? `- ${format(new Date(info.row.original.ended_at), 'PPpp')}`: ''}
+              {info.row.original.status == "started" ? `- ${format(new Date(info.row.original.started_at), 'PPpp')}`: ''}
+            </span>
+          </div>
       },
       {
-        accessorKey: 'score',
+        accessorKey: 'score, passed, status',
         header: 'Score',
         size: 220,
+        cell: (info) => {
+          const hasScore = info.row.original.score ?? '-'
+          const pass = info.row.original.passed ? (
+            <span className="text-green-400">Pass</span>
+          ) : (
+            <span className="text-red-600">Did Not Pass</span>
+          )
+          return (
+            <div className='flex gap-2'>
+              <b>
+                {info.row.original.status !== "untaken" ? <>{hasScore}% - {pass}</>: "-"} </b>
+            </div>
+          )
+        }
       }
     ]
     , []);
@@ -64,6 +109,16 @@ const RosterDetails: React.FC = () => {
         accessorKey: 'status',
         header: 'Status',
         size: 120,
+        cell: (info) =>
+          <div className='flex gap-2'>
+            <span>
+              {info.row.original.status !== "untaken" 
+                ? info.row.original.status 
+                : <p><b className="text-red-600">Invite Sent</b> - {format(new Date(info.row.original.assigned_on), 'PPpp')}</p>} 
+              {info.row.original.ended_at ? `- ${format(new Date(info.row.original.ended_at), 'PPpp')}`: ''}
+              {info.row.original.status == "started" ? `- ${format(new Date(info.row.original.started_at), 'PPpp')}`: ''}
+            </span>
+          </div>
       }
     ]
     , []);
@@ -85,24 +140,26 @@ const RosterDetails: React.FC = () => {
           <button className="bg-red-400 hover:border-red-600 text-white w-20">Save</button>
         </div>
       </div>
-      <div className="max-w-6xl mx-auto pt-14 overflow-y-auto h-full">
-        <div className="flex justify-between mb-4">
-          <h2 className=" text-2xl text-gray-700">Tests ({dataTest?.length})</h2>
-        </div>
-        <div className="mb-8">
-          <Table data={dataTest || []} columns={columns} isLoading={testLoading} />
-        </div>
-        <div className="flex justify-between mb-4">
-          <h2 className=" text-2xl text-gray-700">Skills Checklists ({dataChecklist?.length})</h2>
-        </div>
-        <div className="mb-8">
-          <Table data={dataChecklist || []} columns={columnsChecklist} isLoading={checklistLoading} />
-        </div>
-        <div className="flex justify-between mb-4">
-          <h2 className=" text-2xl text-gray-700">Mandatories ({dataCourses?.length})</h2>
-        </div>
-        <div>
-          <Table data={dataCourses || []} columns={columnsCourses} isLoading={coursesLoading} />
+      <div className="overflow-y-auto h-full pb-10">
+        <div className="max-w-6xl mx-auto pt-14">
+          <div className="flex justify-between mb-4">
+            <h2 className=" text-2xl text-gray-700">Tests ({dataTest?.length})</h2>
+          </div>
+          <div className="mb-8">
+            <Table data={dataTest || []} columns={columns} isLoading={testLoading} />
+          </div>
+          <div className="flex justify-between mb-4">
+            <h2 className=" text-2xl text-gray-700">Skills Checklists ({dataChecklist?.length})</h2>
+          </div>
+          <div className="mb-8">
+            <Table data={dataChecklist || []} columns={columnsChecklist} isLoading={checklistLoading} />
+          </div>
+          <div className="flex justify-between mb-4">
+            <h2 className=" text-2xl text-gray-700">Mandatories ({dataCourses?.length})</h2>
+          </div>
+          <div className="pb-8">
+            <Table data={dataCourses || []} columns={columnsCourses} isLoading={coursesLoading} />
+          </div>
         </div>
       </div>
     </div>

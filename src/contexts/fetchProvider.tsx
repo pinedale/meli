@@ -1,6 +1,6 @@
 import axios from "axios";
 import type { AxiosInstance, AxiosRequestHeaders } from "axios";
-import { FunctionComponent, PropsWithChildren, createContext, useContext, useEffect, useState } from "react";
+import { FunctionComponent, PropsWithChildren, createContext, useContext, useState } from "react";
 
 type Roles = {
   name: string;
