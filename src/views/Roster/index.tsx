@@ -5,7 +5,7 @@ import RostertFields from "./components/roster-fields";
 import { useNavigate } from "react-router-dom";
 import { useFetch } from "../../contexts/fetchProvider";
 import { ColumnDef } from "@tanstack/react-table";
-import useUsers, { type UserItem } from "./components/table/service";
+import useUsers, { type UserItem } from "./components/service";
 import { Pagination, Tooltip } from "flowbite-react";
 import { HiEye } from "react-icons/hi";
 import { FaTrash } from "react-icons/fa";

@@ -1,6 +1,6 @@
 import { AxiosError } from "axios";
 import { UseQueryResult, useQuery } from "react-query";
-import { useFetch } from "../../../../contexts/fetchProvider";
+import { useFetch } from "../../../contexts/fetchProvider";
 
 type Params = {
   page: number;
