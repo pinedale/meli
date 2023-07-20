@@ -11,6 +11,7 @@ import ChecklistSection from './views/ChecklistSection';
 import ChecklistDetails from './views/ChecklistDetails';
 import MandatoryDetails from './views/MandatoryDetails';
 import RosterDetails from './views/RosterDetails';
+import TestDetails from './views/TestDetails';
 
 const Layout = () => {
 
@@ -40,6 +41,7 @@ const App = () => (
       <Route path='/organization/:orgId/checklist/:checklistId' element={<ChecklistDetails />} />
       <Route path='/organization/:orgId/checklist/:checklistId/categories/:categoryId' element={<ChecklistSection />} />
       <Route path='/organization/:orgId/test' element={<Test />} />
+      <Route path='/organization/:orgId/test/:testId' element={<TestDetails />} />
       <Route path='/organization/:orgId/mandatories' element={<Mandatories />} />
       <Route path='/organization/:orgId/mandatories/:mandatoryId' element={<MandatoryDetails />} />
       <Route path='/organization/:orgId/bundles' element={<Bundles />} />

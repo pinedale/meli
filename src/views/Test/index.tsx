@@ -96,7 +96,7 @@ const Test = () => {
                 data-tooltip-target="tooltip-dark"
                 type="button"
                 className='px-1'
-                onClick={() => navigate(`/organization/${organization}/roster/${info.row.original.id}`)}
+                onClick={() => navigate(`/organization/${organization}/test/${info.row.original.id}`)}
               >
                 <HiEye />
               </button>

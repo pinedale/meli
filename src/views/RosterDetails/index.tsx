@@ -135,7 +135,7 @@ const RosterDetails: React.FC = () => {
             Cancel
           </button>
         </div>
-        <div><h1 className="text-base text-gray-700">Edit Skills Checklist</h1></div>
+        <div><h1 className="text-base text-gray-700">Roster Details</h1></div>
         <div>
           <button className="bg-red-400 hover:border-red-600 text-white w-20">Save</button>
         </div>
