@@ -1,8 +1,7 @@
 import { AxiosError } from "axios";
 import { UseMutationResult, UseQueryResult, useMutation, useQuery, useQueryClient } from "react-query";
-import Checklist from "../..";
 import { toast } from "react-toastify";
-import { useFetch } from "../../../../contexts/fetchProvider";
+import { useFetch } from "../../contexts/fetchProvider";
 
 type Params = {
   page: number;
@@ -22,17 +21,35 @@ type ChecklistItem = {
   updated_at: string;
 }
 
-type Checklist = Array<ChecklistItem>
 
-const useChecklist = ({ params }: { params: Params }): UseQueryResult<Checklist, AxiosError> => {
+type ChecklistResponse = {
+  checklists: Array<ChecklistItem>;
+  meta: {
+    pagination: {
+      count: number;
+      page: number;
+      prev: number | null;
+      next: number;
+      last: number;
+    };
+    stats: {
+      total: number;
+      active: number;
+      pending: number;
+      inactive: number;
+    };
+  };
+}
+
+const useChecklist = ({ params }: { params: Params }): UseQueryResult<ChecklistResponse, AxiosError> => {
   const { authRequest } = useFetch();
 
-  return useQuery<Checklist, AxiosError>(['checklist', params.page, params.items], async () => {
-    const response = await authRequest.get<{ checklists: Checklist }>('/checklists', {
+  return useQuery<ChecklistResponse, AxiosError>(['checklist', params.page, params.items], async () => {
+    const response = await authRequest.get<ChecklistResponse>('/checklists', {
       params,
     });
 
-    return response.data.checklists;
+    return response.data;
   });
 };
 
