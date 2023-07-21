@@ -1,5 +1,5 @@
 import { AxiosError } from "axios";
-import { UseQueryResult, useQuery } from "react-query";
+import { UseMutationOptions, UseMutationResult, UseQueryResult, useMutation, useQuery } from "react-query";
 import { useFetch } from "../../../../contexts/fetchProvider";
 
 type MandatoryAttr = {
@@ -13,7 +13,12 @@ type MandatoryAttr = {
   status: string;
 }
 
-const useGetMandatory = (id: string | null | undefined): UseQueryResult<MandatoryAttr, AxiosError> => {
+type UpdateMandatoryParams = {
+  id: string | undefined;
+  data: MandatoryAttr;
+}
+
+const useGetMandatory = (id: string): UseQueryResult<MandatoryAttr, AxiosError> => {
   const { authRequest } = useFetch();
 
   return useQuery<MandatoryAttr, AxiosError>(['mandatory-details'], async () => {
@@ -24,7 +29,20 @@ const useGetMandatory = (id: string | null | undefined): UseQueryResult<Mandator
   })
 }
 
+const useUpdateMandatory = (
+  options: UseMutationOptions<MandatoryAttr, AxiosError, UpdateMandatoryParams, unknown>
+): UseMutationResult<MandatoryAttr, AxiosError, UpdateMandatoryParams, unknown> => {
+  const { authRequest } = useFetch();
 
-export { useGetMandatory };
+  return useMutation(async ({ id, data }) => {
+      const response = await authRequest.patch(`/courses/${id}`, data)
+      return response.data;
+    },
+    options
+  )
+}
+
+
+export { useGetMandatory, useUpdateMandatory };
 
 export type { MandatoryAttr };
