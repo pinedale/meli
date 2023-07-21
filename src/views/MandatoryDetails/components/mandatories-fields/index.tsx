@@ -35,7 +35,7 @@ const MandatoriesFields = () => {
     <>
       <div className="max-w-6xl mx-auto pt-14">
         <h2 className=" text-2xl text-gray-700 mb-8">Course Details</h2>
-        <div className=" w-full grid gap-4 grid-cols-3">
+        <div className="w-full grid gap-4 grid-cols-3">
           <div>
             <label className="text-gray-700 text-xs mb-1 block">Title</label>
             <input

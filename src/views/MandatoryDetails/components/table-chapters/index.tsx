@@ -54,7 +54,7 @@ const TableChapter: React.FC<TableChapterProps> = ({ addChapter, toggleChapter }
 				<div className='flex text-base gap-2'>
 					<Tooltip content="View details">
 						<button
-							onClick={() => navigate(`/organization/${organization}/checklist/${mandatoryId}/categories/${info.row.original.id}`)}
+							onClick={() => navigate(`/organization/${organization}/mandatories/${mandatoryId}/chapters/${info.row.original.id}`)}
 							data-tooltip-target="tooltip-dark"
 							type="button" className='px-1'
 						>
