@@ -10,7 +10,7 @@ import { HiEye } from 'react-icons/hi';
 import { FaTrash } from 'react-icons/fa';
 import { Tooltip } from 'flowbite-react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useGetMandatoryChapters, type ChapterAttr, ChapterAdd, useAddMandatoryChapter } from './services';
+import { type ChapterAdd, useGetMandatoryChapterDetails, type QuestionAttr, useAddMandatoryChapterQuestion } from './services';
 import { BeatLoader } from 'react-spinners';
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -18,21 +18,21 @@ import { useFetch } from '../../../../contexts/fetchProvider';
 import { useForm } from 'react-hook-form';
 import { useEffect } from 'react';
 
-const columnHelper = createColumnHelper<ChapterAttr>()
+const columnHelper = createColumnHelper<QuestionAttr>()
 
 const schema = yup.object({
 	title: yup.string().required("Required field"),
 })
 
-type TableChapterProps = {
+type TableQuestionsProps = {
 	addChapter: boolean;
 	toggleChapter:() => void;
 }
 
-const TableChapter: React.FC<TableChapterProps> = ({ addChapter, toggleChapter }) => {
+const TableQuestions: React.FC<TableQuestionsProps> = ({ addChapter, toggleChapter }) => {
 	const { organization } = useFetch();
-	const { mandatoryId } = useParams()
-	const { data, isLoading } = useGetMandatoryChapters(mandatoryId)
+	const { mandatoryId, chapterId } = useParams()
+	const { data, isLoading } = useGetMandatoryChapterDetails(mandatoryId, chapterId)
 
 	const navigate = useNavigate();
 	const columns = [
@@ -52,9 +52,9 @@ const TableChapter: React.FC<TableChapterProps> = ({ addChapter, toggleChapter }
 			size: 70,
 			cell: (info) =>
 				<div className='flex text-base gap-2'>
-					<Tooltip content="View chapter details">
+					<Tooltip content="View details">
 						<button
-							onClick={() => navigate(`/organization/${organization}/mandatories/${mandatoryId}/chapters/${info.row.original.id}`)}
+							onClick={() => navigate(`/organization/${organization}/mandatories/${mandatoryId}/chapters/${chapterId}/question/${info.row.original.id}`)}
 							data-tooltip-target="tooltip-dark"
 							type="button" className='px-1'
 						>
@@ -79,7 +79,7 @@ const TableChapter: React.FC<TableChapterProps> = ({ addChapter, toggleChapter }
 		getCoreRowModel: getCoreRowModel(),
 	})
 
-  const { mutate } = useAddMandatoryChapter(mandatoryId ?? '', {
+  const { mutate } = useAddMandatoryChapterQuestion(mandatoryId ?? '', chapterId ?? '', {
 		onSuccess: () => {
 			reset()
 		}
@@ -165,4 +165,4 @@ const TableChapter: React.FC<TableChapterProps> = ({ addChapter, toggleChapter }
 	)
 };
 
-export default TableChapter
+export default TableQuestions

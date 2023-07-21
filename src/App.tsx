@@ -13,6 +13,7 @@ import MandatoryDetails from './views/MandatoryDetails';
 import RosterDetails from './views/RosterDetails';
 import TestDetails from './views/TestDetails';
 import MandatoryChapters from './views/MandatoryChapters';
+import MandatoryQuestion from './views/MandatoryQuestion';
 
 const Layout = () => {
 
@@ -46,6 +47,7 @@ const App = () => (
       <Route path='/organization/:orgId/mandatories' element={<Mandatories />} />
       <Route path='/organization/:orgId/mandatories/:mandatoryId' element={<MandatoryDetails />} />
       <Route path='/organization/:orgId/mandatories/:mandatoryId/chapters/:chapterId' element={<MandatoryChapters />} />
+      <Route path='/organization/:orgId/mandatories/:mandatoryId/chapters/:chapterId/question/:questionId' element={<MandatoryQuestion />} />
       <Route path='/organization/:orgId/bundles' element={<Bundles />} />
     </Route>
   </Routes>

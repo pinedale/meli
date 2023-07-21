@@ -11,13 +11,15 @@ const MandatoryDetails: React.FC = () => {
 
   return (
     <div className="left-0 fixed h-screen w-full top-0 bottom-0 bg-white">
-      <MandatoriesFields />
-      <div className="max-w-6xl mx-auto pt-14">
-        <div className="flex justify-between mb-8">
-          <h2 className=" text-2xl text-gray-700">Chapters</h2>
-          <button className="bg-white text-red-400 hover:border-red-400" onClick={toggleChapter}>+ Add Chapter</button>
+      <div className="overflow-y-auto h-full pb-10">
+        <MandatoriesFields />
+        <div className="max-w-6xl mx-auto pt-14">
+          <div className="flex justify-between mb-8">
+            <h2 className=" text-2xl text-gray-700">Chapters</h2>
+            <button className="bg-white text-red-400 hover:border-red-400" onClick={toggleChapter}>+ Add Chapter</button>
+          </div>
+          <TableChapter addChapter={addChapter} toggleChapter={toggleChapter} />
         </div>
-        <TableChapter addChapter={addChapter} toggleChapter={toggleChapter} />
       </div>
     </div>
   )

@@ -13,6 +13,7 @@ type Question = {
 type ChapterAttr = {
   id: string;
   content: string;
+  content_formatted: string;
   rank: string;
   title: string;
   questions: Array<Question>

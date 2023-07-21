@@ -52,8 +52,8 @@ const MandatoriesFields = () => {
 
   const onSubmit = handleSubmit((values) => {
     const payload = {
-      id: mandatoryId,       // Aquí pasas el id que deseas enviar
-      data: values,   // Aquí pasas los datos que deseas enviar
+      id: mandatoryId,
+      data: values,
     };
     mutate(payload);
   });
