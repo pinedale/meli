@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { QuestionAttr } from "../../services";
 import { useNavigate, useParams } from "react-router-dom";
 import { useFetch } from "../../../../contexts/fetchProvider";
+import { useEffect } from "react";
 
 const schema = yup.object({
   title: yup.string().required("Required field"),
@@ -22,12 +23,16 @@ const QuestionFields: React.FC<QuestionFieldsProps> = ({ data }) => {
     navigate(`/organization/${organization}/mandatories/${mandatoryId}/chapters/${chapterId}`);
   }
 
-  const { register, handleSubmit } = useForm<QuestionAttr>({
+  const { register, reset } = useForm<QuestionAttr>({
     defaultValues: {
       title: data?.title,
     },
     resolver: yupResolver<yup.AnyObject>(schema),
   });
+
+  useEffect(() => {
+    reset()
+  }, [reset]);
 
   return(
     <form>

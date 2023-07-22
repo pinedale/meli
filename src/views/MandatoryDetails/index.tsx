@@ -15,7 +15,7 @@ const MandatoryDetails: React.FC = () => {
         <MandatoriesFields />
         <div className="max-w-6xl mx-auto pt-14">
           <div className="flex justify-between mb-8">
-            <h2 className=" text-2xl text-gray-700">Chapters</h2>
+            <h2 className="text-2xl text-gray-700">Chapters</h2>
             <button className="bg-white text-red-400 hover:border-red-400" onClick={toggleChapter}>+ Add Chapter</button>
           </div>
           <TableChapter addChapter={addChapter} toggleChapter={toggleChapter} />

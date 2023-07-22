@@ -14,6 +14,7 @@ import RosterDetails from './views/RosterDetails';
 import TestDetails from './views/TestDetails';
 import MandatoryChapters from './views/MandatoryChapters';
 import MandatoryQuestion from './views/MandatoryQuestion';
+import RosterCourse from './views/RosterCourse';
 
 const Layout = () => {
 
@@ -39,6 +40,7 @@ const App = () => (
     <Route element={<RequiredAuthRoute />}>
       <Route path='/organization/:orgId/roster' element={<Roster />} />
       <Route path="/organization/:orgId/roster/:rosterId" element={<RosterDetails />} />
+      <Route path="/organization/:orgId/roster/:rosterId/course/:courseId" element={<RosterCourse />} />
       <Route path='/organization/:orgId/checklist' element={<Checklist />} />
       <Route path='/organization/:orgId/checklist/:checklistId' element={<ChecklistDetails />} />
       <Route path='/organization/:orgId/checklist/:checklistId/categories/:categoryId' element={<ChecklistSection />} />

@@ -5,6 +5,9 @@ import Table from "../../components/Table";
 import { useMemo } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
+import { Tooltip } from "flowbite-react";
+import { HiEye } from "react-icons/hi";
+import { FaTrash } from "react-icons/fa";
 
 const RosterDetails: React.FC = () => {
   const { organization } = useFetch();
@@ -13,7 +16,7 @@ const RosterDetails: React.FC = () => {
   const { data: dataTest, isLoading: testLoading } = useGetUserTest(rosterId);
   const { data: dataChecklist, isLoading: checklistLoading } = useGetUserChecklist(rosterId);
   const { data: dataCourses, isLoading: coursesLoading } = useGetUserCourses(rosterId);
-  
+
   const columns = useMemo<ColumnDef<TestItem>[]>(() =>
     [
       {
@@ -29,8 +32,8 @@ const RosterDetails: React.FC = () => {
           <div className='flex gap-2'>
             <span>
               {info.row.original.status !== "untaken" ? info.row.original.status : <p><b className="text-red-600">Invite Sent</b> - {format(new Date(info.row.original.assigned_on), 'PPpp')}</p>}
-              {info.row.original.ended_at ? `- ${format(new Date(info.row.original.ended_at), 'PPpp')}`: ''}
-              {info.row.original.status == "started" ? `- ${format(new Date(info.row.original.started_at), 'PPpp')}`: ''}
+              {info.row.original.ended_at ? `- ${format(new Date(info.row.original.ended_at), 'PPpp')}` : ''}
+              {info.row.original.status == "started" ? `- ${format(new Date(info.row.original.started_at), 'PPpp')}` : ''}
             </span>
           </div>
       },
@@ -48,7 +51,7 @@ const RosterDetails: React.FC = () => {
           return (
             <div className='flex gap-2'>
               <b>
-                {info.row.original.status !== "untaken" ? <>{hasScore}% - {pass}</>: "-"} </b>
+                {info.row.original.status !== "untaken" ? <>{hasScore}% - {pass}</> : "-"} </b>
             </div>
           )
         }
@@ -71,15 +74,15 @@ const RosterDetails: React.FC = () => {
           <div className='flex gap-2'>
             <span>
               {info.row.original.status !== "untaken" ? info.row.original.status : <p><b className="text-red-600">Invite Sent</b> - {format(new Date(info.row.original.assigned_on), 'PPpp')}</p>}
-              {info.row.original.ended_at ? `- ${format(new Date(info.row.original.ended_at), 'PPpp')}`: ''}
-              {info.row.original.status == "started" ? `- ${format(new Date(info.row.original.started_at), 'PPpp')}`: ''}
+              {info.row.original.ended_at ? `- ${format(new Date(info.row.original.ended_at), 'PPpp')}` : ''}
+              {info.row.original.status == "started" ? `- ${format(new Date(info.row.original.started_at), 'PPpp')}` : ''}
             </span>
           </div>
       },
       {
         accessorKey: 'score, passed, status',
         header: 'Score',
-        size: 220,
+        size: 80,
         cell: (info) => {
           const hasScore = info.row.original.score ?? '-'
           const pass = info.row.original.passed ? (
@@ -90,13 +93,41 @@ const RosterDetails: React.FC = () => {
           return (
             <div className='flex gap-2'>
               <b>
-                {info.row.original.status !== "untaken" ? <>{hasScore}% - {pass}</>: "-"} </b>
+                {info.row.original.status !== "untaken" ? <>{hasScore}% - {pass}</> : "-"} </b>
             </div>
           )
         }
-      }
+      },
+      {
+        accessorKey: 'id, status',
+        header: 'Actions',
+        size: 100,
+        cell: (info) =>
+          <div className='flex text-base gap-2'>
+            {info.row.original.status !== "untaken" && (
+              <Tooltip content="View results">
+                <button
+                  data-tooltip-target="tooltip-dark"
+                  type="button"
+                  className='px-1'
+                  onClick={() => navigate(`/organization/${organization}/roster/${rosterId}/course/${info.row.original.id}`)}
+                >
+                  <HiEye />
+                </button>
+              </Tooltip>
+            )}
+            <Tooltip content="Delete">
+              <button
+                type="button"
+                className='px-1'
+              >
+                <FaTrash />
+              </button>
+            </Tooltip>
+          </div>
+      },
     ]
-    , []);
+    , [navigate, organization, rosterId]);
 
   const columnsChecklist = useMemo<ColumnDef<ChecklistItem>[]>(() =>
     [
@@ -112,11 +143,11 @@ const RosterDetails: React.FC = () => {
         cell: (info) =>
           <div className='flex gap-2'>
             <span>
-              {info.row.original.status !== "untaken" 
-                ? info.row.original.status 
-                : <p><b className="text-red-600">Invite Sent</b> - {format(new Date(info.row.original.assigned_on), 'PPpp')}</p>} 
-              {info.row.original.ended_at ? `- ${format(new Date(info.row.original.ended_at), 'PPpp')}`: ''}
-              {info.row.original.status == "started" ? `- ${format(new Date(info.row.original.started_at), 'PPpp')}`: ''}
+              {info.row.original.status !== "untaken"
+                ? info.row.original.status
+                : <p><b className="text-red-600">Invite Sent</b> - {format(new Date(info.row.original.assigned_on), 'PPpp')}</p>}
+              {info.row.original.ended_at ? `- ${format(new Date(info.row.original.ended_at), 'PPpp')}` : ''}
+              {info.row.original.status == "started" ? `- ${format(new Date(info.row.original.started_at), 'PPpp')}` : ''}
             </span>
           </div>
       }
@@ -132,7 +163,7 @@ const RosterDetails: React.FC = () => {
             type="button"
             onClick={() => navigate(`/organization/${organization}/roster`)}
           >
-            Cancel
+            Back
           </button>
         </div>
         <div><h1 className="text-base text-gray-700">Roster Details</h1></div>

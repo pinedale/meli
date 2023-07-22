@@ -63,11 +63,11 @@ const MandatoriesFields = () => {
       <form onSubmit={onSubmit}>
         <div className=" flex justify-between align-middle h-12 border-b border-gray-200 items-center px-5">
           <div>
-            <button onClick={handleClose} className="bg-gray-400 hover:bg-gray-500 text-white w-20">Cancel</button>
+            <button type="button" onClick={handleClose} className="bg-gray-400 hover:bg-gray-500 text-white w-20">Cancel</button>
           </div>
           <div><h1 className="text-base text-gray-700">Edit Course</h1></div>
           <div>
-            <button className="bg-red-400 hover:border-red-600 text-white w-20">Save</button>
+            <button type="submit" className="bg-red-400 hover:border-red-600 text-white w-20">Save</button>
           </div>
         </div>
         <div className="max-w-6xl mx-auto pt-14">
