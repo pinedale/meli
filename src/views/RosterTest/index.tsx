@@ -1,16 +1,39 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useFetch } from "../../contexts/fetchProvider";
 import { AiFillPrinter } from "react-icons/ai";
-import { useGetCourseResult, useGetOrganization } from "./services";
+import { Category, Question, useGetOrganization, useGetTestResult } from "./services";
 import { format } from "date-fns";
+import { BeatLoader } from "react-spinners";
 
-const RosterCourse = () => {
+const RosterTest = () => {
   const { organization } = useFetch();
-  const { rosterId, courseId } = useParams();
+  const { rosterId, testId } = useParams();
   const navigate = useNavigate();
-  const { data } = useGetCourseResult(rosterId, courseId)
+  const { data, isLoading } = useGetTestResult(rosterId, testId)
   const { data: organizationData } = useGetOrganization();
-  const incorrectQuestions = data && data.answers.filter((item) => !item.is_correct);
+  
+  const incorrectQuestions: Question[] | undefined = data?.categories.reduce((acc: Question[], item: Category) => {
+    const incorrectQuestionsInCategory = item.questions.filter((question: Question) => !question.is_correct);
+    return acc.concat(incorrectQuestionsInCategory);
+  }, []);
+  console.log("🚀 ~ file: index.tsx:18 ~ constincorrectQuestions:Question[]|undefined=data?.categories.reduce ~ incorrectQuestions:", incorrectQuestions)
+
+  const resultQuestions = data?.categories?.map(category =>{
+    const totalQuestions = category.questions.length;
+    const questionsCorrect = category.questions.filter(question => question.is_correct).length;
+    const percentage = (questionsCorrect/totalQuestions)*100;
+
+    return {
+      id: category.id,
+      title: category.title,
+      rank: category.rank,
+      questionsCorrect,
+      totalQuestions,
+      percentage,
+  };
+  })
+
+  if (isLoading) return <div className="flex items-center"><BeatLoader color="#F98080" className="mx-auto block" /></div>
 
   return (
     <div className="left-0 fixed h-screen w-full top-0 bottom-0 bg-white">
@@ -29,7 +52,7 @@ const RosterCourse = () => {
         </div>
       </div>
       <div className="overflow-y-auto h-full pb-10">
-        <div className="max-w-6xl mx-auto pt-14 print:pt-0">
+        <div className="max-w-6xl mx-auto pt-14 print:pt-0 mb-10">
           <div className="mb-10">
             <div className=" w-32">
               <img className="w-full object-cover" src={organizationData?.logo_url} alt={organizationData?.title} />
@@ -60,17 +83,24 @@ const RosterCourse = () => {
               </div>
             </div>
           </div>
+          <div className="border border-gray-300 rounded mb-10">
+            {resultQuestions && resultQuestions.map((item)=>(
+              <div key={item.id} className="flex justify-between p-5 border-b last:border-0">
+                <b>{item.title}</b>
+                <div>{item.questionsCorrect} of {item.totalQuestions} Correct - {item.percentage.toFixed(0)}%</div>
+              </div>
+            ))}
+          </div>
           {
            incorrectQuestions && incorrectQuestions?.length > 0 &&
            <h3 className="font-bold mb-5">INCORRECTLY ANSWERED QUESTIONS ({incorrectQuestions?.length})</h3>
           }
-
           <div className="flex gap-4 flex-col">
-            {incorrectQuestions && incorrectQuestions.map((item, index) => (
-              <div key={item.value} className="border border-gray-300 rounded py-4 px-5">
-                <h4 className="font-bold mb-3">Q{index+1}</h4>
-                <p className="mb-3 text-base text-black font-medium">{item.question}</p>
-                <p className=" text-red-600">{item.value}</p>
+            {incorrectQuestions?.map((item, index) => (
+              <div key={item.id} className="border border-gray-300 rounded py-4 px-5">
+                <h4 className="font-bold mb-3">Q{item.rank}</h4>
+                <p className="mb-3 text-base text-black font-medium">{item.title}</p>
+                <p className=" text-red-600">{item.answer_value}</p>
               </div>
             ))}
           </div>
@@ -80,4 +110,4 @@ const RosterCourse = () => {
   )
 }
 
-export default RosterCourse;
+export default RosterTest;

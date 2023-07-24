@@ -15,7 +15,7 @@ const Dropdown = () =>{
   }
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { data } = useProfile()
+  const { data } = useProfile();
 
   const openModal = () => {
     setIsModalOpen(true);

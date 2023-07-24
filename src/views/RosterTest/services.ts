@@ -2,13 +2,23 @@ import { UseQueryResult, useQuery } from "react-query";
 import { useFetch } from "../../contexts/fetchProvider";
 import { AxiosError } from "axios";
 
-type Answer = {
-  question: string;
-  value: string;
+
+type Question = {
+  id: string;
+  title: string;
+  rank: string;
+  answer_value: string;
   is_correct: boolean;
 }
 
-type CourseResultAttr = {
+type Category = {
+  id: string;
+  title: string;
+  rank: string;
+  questions: Array<Question>
+}
+
+type TestResultAttr = {
   total_secs: number;
   user_full_name: string;
   id: string;
@@ -19,13 +29,13 @@ type CourseResultAttr = {
   passed: boolean;
   score: number;
   assigned_on: string;
-  answers: Answer[];
+  categories: Category[];
 }
 
-const useGetCourseResult = (id: string | null | undefined, courseId: string | null | undefined): UseQueryResult<CourseResultAttr, AxiosError> => {
+const useGetTestResult = (id: string | null | undefined, testId: string | null | undefined): UseQueryResult<TestResultAttr, AxiosError> => {
   const { authRequest } = useFetch();
-  return useQuery<CourseResultAttr, AxiosError>(['course-result'], async () => {
-    const response = await authRequest.get<CourseResultAttr>(`/users/${id}/courses/${courseId}`);
+  return useQuery<TestResultAttr, AxiosError>(['tests-result'], async () => {
+    const response = await authRequest.get<TestResultAttr>(`/users/${id}/tests/${testId}`);
     return response.data
   })
 }
@@ -48,4 +58,6 @@ const useGetOrganization = (): UseQueryResult<OrganizationAttr, AxiosError> => {
   })
 }
 
-export { useGetCourseResult, useGetOrganization };
+export { useGetTestResult, useGetOrganization };
+
+export type {Question, Category}

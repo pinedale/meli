@@ -1,13 +1,14 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useFetch } from "../../contexts/fetchProvider";
-import { useGetUserTest, type TestItem, useGetUserChecklist, type ChecklistItem, useGetUserCourses, type CourseItem } from "./services";
+import { useGetUserTest, type TestItem, useGetUserChecklist, type ChecklistItem, useGetUserCourses, type CourseItem, useDeleteMandatory } from "./services";
 import Table from "../../components/Table";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
 import { Tooltip } from "flowbite-react";
 import { HiEye } from "react-icons/hi";
 import { FaTrash } from "react-icons/fa";
+import ModalConfirmation from "../../components/ModalConfirmation";
 
 const RosterDetails: React.FC = () => {
   const { organization } = useFetch();
@@ -16,6 +17,25 @@ const RosterDetails: React.FC = () => {
   const { data: dataTest, isLoading: testLoading } = useGetUserTest(rosterId);
   const { data: dataChecklist, isLoading: checklistLoading } = useGetUserChecklist(rosterId);
   const { data: dataCourses, isLoading: coursesLoading } = useGetUserCourses(rosterId);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<{ user_id: string | undefined; course_id: string; }>();
+
+  const { mutateAsync: deleteMandatory } = useDeleteMandatory()
+
+  const handleDelete = (item: {user_id: string | undefined; course_id: string;}) =>{
+    setSelectedItem(item)
+    setIsModalOpen(true);
+  }
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  }
+
+  const confirmDelete = () => {
+    if(selectedItem){
+      deleteMandatory(selectedItem);
+    }
+  }
 
   const columns = useMemo<ColumnDef<TestItem>[]>(() =>
     [
@@ -55,7 +75,27 @@ const RosterDetails: React.FC = () => {
             </div>
           )
         }
-      }
+      },
+      {
+        accessorKey: 'id, status',
+        header: 'Actions',
+        size: 80,
+        cell: (info) =>
+          <div className='flex text-base gap-2'>
+            {info.row.original.status !== "untaken" && (
+              <Tooltip content="View results">
+                <button
+                  data-tooltip-target="tooltip-dark"
+                  type="button"
+                  className='px-1'
+                  onClick={() => navigate(`/organization/${organization}/roster/${rosterId}/test/${info.row.original.id}`)}
+                >
+                  <HiEye />
+                </button>
+              </Tooltip>
+            )}
+          </div>
+      },
     ]
     , []);
 
@@ -101,7 +141,7 @@ const RosterDetails: React.FC = () => {
       {
         accessorKey: 'id, status',
         header: 'Actions',
-        size: 100,
+        size: 80,
         cell: (info) =>
           <div className='flex text-base gap-2'>
             {info.row.original.status !== "untaken" && (
@@ -120,6 +160,7 @@ const RosterDetails: React.FC = () => {
               <button
                 type="button"
                 className='px-1'
+                onClick={() => handleDelete({user_id:rosterId, course_id:info.row.original.id})}
               >
                 <FaTrash />
               </button>
@@ -172,6 +213,7 @@ const RosterDetails: React.FC = () => {
         </div>
       </div>
       <div className="overflow-y-auto h-full pb-10">
+        <ModalConfirmation confirmDelete={confirmDelete} onClose={closeModal} isOpen={isModalOpen}/>
         <div className="max-w-6xl mx-auto pt-14">
           <div className="flex justify-between mb-4">
             <h2 className=" text-2xl text-gray-700">Tests ({dataTest?.length})</h2>
