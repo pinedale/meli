@@ -96,7 +96,7 @@ const RosterTest = () => {
            <h3 className="font-bold mb-5">INCORRECTLY ANSWERED QUESTIONS ({incorrectQuestions?.length})</h3>
           }
           <div className="flex gap-4 flex-col">
-            {incorrectQuestions?.map((item, index) => (
+            {incorrectQuestions?.map(item => (
               <div key={item.id} className="border border-gray-300 rounded py-4 px-5">
                 <h4 className="font-bold mb-3">Q{item.rank}</h4>
                 <p className="mb-3 text-base text-black font-medium">{item.title}</p>
