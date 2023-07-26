@@ -11,11 +11,16 @@ import { BeatLoader } from 'react-spinners';
 import { format } from 'date-fns';
 import { FaTrash } from "react-icons/fa";
 import { Tooltip } from 'flowbite-react';
+import { useNavigate } from 'react-router-dom';
+import { useFetch } from '../../../../contexts/fetchProvider';
+import { HiEye } from 'react-icons/hi';
 
 const columnHelper = createColumnHelper<BundleItem>()
 
 const Table = () => {
   const { data, isLoading } = useBundleList({ params: { page: 1, items: 20 } })
+  const navigate = useNavigate();
+  const {organization} = useFetch();
 
   const columns = [
     columnHelper.accessor('title', {
@@ -40,6 +45,16 @@ const Table = () => {
       size: 70,
       cell: (info) =>
         <div className='flex text-base gap-2'>
+          <Tooltip content="View details">
+            <button
+              data-tooltip-target="tooltip-dark"
+              type="button"
+              className='px-1'
+              onClick={()=> navigate(`/organization/${organization}/bundles/${info.row.original.id}`)}
+            >
+              <HiEye />
+            </button>
+          </Tooltip>
           <Tooltip content="Delete checklist">
             <button type="button" className='px-1' onClick={() => deleteBundle(info.row.original.id)}><FaTrash /></button>
           </Tooltip>

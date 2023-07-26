@@ -16,6 +16,7 @@ import MandatoryChapters from './views/MandatoryChapters';
 import MandatoryQuestion from './views/MandatoryQuestion';
 import RosterCourse from './views/RosterCourse';
 import RosterTest from './views/RosterTest';
+import BundleDetails from './views/BundleDetails';
 
 const Layout = () => {
 
@@ -53,6 +54,7 @@ const App = () => (
       <Route path='/organization/:orgId/mandatories/:mandatoryId/chapters/:chapterId' element={<MandatoryChapters />} />
       <Route path='/organization/:orgId/mandatories/:mandatoryId/chapters/:chapterId/question/:questionId' element={<MandatoryQuestion />} />
       <Route path='/organization/:orgId/bundles' element={<Bundles />} />
+      <Route path='/organization/:orgId/bundles/:bundleId' element={<BundleDetails />} />
     </Route>
   </Routes>
 );
