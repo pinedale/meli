@@ -17,6 +17,7 @@ import MandatoryQuestion from './views/MandatoryQuestion';
 import RosterCourse from './views/RosterCourse';
 import RosterTest from './views/RosterTest';
 import BundleDetails from './views/BundleDetails';
+import Profile from './views/Profile';
 
 const Layout = () => {
 
@@ -40,6 +41,7 @@ const App = () => (
       <Route path='/' element={<Login />} />
     </Route>
     <Route element={<RequiredAuthRoute />}>
+      <Route path='/profile' element={<Profile />} />
       <Route path='/organization/:orgId/roster' element={<Roster />} />
       <Route path="/organization/:orgId/roster/:rosterId" element={<RosterDetails />} />
       <Route path="/organization/:orgId/roster/:rosterId/course/:courseId" element={<RosterCourse />} />
