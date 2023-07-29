@@ -136,7 +136,7 @@ const Roster = () => {
       </div>
       <div className="max-w-6xl mx-auto">
         <Table data={data?.users || []} isLoading={isLoading} columns={columns} />
-        <Pagination className="mb-8" currentPage={paginationParams.page} onPageChange={onPageChange} totalPages={paginationParams.totalPages} />
+        { paginationParams.totalPages >= 20 &&  <Pagination className="mb-8" currentPage={paginationParams.page} onPageChange={onPageChange} totalPages={paginationParams.totalPages} />}        
       </div>
       <Modal onClose={closeModal} isOpen={isModalOpen}>
         <RostertFields onClose={closeModal} id={selectedItemId} isEditing={isEditing} />

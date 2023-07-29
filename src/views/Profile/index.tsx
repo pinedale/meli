@@ -4,10 +4,8 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import { toast } from "react-toastify";
-import { RoleItem, useProfile, useUpdateProfile } from "./service";
+import { useProfile, useUpdateProfile } from "./service";
 import { useNavigate } from "react-router-dom";
-import Table from "../../components/Table";
-import { ColumnDef } from "@tanstack/react-table";
 
 const schema = yup.object({
   first_name: yup.string().required("Required field"),
@@ -25,7 +23,7 @@ type ProfileForm = {
 
 const Profile = () => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
-  const { data, isLoading } = useProfile()
+  const { data } = useProfile()
   const navigate = useNavigate();
   const { register, handleSubmit, formState: { errors }, reset } = useForm<ProfileForm>({
     defaultValues: {
@@ -59,20 +57,6 @@ const Profile = () => {
   const onSubmit = handleSubmit((values) => {
     mutate(values)
   });
-
-  const colums = useMemo<ColumnDef<RoleItem>[]>(() =>
-    [
-      {
-        accessorKey: 'name, organization',
-        header: 'Title',
-        cell: (info) =>
-          <div>
-            <h3>{info.row.original.organization.title}</h3>
-            <p className="text-red-app capitalize">{info.row.original.name.replace(/_/g, ' ')}</p>
-          </div>
-      }
-    ]
-    , []);
 
   return (
     <div className="left-0 fixed h-screen w-full top-0 bottom-0 bg-white z-50">
@@ -145,9 +129,6 @@ const Profile = () => {
                 : <span className="text-gray-900 font-semibold text-xs">{data?.phone_number ? data?.phone_number : "None provided"}</span>}
               <p className="text-xs text-red-app">{errors.phone_number?.message}</p>
             </div>
-          </div>
-          <div>
-            <Table data={data?.roles || []} isLoading={isLoading} columns={colums}/>
           </div>
         </div>
       </form>

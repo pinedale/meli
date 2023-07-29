@@ -21,13 +21,6 @@ import Profile from './views/Profile';
 
 const Layout = () => {
 
-  // useEffect(() => {
-  //   if (token) {
-  //     navigate(`/organization/${organization}/roster`);
-  //     debugger;
-  //   }
-  // }, [token, navigate, organization]);
-
   return (
     <>
       <Outlet />

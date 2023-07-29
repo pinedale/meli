@@ -32,8 +32,7 @@ const Login: React.FC = () => {
     onSuccess: (data) => {
       const token = data.access;
       const roles = data.roles;
-      saveToken(token, roles)
-      navigate(`/organization/${roles[0].organization.id}/roster`)
+      saveToken(token, roles);
     },
     onError: (error) => {
       const errorMessage = error.message
