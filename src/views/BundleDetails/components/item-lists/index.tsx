@@ -37,7 +37,6 @@ const BundleItemList: React.FC<BundleItemListProps>  = ({testLoading, numberOfSe
                 </li>
               ))
             }
-            <li></li>
           </ul>
         </>
       }

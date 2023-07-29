@@ -209,7 +209,7 @@ const RosterDetails: React.FC = () => {
         </div>
         <div><h1 className="text-base text-gray-700">Roster Details</h1></div>
         <div>
-          <button className="bg-red-400 hover:border-red-600 text-white w-20">Save</button>
+          <button onClick={() => navigate(`/organization/${organization}/roster/${rosterId}/invite`)} type="button" className="bg-red-400 hover:border-red-600 text-white w-auto">Create new invite</button>
         </div>
       </div>
       <div className="overflow-y-auto h-full pb-10">

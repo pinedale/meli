@@ -61,7 +61,6 @@ const FetchProvider: FunctionComponent<PropsWithChildren> = ({ children }) => {
   const getToken = () => sessionStorage.getItem(TOKEN_KEY);
   const getRoles = () => sessionStorage.getItem(ROLE_KEY);
   const getOrganizationId = () => sessionStorage.getItem(ORGANIZATION_KEY);
-  console.log("🚀 ~ file: fetchProvider.tsx:48 ~ getRoles:", getRoles)
 
   const [roleType, setRoleType] = useState(getRoles())
   const [organization, setOrganization] = useState(getOrganizationId());

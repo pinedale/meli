@@ -10,16 +10,17 @@ const RequiredAuthRoute = () => {
   const { getToken } = useFetch()
   const token = getToken();
 
+  if (!token || !organization) {
+    return  <Navigate to={"/"} state={{ from: location }} replace />;
+  }
+
   return (
-    token
-      ?
-      <>
-        <Header />
-        <Menu />
-        <Outlet />
-      </>
-      : <Navigate to={`/organization/${organization}`} state={{ from: location }} replace />
-  )
+    <>
+      <Header />
+      <Menu />
+      <Outlet />
+    </>
+  );
 }
 
 export default RequiredAuthRoute

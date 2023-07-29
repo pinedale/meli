@@ -1,0 +1,135 @@
+import { useNavigate, useParams } from "react-router-dom";
+import { useFetch } from "../../contexts/fetchProvider";
+import useTestList from "../Test/service";
+import { useChecklist } from "../Checklist/services";
+import { useGetCourses } from "../Mandatories/services";
+import { useGetBundleDetails } from "../BundleDetails/services";
+import { useForm } from "react-hook-form";
+import { useEffect } from "react";
+import BundleItemList from "../BundleDetails/components/item-lists";
+import { useBundleList } from "../Bundles/components/table/service";
+import { Checkbox } from "flowbite-react";
+
+const RosterInvite = () => {
+
+  const navigate = useNavigate();
+  const { organization } = useFetch();
+  const { bundleId } = useParams()
+  const { data: testData, isLoading: testLoading } = useTestList({ params: { page: 1, items: 9999 } });
+  const { data: checklistData, isLoading: checklistLoading } = useChecklist({ params: { page: 1, items: 9999 } });
+  const { data: mandatoryData, isLoading: mandatoryLoading } = useGetCourses({ params: { page: 1, items: 9999 } });
+  const { data: bundleDetails } = useGetBundleDetails(bundleId ?? "");
+  const { data: bundleList } = useBundleList({ params: { page: 1, items: 9999 } });
+
+  const { handleSubmit, watch, register, setValue } = useForm<{ tests_ids: string[], checklists_ids: string[], courses_ids: string[], title: string }>({
+    defaultValues: {
+      tests_ids: [],
+      checklists_ids: [],
+      courses_ids: [],
+    },
+  });
+
+  const handleClose = () => {
+    navigate(`/organization/${organization}/bundles`);
+  }
+
+  const selectedTestsIds = watch("tests_ids");
+  const numberOfSelectedTests = selectedTestsIds ? selectedTestsIds?.length : 0;
+  const activeTests = testData?.tests.filter(item => item.status === "active");
+
+  const selectedChecklistIds = watch("checklists_ids");
+  const numberOfSelectedChecklists = selectedChecklistIds ? selectedChecklistIds.length : 0;
+  const activeChecklist = checklistData?.checklists.filter(item => item.status === "active");
+
+  const selectedMandatoryIds = watch("courses_ids");
+  const numberOfSelectedMandatories = selectedMandatoryIds ? selectedMandatoryIds.length : 0;
+  const activeMandatory = mandatoryData?.courses.filter(item => item.status === "active");
+
+  useEffect(() => {
+    if (bundleDetails?.tests_ids) {
+      const stringifiedTestsIds = bundleDetails.tests_ids.map((num) => num.toString());
+      setValue("tests_ids", stringifiedTestsIds, { shouldDirty: false });
+    }
+    if (bundleDetails?.checklists_ids) {
+      const stringifiedChecklistIds = bundleDetails.checklists_ids.map((num) => num.toString());
+      setValue("checklists_ids", stringifiedChecklistIds, { shouldDirty: false });
+    }
+    if (bundleDetails?.courses_ids) {
+      const stringifiedMandatoriesIds = bundleDetails.courses_ids.map((num) => num.toString());
+      setValue("courses_ids", stringifiedMandatoriesIds, { shouldDirty: false });
+    }
+    setValue("title", bundleDetails?.title ?? "")
+  }, [bundleDetails, setValue]);
+
+  const onSubmit = handleSubmit((values) => {
+    console.log("🚀 ~ file: index.tsx:42 ~ onSubmit ~ valuesssss:", values)
+  });
+
+  return (
+    <div className="left-0 fixed h-screen w-full top-0 bottom-0 bg-white">
+      <form onSubmit={onSubmit}>
+        <div className="flex justify-between align-middle h-12 border-b border-gray-200 items-center px-5">
+          <div>
+            <button type="button" onClick={() => navigate(-1)} className="bg-gray-400 hover:bg-gray-500 text-white w-20">Cancel</button>
+          </div>
+          <div><h1 className="text-base text-gray-700">Roster Invite</h1></div>
+          <div>
+            <button type="submit" className="bg-red-400 hover:border-red-600 text-white w-20">Save</button>
+          </div>
+        </div>
+        <div className="overflow-y-auto h-screen pb-10">
+          <div className="max-w-6xl mx-auto pt-14">
+            <div className="mb-10">
+              <h2 className="text-2xl text-gray-700 font-medium mb-4">Bundles</h2>
+              <ul className="grid grid-cols-3">
+                {
+                  bundleList?.map((item) => (
+                    <li className="mb-2" key={item.id}>
+                      <label className="cursor-pointer flex items-center" htmlFor={`${item.id}`}>
+                        <Checkbox value={item.id} id={`${item.id}`} />
+                        <span className="pl-2 text-sm font-medium">{item.title}</span>
+                      </label>
+
+                    </li>
+                  ))
+                }
+              </ul>
+            </div>
+            <div className="mb-10">
+              <BundleItemList
+                testLoading={testLoading}
+                numberOfSelectedItems={numberOfSelectedTests}
+                activeItems={activeTests}
+                register={register}
+                registerValue="tests_ids"
+                title="Test"
+              />
+            </div>
+            <div className="mb-10">
+              <BundleItemList
+                testLoading={checklistLoading}
+                numberOfSelectedItems={numberOfSelectedChecklists}
+                activeItems={activeChecklist}
+                register={register}
+                registerValue="checklists_ids"
+                title="Skills Checklists"
+              />
+            </div>
+            <div className="mb-10">
+              <BundleItemList
+                testLoading={mandatoryLoading}
+                numberOfSelectedItems={numberOfSelectedMandatories}
+                activeItems={activeMandatory}
+                register={register}
+                registerValue="courses_ids"
+                title="Mandatories"
+              />
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  )
+}
+
+export default RosterInvite;

@@ -1,32 +1,19 @@
-import { useState } from "react";
-import Modal from "../../components/Modal";
-import BundlesFields from "./components/bundles-fields";
+import { useNavigate } from "react-router-dom";
 import Table from "./components/table";
 
-const Bundles = () =>{
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
+const Bundles = () => {
+  const navigate = useNavigate();
 
   return(
     <>
       <div className="py-4">
         <div className="max-w-6xl mx-auto flex justify-end">
-          <button className="bg-white text-red-400 hover:border-red-400" onClick={openModal}> + Create New Bundle</button>
+          <button className="bg-white text-red-400 hover:border-red-400" onClick={() => navigate("/organization/${organization}/bundles/new")}> + Create New Bundle</button>
         </div>
       </div>
       <div className="max-w-6xl mx-auto">
         <Table />
       </div>
-      <Modal onClose={closeModal} isOpen={isModalOpen}>
-        <BundlesFields onClose={closeModal}/>
-      </Modal>
     </>
   )
 };

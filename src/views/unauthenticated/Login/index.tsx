@@ -1,11 +1,11 @@
 import { unaLogo } from "../../../assets/images";
 import { useForm } from 'react-hook-form';
 import useLogin from './service';
-import { useNavigate } from "react-router-dom";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import { toast } from "react-toastify";
 import { useFetch } from "../../../contexts/fetchProvider";
+import { Navigate } from "react-router-dom";
 
 const schema = yup.object({
   email: yup.string().email("please enter a valid email").required("Required field"),
@@ -18,8 +18,7 @@ type LoginForm = {
 }
 
 const Login: React.FC = () => {
-  const { saveToken } = useFetch()
-  const navigate = useNavigate()
+  const { saveToken, getToken } = useFetch()
   const { register, handleSubmit, formState: { errors } } = useForm<LoginForm>({
     defaultValues: {
       email: "",
@@ -43,6 +42,11 @@ const Login: React.FC = () => {
   const onSubmit = handleSubmit((values) => {
     mutate(values)
   });
+
+  const token = getToken();
+  if (token) {
+    return <Navigate to={`/organization/${token}/roster`} />;
+  }
 
   return (
     <div className="h-screen flex justify-center items-center">

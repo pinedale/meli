@@ -18,6 +18,7 @@ import RosterCourse from './views/RosterCourse';
 import RosterTest from './views/RosterTest';
 import BundleDetails from './views/BundleDetails';
 import Profile from './views/Profile';
+import RosterInvite from './views/RosterInvite';
 
 const Layout = () => {
 
@@ -37,6 +38,7 @@ const App = () => (
       <Route path='/profile' element={<Profile />} />
       <Route path='/organization/:orgId/roster' element={<Roster />} />
       <Route path="/organization/:orgId/roster/:rosterId" element={<RosterDetails />} />
+      <Route path="/organization/:orgId/roster/:rosterId/invite" element={<RosterInvite />} />
       <Route path="/organization/:orgId/roster/:rosterId/course/:courseId" element={<RosterCourse />} />
       <Route path="/organization/:orgId/roster/:rosterId/test/:testId" element={<RosterTest />} />
       <Route path='/organization/:orgId/checklist' element={<Checklist />} />
@@ -49,6 +51,7 @@ const App = () => (
       <Route path='/organization/:orgId/mandatories/:mandatoryId/chapters/:chapterId' element={<MandatoryChapters />} />
       <Route path='/organization/:orgId/mandatories/:mandatoryId/chapters/:chapterId/question/:questionId' element={<MandatoryQuestion />} />
       <Route path='/organization/:orgId/bundles' element={<Bundles />} />
+      <Route path='/organization/:orgId/bundles/new' element={<BundleDetails />} />
       <Route path='/organization/:orgId/bundles/:bundleId' element={<BundleDetails />} />
     </Route>
   </Routes>
