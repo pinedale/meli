@@ -1,7 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
 import Summary from "../../components/Summary";
-import Modal from "../../components/Modal";
-import MandatoriesFields from "./components/mandatories-fields";
 import { CourseItem, useGetCourses } from "./services";
 import { format } from "date-fns";
 import { ColumnDef } from "@tanstack/react-table";
@@ -17,7 +15,7 @@ const Mandatories = () =>{
     page: 1,
     totalPages: 1,
   })
-  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const {organization} = useFetch();
   const navigate = useNavigate();
   const { data, isLoading } = useGetCourses({ params: { page: paginationParams.page, items: 20 } });
@@ -94,29 +92,23 @@ const Mandatories = () =>{
     ]
     , [navigate, organization]);
 
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
-
   return(
     <>
       <Summary stats={data?.meta.stats}/>
       <div className="py-4">
         <div className="max-w-6xl mx-auto flex justify-end">
-          <button className="bg-white text-red-400 hover:border-red-400" onClick={openModal}> + Create New Course</button>
+          <button
+            className="bg-white text-red-400 hover:border-red-400"
+            onClick={() => navigate(`/organization/${organization}/mandatories/new`)}
+          >
+            + Create New Course
+          </button>
         </div>
       </div>
       <div className="max-w-6xl mx-auto">
         <Table data={data?.courses || []} isLoading={isLoading} columns={columns} />
         <Pagination className="mb-8" currentPage={paginationParams.page} onPageChange={onPageChange} totalPages={paginationParams.totalPages} />
       </div>
-      <Modal onClose={closeModal} isOpen={isModalOpen}>
-        <MandatoriesFields onClose={closeModal}/>
-      </Modal>
     </>
   )
 };

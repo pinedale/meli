@@ -19,6 +19,8 @@ import RosterTest from './views/RosterTest';
 import BundleDetails from './views/BundleDetails';
 import Profile from './views/Profile';
 import RosterInvite from './views/RosterInvite';
+import LayoutWithoutHeader from './routes/LayoutWithoutHeader';
+import MandatoryNew from './views/MandatoryNew';
 
 const Layout = () => {
 
@@ -47,12 +49,15 @@ const App = () => (
       <Route path='/organization/:orgId/test' element={<Test />} />
       <Route path='/organization/:orgId/test/:testId' element={<TestDetails />} />
       <Route path='/organization/:orgId/mandatories' element={<Mandatories />} />
-      <Route path='/organization/:orgId/mandatories/:mandatoryId' element={<MandatoryDetails />} />
       <Route path='/organization/:orgId/mandatories/:mandatoryId/chapters/:chapterId' element={<MandatoryChapters />} />
       <Route path='/organization/:orgId/mandatories/:mandatoryId/chapters/:chapterId/question/:questionId' element={<MandatoryQuestion />} />
       <Route path='/organization/:orgId/bundles' element={<Bundles />} />
       <Route path='/organization/:orgId/bundles/new' element={<BundleDetails />} />
       <Route path='/organization/:orgId/bundles/:bundleId' element={<BundleDetails />} />
+    </Route>
+    <Route element={<LayoutWithoutHeader />}>
+      <Route path='/organization/:orgId/mandatories/:mandatoryId' element={<MandatoryDetails />} />
+      <Route path='/organization/:orgId/mandatories/new' element={<MandatoryNew />} />
     </Route>
   </Routes>
 );

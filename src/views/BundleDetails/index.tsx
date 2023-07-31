@@ -3,11 +3,12 @@ import { useFetch } from "../../contexts/fetchProvider";
 
 import { useForm } from "react-hook-form";
 import useTestList from "../Test/service";
-import { useGetBundleDetails } from "./services";
+import { useCreateBundle, useGetBundleDetails, useUpdateBundle } from "./services";
 import { useEffect } from "react";
 import { useChecklist } from "../Checklist/services";
 import BundleItemList from "./components/item-lists";
 import { useGetCourses } from "../Mandatories/services";
+import { toast } from "react-toastify";
 
 const BundleDetails = () => {
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ const BundleDetails = () => {
     navigate(`/organization/${organization}/bundles`);
   }
 
-  const { handleSubmit, watch, register, setValue } = useForm<{ tests_ids: string[], checklists_ids: string[], courses_ids: string[], title: string }>({
+  const { handleSubmit, watch, register, setValue, formState: { errors } } = useForm<{ tests_ids: string[], checklists_ids: string[], courses_ids: string[], title?: string | undefined}>({
     defaultValues: {
       tests_ids: [],
       checklists_ids: [],
@@ -60,8 +61,30 @@ const BundleDetails = () => {
     setValue("title", bundleDetails?.title?? "")
   }, [bundleDetails, setValue]);
 
+  const { mutate: createBundle } = useCreateBundle({
+    onSuccess: () => {
+      toast.success("The bundle has been created successfully");
+      navigate(-1);
+    }
+  })
+
+  const { mutate: updateBundle } = useUpdateBundle({
+    onSuccess: () => {
+      toast.success("The bundle has been updated successfully");
+      navigate(-1);
+    }
+  })
+
   const onSubmit = handleSubmit((values) => {
-    console.log("🚀 ~ file: index.tsx:42 ~ onSubmit ~ valuesssss:", values)
+    if(bundleId){
+      const payload = {
+        id: bundleId,
+        data: {bundle: values}
+      }
+      updateBundle(payload)
+    }else{
+      createBundle({bundle: values});
+    }
   });
 
   return (
@@ -86,6 +109,7 @@ const BundleDetails = () => {
                 placeholder="Enter title of bundle"
                 {...register('title', { required: 'Title is required' })}
               />
+              <p className="text-xs text-red-app pt-1">{errors.title?.message}</p>
             </div>
             <div className="mb-10">
               <BundleItemList

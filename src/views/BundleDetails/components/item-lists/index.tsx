@@ -9,9 +9,9 @@ type BundleItemListProps = {
   testLoading: boolean;
   numberOfSelectedItems: number;
   activeItems: TestItem[] | ChecklistItem[] | CourseItem[] | undefined;
-  register: UseFormRegister<{ tests_ids: string[]; checklists_ids: string[]; courses_ids: string[], title: string }>;
+  register: UseFormRegister<{ tests_ids: string[]; checklists_ids: string[]; courses_ids: string[], title?: string }>;
   registerValue: "tests_ids" | "checklists_ids" | "courses_ids" | "title";
-  title: string;
+  title?: string;
 }
 
 const BundleItemList: React.FC<BundleItemListProps>  = ({testLoading, numberOfSelectedItems, activeItems, register, registerValue, title}) => {

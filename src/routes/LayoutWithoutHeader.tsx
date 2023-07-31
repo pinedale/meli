@@ -1,9 +1,7 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom"
-import Header from "../components/Header";
-import Menu from "../components/Menu";
 import { useFetch } from "../contexts/fetchProvider";
 
-const RequiredAuthRoute = () => {
+const LayoutWithoutHeader = () => {
   const { organization} = useFetch()
   const location = useLocation()
   const { getToken } = useFetch()
@@ -15,11 +13,9 @@ const RequiredAuthRoute = () => {
 
   return (
     <>
-      <Header />
-      <Menu />
       <Outlet />
     </>
   );
 }
 
-export default RequiredAuthRoute
+export default LayoutWithoutHeader

@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { useEffect } from "react";
 import { useFetch } from "../../../../contexts/fetchProvider";
 import { toast } from "react-toastify";
+import { Checkbox } from "flowbite-react";
 
 const schema = yup.object({
   title: yup.string().required("Required field"),
@@ -21,12 +22,13 @@ const MandatoriesFields = () => {
   const { mandatoryId } = useParams()
   const { data } = useGetMandatory(mandatoryId ?? "");
 
-  const { register, reset, handleSubmit } = useForm<MandatoryAttr>({
+  const { register, reset, handleSubmit, watch, setValue, getValues } = useForm<MandatoryAttr>({
     defaultValues: {
       title: data?.title,
       passing_score: data?.passing_score,
       desc: data?.desc,
       kind: data?.color,
+      status: data?.status == "active" ? data?.status : "",
     },
     resolver: yupResolver<yup.AnyObject>(schema),
   });
@@ -34,10 +36,6 @@ const MandatoriesFields = () => {
   useEffect(() => {
     reset(data)
   }, [data, reset]);
-
-  const handleClose = () => {
-    navigate(`/organization/${organization}/mandatories`);
-  }
 
   const { mutate } = useUpdateMandatory({
     onError: (error) => {
@@ -58,16 +56,21 @@ const MandatoriesFields = () => {
     mutate(payload);
   });
 
+  useEffect(()=>{
+    setValue("status", data?.status === "active" ? "true" : "")
+  },[data?.status, getValues, setValue, watch])
+
   return (
     <>
       <form onSubmit={onSubmit}>
         <div className=" flex justify-between align-middle h-12 border-b border-gray-200 items-center px-5">
           <div>
-            <button type="button" onClick={handleClose} className="bg-gray-400 hover:bg-gray-500 text-white w-20">Cancel</button>
+            <button type="button" onClick={() => navigate(-1)} className="bg-gray-400 hover:bg-gray-500 text-white w-20">Cancel</button>
           </div>
           <div><h1 className="text-base text-gray-700">Edit Course</h1></div>
-          <div>
-            <button type="submit" className="bg-red-400 hover:border-red-600 text-white w-20">Save</button>
+          <div className="flex flex-row gap-2">
+            <div className="flex gap-2 flex-row items-center"><span>Active?</span> <Checkbox value="active" {...register('status')} /></div>
+            <button className="bg-red-400 hover:border-red-600 text-white w-20">Save</button>
           </div>
         </div>
         <div className="max-w-6xl mx-auto pt-14">

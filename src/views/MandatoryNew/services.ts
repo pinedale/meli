@@ -1,6 +1,6 @@
 import { AxiosError } from "axios";
 import { UseMutationOptions, UseMutationResult, useMutation } from "react-query";
-import { useFetch } from "../../../../contexts/fetchProvider";
+import { useFetch } from "../../contexts/fetchProvider";
 
 type MandatoryAttr = {
   id: string;
@@ -16,7 +16,8 @@ type MandatoryAttr = {
 const useCreateMandatory = (
   options: UseMutationOptions<MandatoryAttr, AxiosError, MandatoryAttr, unknown>
 ): UseMutationResult<MandatoryAttr, AxiosError, MandatoryAttr, unknown> => {
-  const { authRequest } = useFetch();
+  const { authRequest } = useFetch
+  ();
 
   return useMutation(async (data) => {
       const response = await authRequest.post('/courses', data)
