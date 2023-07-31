@@ -21,6 +21,7 @@ import Profile from './views/Profile';
 import RosterInvite from './views/RosterInvite';
 import LayoutWithoutHeader from './routes/LayoutWithoutHeader';
 import MandatoryNew from './views/MandatoryNew';
+import TestNew from './views/TestNew';
 
 const Layout = () => {
 
@@ -39,8 +40,6 @@ const App = () => (
     <Route element={<RequiredAuthRoute />}>
       <Route path='/profile' element={<Profile />} />
       <Route path='/organization/:orgId/roster' element={<Roster />} />
-      <Route path="/organization/:orgId/roster/:rosterId" element={<RosterDetails />} />
-      <Route path="/organization/:orgId/roster/:rosterId/invite" element={<RosterInvite />} />
       <Route path="/organization/:orgId/roster/:rosterId/course/:courseId" element={<RosterCourse />} />
       <Route path="/organization/:orgId/roster/:rosterId/test/:testId" element={<RosterTest />} />
       <Route path='/organization/:orgId/checklist' element={<Checklist />} />
@@ -58,6 +57,9 @@ const App = () => (
     <Route element={<LayoutWithoutHeader />}>
       <Route path='/organization/:orgId/mandatories/:mandatoryId' element={<MandatoryDetails />} />
       <Route path='/organization/:orgId/mandatories/new' element={<MandatoryNew />} />
+      <Route path="/organization/:orgId/roster/:rosterId" element={<RosterDetails />} />
+      <Route path="/organization/:orgId/roster/:rosterId/invite" element={<RosterInvite />} />
+      <Route path='/organization/:orgId/test/new' element={<TestNew />} />
     </Route>
   </Routes>
 );

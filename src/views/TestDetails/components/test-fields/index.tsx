@@ -2,30 +2,40 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useParams } from "react-router-dom";
 import { type TestAttr, useGetTest } from "./services";
-import { useForm } from "react-hook-form";
-import { useEffect } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { useEffect, useState } from "react";
+import { Block, ColorResult } from "@uiw/react-color";
 
 const schema = yup.object({
   title: yup.string().required("Required field"),
   passing_score: yup.string().required("Required field"),
   desc: yup.string().required("Required field"),
-  kind: yup.string().required("Required field"),
+  color: yup.string().required("Required field"),
+  duration_mins: yup.string(),
 })
 
 const TestFields = () => {
   const { testId } = useParams()
   const { data } = useGetTest(testId);
-  console.log("🚀 ~ file: index.tsx:7 ~ TestFields ~ data:", data)
+  const [color, setColor] = useState("#f47373");
+  const [showColorPicker, setShowColorPicker] = useState(false);
 
-  const { register, reset } = useForm<TestAttr>({
+  const { register, reset, control } = useForm<TestAttr>({
     defaultValues: {
       title: data?.title,
       passing_score: data?.passing_score,
+      duration_mins: data?.duration_mins,
       desc: data?.desc,
-      kind: data?.color,
+      color: data?.color,
+      status: data?.status
     },
     resolver: yupResolver<yup.AnyObject>(schema),
   });
+
+  const handleColorChange = (color: ColorResult) => {
+    setColor(color.hex); 
+    setShowColorPicker(false);
+  };
 
   useEffect(() => {
     reset(data)
@@ -50,9 +60,9 @@ const TestFields = () => {
             className="w-full bg-gray-100 border rounded px-3 py-2 text-xs text-gray-700"
             {...register("duration_mins")}
           >
-            <option value="female">1 Day</option>
-            <option value="male">2 Days</option>
-            <option value="other">3 Days</option>
+            <option value="1">1 Day</option>
+            <option value="2">2 Days</option>
+            <option value="3">3 Days</option>
             <option value="other1">4 Days</option>
             <option value="other2">5 Days</option>
           </select>
@@ -107,21 +117,36 @@ const TestFields = () => {
             <option value="100">100%</option>
           </select>
         </div>
-        <div>
+        <div className="relative">
           <label className="text-gray-700 text-xs mb-1 block">Color</label>
+          {showColorPicker && (
+            <div className="absolute bottom-9">
+              <Controller
+                name="color"
+                control={control}
+                render={({ field: { value } }) => (
+                  <Block color={value} onChange={handleColorChange} />
+                )}
+              />
+            </div>
+
+          )}
           <input
             className="w-full bg-gray-100 border rounded px-3 py-2 text-xs text-gray-700"
             type="text"
-            placeholder="Enter color" 
-            {...register('color')}
+            placeholder="Enter color"
+            value={color}
+            onClick={() => setShowColorPicker(true)}
+            {...register("color")}
           />
+          <div style={{ backgroundColor: color }} className="w-4 h-4 absolute right-3 top-7 rounded"></div>
         </div>
         <div>
           <label className="text-gray-700 text-xs mb-1 block">Kind</label>
           <input
             className="w-full bg-gray-100 border rounded px-3 py-2 text-xs text-gray-700"
             type="text"
-            placeholder="Enter kind of test" 
+            placeholder="Enter kind of test"
             {...register('kind')}
           />
         </div>
@@ -130,7 +155,7 @@ const TestFields = () => {
           <textarea
             rows={5}
             className="w-full bg-gray-100 border rounded px-3 py-2 text-xs text-gray-700"
-            placeholder="Enter description for test..." 
+            placeholder="Enter description for test..."
             {...register('desc')}
           />
         </div>

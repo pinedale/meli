@@ -58,6 +58,14 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+.w-color-block{
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5) !important;
+}
+
+.w-color-block div:first-child, .w-color-block input{
+  display: none;
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;

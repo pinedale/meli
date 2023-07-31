@@ -69,7 +69,6 @@ const RosterInvite = () => {
       const stringifiedMandatoriesIds = updatedBundles.courses_ids.map((num) => num.toString());
       setValue("courses_ids", stringifiedMandatoriesIds, { shouldDirty: false });
     }else {
-      // If checkboxType is false, remove the values from combinedBundles
       const updatedBundles = {
         tests_ids: combinedBundles.tests_ids.filter(id => !bundleDetails?.tests_ids?.includes(id)),
         courses_ids: combinedBundles.courses_ids.filter(id => !bundleDetails?.courses_ids?.includes(id)),
@@ -78,7 +77,6 @@ const RosterInvite = () => {
   
       setCombinedBundles(updatedBundles);
   
-      // Remove selected values for each type of checkbox
       setValue("tests_ids", updatedBundles.tests_ids.map(id => id.toString()), { shouldDirty: false });
       setValue("checklists_ids", updatedBundles.checklists_ids.map(id => id.toString()), { shouldDirty: false });
       setValue("courses_ids", updatedBundles.courses_ids.map(id => id.toString()), { shouldDirty: false });

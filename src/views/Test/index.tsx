@@ -1,7 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
 import Summary from "../../components/Summary";
-import Modal from "../../components/Modal";
-import TestFields from "./components/test-fields";
 import Table from "../../components/Table";
 import { ColumnDef } from "@tanstack/react-table";
 import useTestList, { TestItem } from "./service";
@@ -18,10 +16,8 @@ const Test = () => {
     totalPages: 1,
   })
   const { organization } = useFetch()
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
   const { data, isLoading } = useTestList({ params: { page: paginationParams.page, items: 20 } });
-  const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
 
   useEffect(() => {
     if (data?.meta.pagination) {
@@ -41,15 +37,6 @@ const Test = () => {
     }))
 
   }
-
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setSelectedItemId(null)
-  };
 
   const columns = useMemo<ColumnDef<TestItem>[]>(() =>
     [
@@ -114,16 +101,13 @@ const Test = () => {
       <Summary stats={data?.meta.stats}/>
       <div className="py-4">
         <div className="max-w-6xl mx-auto flex justify-end">
-          <button className="bg-white text-red-400 hover:border-red-400" onClick={openModal}> + Create New Test</button>
+          <button className="bg-white text-red-400 hover:border-red-400"onClick={() => navigate(`/organization/${organization}/test/new`)}> + Create New Test</button>
         </div>
       </div>
       <div className="max-w-6xl mx-auto">
         <Table data={data?.tests || []} isLoading={isLoading} columns={columns}/>
         <Pagination className="mb-8" currentPage={paginationParams.page} onPageChange={onPageChange} totalPages={paginationParams.totalPages} />
       </div>
-      <Modal onClose={closeModal} isOpen={isModalOpen}>
-        <TestFields onClose={closeModal} id={selectedItemId}/>
-      </Modal>
     </>
   )
 };
