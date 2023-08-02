@@ -38,18 +38,21 @@ const TableQuestions: React.FC<TableQuestionsProps> = ({ addChapter, toggleChapt
 	const columns = [
 		columnHelper.accessor('title', {
 			header: 'Title',
+			size: 150,
 		}),
 		columnHelper.accessor('rank', {
 			header: 'Sections',
+			size: 30,
 		}),
 		columnHelper.accessor('id', {
 			header: 'Items',
+			size: 30,
 		}),
 
 		columnHelper.accessor(row => row.id, {
 			id: 'actions',
 			header: 'Actions',
-			size: 70,
+			size: 30,
 			cell: (info) =>
 				<div className='flex text-base gap-2'>
 					<Tooltip content="View details">

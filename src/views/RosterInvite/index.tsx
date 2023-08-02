@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import useTestList from "../Test/service";
 import { useChecklist } from "../Checklist/services";
 import { useGetCourses } from "../Mandatories/services";
@@ -9,9 +9,12 @@ import BundleItemList from "../BundleDetails/components/item-lists";
 import { useBundleList } from "../Bundles/components/table/service";
 import { Checkbox } from "flowbite-react";
 import { useQueryClient } from "react-query";
+import { useCreateRosterInvite } from "./services";
+import { toast } from "react-toastify";
 
 const RosterInvite = () => {
   const queryClient = useQueryClient();
+  const { rosterId } = useParams()
   const navigate = useNavigate();
   const { data: testData, isLoading: testLoading } = useTestList({ params: { page: 1, items: 9999 } });
   const { data: checklistData, isLoading: checklistLoading } = useChecklist({ params: { page: 1, items: 9999 } });
@@ -21,7 +24,7 @@ const RosterInvite = () => {
   const { data: bundleDetails } = useGetBundleDetails(selectedBundleId ?? "");
   const [checkboxType, setCheckboxType] = useState<boolean>();
 
-  const { handleSubmit, watch, register, setValue } = useForm<{ tests_ids: string[], checklists_ids: string[], courses_ids: string[]}>({
+  const { handleSubmit, watch, register, setValue } = useForm<{ tests_ids: string[], checklists_ids: string[], courses_ids: string[] }>({
     defaultValues: {
       tests_ids: [],
       checklists_ids: [],
@@ -46,7 +49,6 @@ const RosterInvite = () => {
     courses_ids: [],
     checklists_ids: [],
   });
-  console.log("🚀 ~ file: index.tsx:49 ~ RosterInvite ~ combinedBundles:", combinedBundles)
 
   useEffect(() => {
 
@@ -56,7 +58,6 @@ const RosterInvite = () => {
         courses_ids: combinedBundles.courses_ids.concat(bundleDetails?.courses_ids ?? []),
         checklists_ids: combinedBundles.checklists_ids.concat(bundleDetails?.checklists_ids ?? []),
       };
-      console.log("🚀 ~ file: index.tsx:59 ~ useEffect ~ updatedBundles:", updatedBundles)
 
       setCombinedBundles(updatedBundles);
 
@@ -68,23 +69,34 @@ const RosterInvite = () => {
 
       const stringifiedMandatoriesIds = updatedBundles.courses_ids.map((num) => num.toString());
       setValue("courses_ids", stringifiedMandatoriesIds, { shouldDirty: false });
-    }else {
+    } else {
       const updatedBundles = {
         tests_ids: combinedBundles.tests_ids.filter(id => !bundleDetails?.tests_ids?.includes(id)),
         courses_ids: combinedBundles.courses_ids.filter(id => !bundleDetails?.courses_ids?.includes(id)),
         checklists_ids: combinedBundles.checklists_ids.filter(id => !bundleDetails?.checklists_ids?.includes(id)),
       };
-  
+
       setCombinedBundles(updatedBundles);
-  
+
       setValue("tests_ids", updatedBundles.tests_ids.map(id => id.toString()), { shouldDirty: false });
       setValue("checklists_ids", updatedBundles.checklists_ids.map(id => id.toString()), { shouldDirty: false });
       setValue("courses_ids", updatedBundles.courses_ids.map(id => id.toString()), { shouldDirty: false });
     }
   }, [bundleDetails, checkboxType]);
 
+  const { mutate: rosterInvite } = useCreateRosterInvite({
+    onSuccess: () => {
+      toast.success("The invitation has been created successfully");
+      navigate(-1);
+    }
+  })
+
   const onSubmit = handleSubmit((values) => {
-    console.log("🚀 ~ file: index.tsx:42 ~ onSubmit ~ valuesssss:", values)
+    const payload = {
+      id: rosterId,
+      data: { assessment_group: values }
+    }
+    rosterInvite(payload)
   });
 
   const handleBundleSelection = (bundleId: string, event: React.MouseEvent<HTMLInputElement, MouseEvent>) => {

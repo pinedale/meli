@@ -22,6 +22,8 @@ import RosterInvite from './views/RosterInvite';
 import LayoutWithoutHeader from './routes/LayoutWithoutHeader';
 import MandatoryNew from './views/MandatoryNew';
 import TestNew from './views/TestNew';
+import TestCategoryDetails from './views/TestCategoryDetails';
+import TestQuestionNew from './views/TestQuestionNew';
 
 const Layout = () => {
 
@@ -60,6 +62,8 @@ const App = () => (
       <Route path="/organization/:orgId/roster/:rosterId" element={<RosterDetails />} />
       <Route path="/organization/:orgId/roster/:rosterId/invite" element={<RosterInvite />} />
       <Route path='/organization/:orgId/test/new' element={<TestNew />} />
+      <Route path='/organization/:orgId/test/:testId/category/:categoryId' element={<TestCategoryDetails />} />
+      <Route path='/organization/:orgId/test/:testId/category/:categoryId/question/new' element={<TestQuestionNew />} />
     </Route>
   </Routes>
 );

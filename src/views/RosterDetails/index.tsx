@@ -34,6 +34,7 @@ const RosterDetails: React.FC = () => {
   const confirmDelete = () => {
     if(selectedItem){
       deleteMandatory(selectedItem);
+      setIsModalOpen(false);
     }
   }
 
@@ -97,7 +98,7 @@ const RosterDetails: React.FC = () => {
           </div>
       },
     ]
-    , []);
+    , [navigate, organization, rosterId]);
 
   const columnsCourses = useMemo<ColumnDef<CourseItem>[]>(() =>
     [

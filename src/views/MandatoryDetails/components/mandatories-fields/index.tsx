@@ -65,7 +65,7 @@ const MandatoriesFields = () => {
       <form onSubmit={onSubmit}>
         <div className=" flex justify-between align-middle h-12 border-b border-gray-200 items-center px-5">
           <div>
-            <button type="button" onClick={() => navigate(-1)} className="bg-gray-400 hover:bg-gray-500 text-white w-20">Cancel</button>
+            <button type="button" onClick={() => navigate(`/organization/${organization}/mandatories`)} className="bg-gray-400 hover:bg-gray-500 text-white w-20">Cancel</button>
           </div>
           <div><h1 className="text-base text-gray-700">Edit Course</h1></div>
           <div className="flex flex-row gap-2">

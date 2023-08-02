@@ -11,6 +11,10 @@ const schema = yup.object({
   content: yup.string().required("Required field"),
 })
 
+type ChapterFormAttr = {
+  content: string;
+}
+
 type ChapterFieldsProps = {
   data: ChapterAttr | undefined;
 }
@@ -25,11 +29,11 @@ const ChapterFields: React.FC<ChapterFieldsProps> = ({ data }) => {
     navigate(`/organization/${organization}/mandatories/${mandatoryId}`);
   }
 
-  const { register, reset, handleSubmit } = useForm<ChapterAttr>({
+  const { register, reset, handleSubmit } = useForm<ChapterFormAttr>({
     defaultValues: {
       content: data?.content,
     },
-    resolver: yupResolver<yup.AnyObject>(schema),
+    resolver: yupResolver(schema),
   });
 
   useEffect(() => {

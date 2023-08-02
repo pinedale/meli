@@ -1,5 +1,5 @@
 import { AxiosError } from "axios";
-import { UseQueryResult, useQuery } from "react-query";
+import { UseMutationOptions, UseMutationResult, UseQueryResult, useMutation, useQuery } from "react-query";
 import { useFetch } from "../../../../contexts/fetchProvider";
 
 type TestAttr = {
@@ -7,7 +7,6 @@ type TestAttr = {
   color: string;
   desc: string;
   duration_mins: string;
-  kind: string;
   passing_score: string;
   title: string;
   status: string;
@@ -24,7 +23,34 @@ const useGetTest = (id: string | null | undefined): UseQueryResult<TestAttr, Axi
   })
 }
 
+type TestFormAttr = {
+  color: string;
+  desc: string;
+  duration_mins: string;
+  passing_score: string;
+  title: string;
+  status: string;
+}
 
-export { useGetTest };
+type UpdateTestParams = {
+  id: string | undefined;
+  data: TestFormAttr;
+}
 
-export type { TestAttr };
+const useUpdateTest = (
+  options: UseMutationOptions<TestFormAttr, AxiosError, UpdateTestParams, unknown>
+): UseMutationResult<TestFormAttr, AxiosError, UpdateTestParams, unknown> => {
+  const { authRequest } = useFetch();
+
+  return useMutation(async ({ id, data }) => {
+      const response = await authRequest.patch(`/tests/${id}`, data)
+      return response.data;
+    },
+    options,
+  )
+}
+
+
+export { useGetTest, useUpdateTest };
+
+export type { TestAttr, TestFormAttr };

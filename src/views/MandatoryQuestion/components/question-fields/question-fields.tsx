@@ -23,11 +23,11 @@ const QuestionFields: React.FC<QuestionFieldsProps> = ({ data }) => {
     navigate(`/organization/${organization}/mandatories/${mandatoryId}/chapters/${chapterId}`);
   }
 
-  const { register, reset } = useForm<QuestionAttr>({
+  const { register, reset } = useForm<{title: string}>({
     defaultValues: {
       title: data?.title,
     },
-    resolver: yupResolver<yup.AnyObject>(schema),
+    resolver: yupResolver(schema),
   });
 
   useEffect(() => {
@@ -53,6 +53,7 @@ const QuestionFields: React.FC<QuestionFieldsProps> = ({ data }) => {
           <div className="col-span-3">
             <label className="text-gray-700 text-xs mb-1 block">Title</label>
             <input
+              value={data?.title}
               type="text"
               className="w-full bg-gray-100 border rounded px-3 py-2 text-xs text-gray-700"
               placeholder="Enter question title"

@@ -77,8 +77,8 @@ const useDeleteMandatory = (): UseMutationResult<void, AxiosError, { user_id: st
   const { authRequest } = useFetch();
   const queryClient = useQueryClient();
 
-  return useMutation<void, AxiosError, { user_id: string | undefined; course_id: string }>( // Cambio en la firma
-    async ({ user_id, course_id }) => { // Cambio en la firma
+  return useMutation<void, AxiosError, { user_id: string | undefined; course_id: string }>(
+    async ({ user_id, course_id }) => { 
       await authRequest.delete(`/users/${user_id}/courses/${course_id}`);
     },
     {
