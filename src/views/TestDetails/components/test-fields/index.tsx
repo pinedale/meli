@@ -22,7 +22,7 @@ const schema = yup.object({
 const TestFields = () => {
   const { organization } = useFetch();
   const { testId } = useParams();
-  const { data, isFetching } = useGetTest(testId);
+  const { data, isLoading } = useGetTest(testId);
   const navigate = useNavigate();
   const [color, setColor] = useState("#f47373");
   const [showColorPicker, setShowColorPicker] = useState(false);
@@ -79,7 +79,7 @@ const TestFields = () => {
     setColor(data?.color || "");
   },[data?.color, setValue])
 
-  if (isFetching) return <div className="flex items-center"><BeatLoader color="#F98080" className="mx-auto block" /></div>
+  if (isLoading) return <div className="flex items-center"><BeatLoader color="#F98080" className="mx-auto block" /></div>
 
   return (
     <form onSubmit={onSubmit}>

@@ -1,18 +1,38 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { type Question, useGetTestCategoryDetails } from "./services";
+import { type Question, useGetTestCategoryDetails, DeleteTestQuestionParams, useDeleteTestQuestion } from "./services";
 import { useFetch } from "../../contexts/fetchProvider";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { Tooltip } from "flowbite-react";
 import { HiEye } from "react-icons/hi";
 import { FaTrash } from "react-icons/fa";
 import Table from "../../components/Table";
+import ModalConfirmation from "../../components/ModalConfirmation";
 
 const TestCategoryDetails = () => {
   const { organization } = useFetch();
   const navigate = useNavigate();
   const { testId, categoryId } = useParams();
   const { data, isLoading } = useGetTestCategoryDetails(testId, categoryId);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<DeleteTestQuestionParams>();
+  const { mutateAsync: deleteTestQuestion } = useDeleteTestQuestion()
+
+  const handleDelete = (item: DeleteTestQuestionParams) =>{
+    setSelectedItem(item)
+    setIsModalOpen(true);
+  }
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  }
+
+  const confirmDelete = () => {
+    if(selectedItem){
+      deleteTestQuestion(selectedItem);
+      setIsModalOpen(false);
+    }
+  }
 
   const colums = useMemo<ColumnDef<Question>[]>(() =>
     [
@@ -49,6 +69,7 @@ const TestCategoryDetails = () => {
 						<button
 							type="button"
 							className='px-1'
+              onClick={() => handleDelete({test_id:testId || "", category_id: categoryId || "", question_id:info.row.original.id || ""})}
 						>
 							<FaTrash />
 						</button>
@@ -56,10 +77,11 @@ const TestCategoryDetails = () => {
 				</div>
       },
     ]
-    , [navigate, organization, testId]);
+    , [categoryId, navigate, organization, testId]);
 
   return(
     <div className="left-0 fixed h-screen w-full top-0 bottom-0 bg-white">
+      <ModalConfirmation confirmDelete={confirmDelete} onClose={closeModal} isOpen={isModalOpen}/>
       <div className=" flex justify-between align-middle h-12 border-b border-gray-200 items-center px-5">
         <div>
           <button onClick={() => navigate(`/organization/${organization}/test/${testId}`)} type="button" className="bg-gray-400 hover:bg-gray-500 text-white w-20">Cancel</button>

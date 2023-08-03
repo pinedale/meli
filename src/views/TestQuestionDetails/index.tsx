@@ -6,7 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useFetch } from "../../contexts/fetchProvider";
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox, Tooltip } from "flowbite-react";
-import { HiCheckCircle, HiEye } from "react-icons/hi";
+import { HiCheckCircle } from "react-icons/hi";
 import { FaTrash } from "react-icons/fa";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
@@ -38,16 +38,15 @@ const TestQuestionDetails = () => {
   const queryClient = useQueryClient();
   const { testId, categoryId, questionId } = useParams();
   const [addItem, setAddItem] = useState<boolean>(false);
-  
-  const { data, isLoading } = useGetTestQuestionDetails(testId ?? "", categoryId??"", questionId??"");
-  console.log("🚀 ~ file: index.tsx:41 ~ TestQuestionDetails ~ datasssss:", data)
+
+  const { data, isLoading } = useGetTestQuestionDetails(testId ?? "", categoryId ?? "", questionId ?? "");
 
   const transformedArray = data?.answers && data?.answers.map(answer => {
     return { "title": answer, isCorrect: false };
   });
 
   const [answerList, setAnswerList] = useState<Answer[]>(transformedArray || []);
-  
+
 
   const handleClose = () => {
     navigate(`/organization/${organization}/test/${testId}/category/${categoryId}`);
@@ -69,7 +68,7 @@ const TestQuestionDetails = () => {
         header: 'Correct question',
         size: 50,
         cell: (info) =>
-          <div className=" text-2xl text-red-app">{info.row.original.isCorrect && <HiCheckCircle/>}</div>
+          <div className=" text-2xl text-red-app">{info.row.original.isCorrect && <HiCheckCircle />}</div>
       },
       {
         accessorKey: 'actions',
@@ -77,15 +76,6 @@ const TestQuestionDetails = () => {
         size: 80,
         cell: () =>
           <div className='flex text-base gap-2'>
-            <Tooltip content="View category details">
-              <button
-                onClick={() => navigate(`/organization/${organization}/test/${testId}/category/`)}
-                data-tooltip-target="tooltip-dark"
-                type="button" className='px-1'
-              >
-                <HiEye />
-              </button>
-            </Tooltip>
             <Tooltip content="Delete">
               <button
                 type="button"
@@ -97,7 +87,7 @@ const TestQuestionDetails = () => {
           </div>
       },
     ]
-    , [navigate, organization, testId]);
+    , []);
 
   const { register, handleSubmit, reset, watch } = useForm<Question>({
     defaultValues: {
