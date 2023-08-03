@@ -8,6 +8,7 @@ import { Block, ColorResult } from "@uiw/react-color";
 import { Checkbox } from "flowbite-react";
 import { toast } from "react-toastify";
 import { useFetch } from "../../../../contexts/fetchProvider";
+import { BeatLoader } from "react-spinners";
 
 const schema = yup.object({
   title: yup.string().required("Required field"),
@@ -21,7 +22,7 @@ const schema = yup.object({
 const TestFields = () => {
   const { organization } = useFetch();
   const { testId } = useParams();
-  const { data } = useGetTest(testId);
+  const { data, isFetching } = useGetTest(testId);
   const navigate = useNavigate();
   const [color, setColor] = useState("#f47373");
   const [showColorPicker, setShowColorPicker] = useState(false);
@@ -73,9 +74,16 @@ const TestFields = () => {
     setValue("status", data?.status === "active" ? "true" : "")
   },[data?.status, getValues, setValue, watch])
 
+  useEffect(()=>{
+    setValue("color", data?.color ? data?.color : "")
+    setColor(data?.color || "");
+  },[data?.color, setValue])
+
+  if (isFetching) return <div className="flex items-center"><BeatLoader color="#F98080" className="mx-auto block" /></div>
+
   return (
     <form onSubmit={onSubmit}>
-      <div className=" flex justify-between align-middle h-12 border-b border-gray-200 items-center px-5">
+      <div className="flex justify-between align-middle h-12 border-b border-gray-200 items-center px-5">
         <div>
           <button type="button" onClick={() => navigate(`/organization/${organization}/test`)} className="bg-gray-400 hover:bg-gray-500 text-white w-20">Cancel</button>
         </div>
@@ -85,7 +93,7 @@ const TestFields = () => {
           <button className="bg-red-400 hover:border-red-600 text-white w-20">Save</button>
         </div>
       </div>
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-6xl mx-auto pt-14">
         <h2 className=" text-2xl text-gray-700 mb-8">Test Details</h2>
         <div className=" w-full grid gap-4 grid-cols-3">
           <div>
