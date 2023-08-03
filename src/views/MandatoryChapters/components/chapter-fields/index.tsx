@@ -11,17 +11,13 @@ const schema = yup.object({
   content: yup.string().required("Required field"),
 })
 
-type ChapterFormAttr = {
-  content: string;
-}
-
 type ChapterFieldsProps = {
   data: ChapterAttr | undefined;
 }
 
 const ChapterFields: React.FC<ChapterFieldsProps> = ({ data }) => {
   const { organization } = useFetch();
-  console.log("🚀 ~ file: index.tsx:12 ~ data:", data)
+  
   const { mandatoryId, chapterId } = useParams()
   const navigate = useNavigate();
 
@@ -29,11 +25,15 @@ const ChapterFields: React.FC<ChapterFieldsProps> = ({ data }) => {
     navigate(`/organization/${organization}/mandatories/${mandatoryId}`);
   }
 
-  const { register, reset, handleSubmit } = useForm<ChapterFormAttr>({
+  const { register, reset, handleSubmit } = useForm<ChapterAttr>({
     defaultValues: {
       content: data?.content,
+      content_formatted: data?.content_formatted,
+      rank: data?.rank,
+      title: data?.title,
+      questions: data?.questions
     },
-    resolver: yupResolver(schema),
+    resolver: yupResolver(schema) as any,
   });
 
   useEffect(() => {

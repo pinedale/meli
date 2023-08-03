@@ -50,7 +50,7 @@ const Header = () => {
                 ? <div className="flex items-center"><BeatLoader color="#F98080" className="mx-auto block" /></div>
                 : (
                   unTakenRoles && unTakenRoles?.length > 0 &&
-                  <Dropdown label={`${selectedRole?.organization.title} - ${selectedRole?.name}`}>
+                  <Dropdown inline label={`${selectedRole?.organization.title} - ${selectedRole?.name}`}>
                   {unTakenRoles?.map((role) => (
                     <Dropdown.Item key={role.organization.id} onClick={() => handleDropdown(role.organization.id)}>
                       {role.organization.title} - {role.name.replace(/_/g, ' ')}

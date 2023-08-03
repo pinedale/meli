@@ -1,17 +1,18 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useQueryClient } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import { useFetch } from "../../contexts/fetchProvider";
-import { useForm } from "react-hook-form";
-import { useEffect, useMemo, useRef, useState } from "react";
-import Table from "../../components/Table";
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox, Tooltip } from "flowbite-react";
-import { HiEye } from "react-icons/hi";
+import { HiCheckCircle, HiEye } from "react-icons/hi";
 import { FaTrash } from "react-icons/fa";
-import { useCreateTestQuestion } from "./services";
+import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { useQueryClient } from "react-query";
+import Table from "../../components/Table";
+import { useGetTestQuestionDetails, useUpdateTestQuestion } from "./services";
+import { BeatLoader } from "react-spinners";
 
 const schema = yup.object({
   title: yup.string().required("Required field"),
@@ -22,21 +23,31 @@ type Question = {
   rank: string;
   title: string;
   correct_answer_index: string;
-  is_randomized: boolean;
+  is_randomized: boolean | string;
   answers: string[];
 }
 
 type Answer = {
   title: string;
+  isCorrect: boolean;
 }
 
-const TestQuestionNew = () => {
+const TestQuestionDetails = () => {
   const { organization } = useFetch();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { testId, categoryId } = useParams();
+  const { testId, categoryId, questionId } = useParams();
   const [addItem, setAddItem] = useState<boolean>(false);
-  const [answerList, setAnswerList] = useState<Answer[]>([]);
+  
+  const { data, isLoading } = useGetTestQuestionDetails(testId ?? "", categoryId??"", questionId??"");
+  console.log("🚀 ~ file: index.tsx:41 ~ TestQuestionDetails ~ datasssss:", data)
+
+  const transformedArray = data?.answers && data?.answers.map(answer => {
+    return { "title": answer, isCorrect: false };
+  });
+
+  const [answerList, setAnswerList] = useState<Answer[]>(transformedArray || []);
+  
 
   const handleClose = () => {
     navigate(`/organization/${organization}/test/${testId}/category/${categoryId}`);
@@ -52,6 +63,13 @@ const TestQuestionNew = () => {
         accessorKey: 'title',
         header: 'Title',
         size: 150,
+      },
+      {
+        accessorKey: 'isCorrect',
+        header: 'Correct question',
+        size: 50,
+        cell: (info) =>
+          <div className=" text-2xl text-red-app">{info.row.original.isCorrect && <HiCheckCircle/>}</div>
       },
       {
         accessorKey: 'actions',
@@ -81,18 +99,20 @@ const TestQuestionNew = () => {
     ]
     , [navigate, organization, testId]);
 
-  const { register, handleSubmit, reset } = useForm<Question>({
+  const { register, handleSubmit, reset, watch } = useForm<Question>({
     defaultValues: {
-      answers: [],
-      title: "",
-      rank: "",
-      correct_answer_index: "",
-      is_randomized: false,
+      answers: data?.answers,
+      title: data?.title,
+      rank: data?.rank,
+      correct_answer_index: data?.correct_answer_index,
+      is_randomized: data?.is_randomized ? "true" : "false",
     },
     resolver: yupResolver(schema) as any,
   });
 
-  const { mutate: createTestQuesion } = useCreateTestQuestion({
+  const selectValue = watch("correct_answer_index");
+
+  const { mutate: updateTestQuestion } = useUpdateTestQuestion({
     onError: (error) => {
       const errorMessage = error.message
       toast.error(`${errorMessage}`);
@@ -108,7 +128,7 @@ const TestQuestionNew = () => {
 
   const collectAnswers = () => {
     if (inputRef.current && inputRef.current.value.trim() !== "") {
-      setAnswerList([...answerList, { title: inputRef.current.value }]);
+      setAnswerList([...answerList, { title: inputRef.current.value, isCorrect: false }]);
       inputRef.current.value = "";
     }
   }
@@ -118,22 +138,39 @@ const TestQuestionNew = () => {
     const payload = {
       testId: testId || "",
       categoryId: categoryId || "",
+      questionId: questionId || "",
       data: {
         ...values,
-        answers: answersData
+        answers: answersData,
+        is_randomized: !!values.is_randomized
       },
     };
 
     if (answersData.length >= 2) {
-      createTestQuesion(payload)
+      updateTestQuestion(payload)
     } else {
       toast.error("You need to add more than one answer option")
     }
   });
 
   useEffect(() => {
-    reset()
-  }, [reset]);
+    reset(data)
+  }, [data, reset]);
+
+  useEffect(() => {
+    if (data?.answers) {
+      const correctAnswerIndex = parseInt(selectValue, 10);
+      const transformedArray = data?.answers.map((answer, index) => {
+        return {
+          "title": answer,
+          "isCorrect": index === correctAnswerIndex
+        };
+      });
+      setAnswerList(transformedArray)
+    }
+  }, [data?.answers, data?.correct_answer_index, selectValue]);
+
+  if (isLoading) return <div className="flex items-center"><BeatLoader color="#F98080" className="mx-auto block" /></div>
 
   return (
     <div className="left-0 fixed h-screen w-full top-0 bottom-0 bg-white">
@@ -188,18 +225,18 @@ const TestQuestionNew = () => {
               <div className="flex gap-2">
                 <label className="cursor-pointer flex items-center gap-2" htmlFor={"random"}>
                   <span className="text-xs">Randomize Answers</span>
-                  <Checkbox id="random"  {...register('is_randomized')} />
+                  <Checkbox value="true" id="random"  {...register('is_randomized')} />
                 </label>
                 <button onClick={toggleAddItem} type="button" className="bg-white text-red-400 hover:border-red-400">+ Add Option</button>
               </div>
-              
+
             </div>
             {
               answerList.length === 0
-              ? <p className=" text-sm">No options have been added.</p>
-              : <Table data={answerList || []} columns={columns} isLoading={false} />
+                ? <p className=" text-sm">No options have been added.</p>
+                : <Table data={answerList || []} columns={columns} isLoading={false} />
             }
-            
+
             {
               addItem && (
                 <div className="border-2 p-1 rounded-lg mt-1">
@@ -223,6 +260,7 @@ const TestQuestionNew = () => {
       </div>
     </div>
   )
+
 }
 
-export default TestQuestionNew;
+export default TestQuestionDetails;

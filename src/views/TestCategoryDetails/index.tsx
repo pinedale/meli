@@ -27,7 +27,7 @@ const TestCategoryDetails = () => {
         size: 120,
         cell: (info) =>
           <div>
-            {info.row.original.answers.length}
+            {info.row.original.answers ? info.row.original.answers.length : 0}
           </div>
       },
       {
@@ -36,7 +36,7 @@ const TestCategoryDetails = () => {
         size: 80,
         cell: (info) =>
 				<div className='flex text-base gap-2'>
-					<Tooltip content="View category details">
+					<Tooltip content="View question details">
 						<button
 							onClick={() => navigate(`/organization/${organization}/test/${testId}/category/${categoryId}/question/${info.row.original.id}`)}
 							data-tooltip-target="tooltip-dark"

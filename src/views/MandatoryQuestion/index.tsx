@@ -6,7 +6,7 @@ import { useAddMandatoryQuestionOption, useGetMandatoryQuestionDetails } from ".
 import Table from "../../components/Table";
 import { Tooltip } from "flowbite-react";
 import { HiEye } from "react-icons/hi";
-import { FaPencilAlt, FaTrash } from "react-icons/fa";
+import { FaPencilAlt } from "react-icons/fa";
 import { ColumnDef } from "@tanstack/react-table";
 import { useEffect, useMemo, useState } from "react";
 import { useFetch } from "../../contexts/fetchProvider";

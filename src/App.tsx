@@ -24,6 +24,7 @@ import MandatoryNew from './views/MandatoryNew';
 import TestNew from './views/TestNew';
 import TestCategoryDetails from './views/TestCategoryDetails';
 import TestQuestionNew from './views/TestQuestionNew';
+import TestQuestionDetails from './views/TestQuestionDetails';
 
 const Layout = () => {
 
@@ -64,6 +65,7 @@ const App = () => (
       <Route path='/organization/:orgId/test/new' element={<TestNew />} />
       <Route path='/organization/:orgId/test/:testId/category/:categoryId' element={<TestCategoryDetails />} />
       <Route path='/organization/:orgId/test/:testId/category/:categoryId/question/new' element={<TestQuestionNew />} />
+      <Route path='/organization/:orgId/test/:testId/category/:categoryId/question/:questionId' element={<TestQuestionDetails />} />
     </Route>
   </Routes>
 );
