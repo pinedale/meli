@@ -74,12 +74,13 @@ const TestQuestionDetails = () => {
         accessorKey: 'actions',
         header: 'Actions',
         size: 80,
-        cell: () =>
+        cell: (info) =>
           <div className='flex text-base gap-2'>
             <Tooltip content="Delete">
               <button
                 type="button"
                 className='px-1'
+                onClick={() => handleDeleteItem(info.row.index)}
               >
                 <FaTrash />
               </button>
@@ -108,7 +109,7 @@ const TestQuestionDetails = () => {
       toast.error(`${errorMessage}`);
     },
     onSuccess: () => {
-      toast.success("The question has been created successfully");
+      toast.success("The question has been updated successfully");
       navigate(`/organization/${organization}/test/${testId}/category/${categoryId}`);
       queryClient.invalidateQueries(['test-category-details']);
     }
@@ -122,6 +123,10 @@ const TestQuestionDetails = () => {
       inputRef.current.value = "";
     }
   }
+
+  const handleDeleteItem = (index: number) => {
+    setAnswerList(prevList => prevList.filter((_, i) => i !== index));
+  };
 
   const onSubmit = handleSubmit((values) => {
     const answersData = answerList.map(obj => obj.title);
@@ -211,7 +216,7 @@ const TestQuestionDetails = () => {
               }
             </div>
             <div className="flex justify-between mb-8">
-              <h2 className="text-2xl text-gray-700">Answer Options</h2>
+              <h2 className="text-2xl text-gray-700">Answer Options ({answerList.length})</h2>
               <div className="flex gap-2">
                 <label className="cursor-pointer flex items-center gap-2" htmlFor={"random"}>
                   <span className="text-xs">Randomize Answers</span>
