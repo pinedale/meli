@@ -4,7 +4,9 @@ import { type RosterFormAttr } from "./services";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { toast } from "react-toastify";
+import { toast } from "react-toastify";                                                                                         
+import { BeatLoader } from "react-spinners";
+import { useQueryClient } from "react-query";
 
 const schema = yup.object({
   first_name: yup.string().required("Required field"),
@@ -20,7 +22,7 @@ type RosterFieldsProps = {
   isEditing?: boolean;
 }
 const RosterFields: React.FC<RosterFieldsProps> = ({ onClose, id, isEditing }) => {
-  console.log("🚀 ~ file: index.tsx:23 ~ isEditing:", isEditing)
+  const queryClient = useQueryClient();
   // const [file, setFile] = useState<string | undefined>();
 
   // const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -29,7 +31,7 @@ const RosterFields: React.FC<RosterFieldsProps> = ({ onClose, id, isEditing }) =
   //   }
   // };
 
-  const {data} = useGetRoster(id);
+  const {data, isLoading} = useGetRoster(id);
 
   const { register, handleSubmit, reset } = useForm<RosterFormAttr>({
     defaultValues: isEditing ? 
@@ -52,6 +54,8 @@ const RosterFields: React.FC<RosterFieldsProps> = ({ onClose, id, isEditing }) =
   const { mutate } = useCreateRoster({
     onSuccess: () => {
       toast.success("The member has been created successfully");
+      onClose();
+      queryClient.invalidateQueries(['users'])
     }
   })
 
@@ -64,6 +68,8 @@ const RosterFields: React.FC<RosterFieldsProps> = ({ onClose, id, isEditing }) =
   const onSubmit = handleSubmit((values) => {
     mutate({user: values});
   });
+
+  if (isLoading) return <div className="flex items-center"><BeatLoader color="#F98080" className="mx-auto block" /></div>
 
   return (
     <>
@@ -104,7 +110,6 @@ const RosterFields: React.FC<RosterFieldsProps> = ({ onClose, id, isEditing }) =
                 className="w-full bg-gray-100 border rounded px-3 py-2 text-xs text-gray-700"
                 {...register("role")}
               >
-                <option value="corporate">Corporate</option>
                 <option value="super_admin">Super Admin</option>
                 <option value="admin">Admin</option>
                 <option value="recruiter">Recruiter / QA</option>
