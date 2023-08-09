@@ -11,6 +11,8 @@ const schema = yup.object({
   last_name: yup.string().required("Required field"),
   email: yup.string().required("Required field"),
   phone_number: yup.string().optional(),
+  bio: yup.string().optional(),
+  attachment: yup.string().optional(),
   role: yup.string().required("Required field"),
 })
 
@@ -25,6 +27,8 @@ const RosterNew = () => {
       email: "",
       phone_number: "",
       role: "",
+      attachment: "",
+      bio: "",
     },
     resolver: yupResolver(schema),
   });

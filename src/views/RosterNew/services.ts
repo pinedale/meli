@@ -3,26 +3,24 @@ import { toast } from "react-toastify";
 import { useFetch } from "../../contexts/fetchProvider";
 
 type RosterFormAttr = {
-  id: string;
   first_name: string;
   last_name: string;
   email: string;
-  bio: string;
+  bio: string | undefined;
   role: string;
-  phone_number?: string;
-  attachment: string;
+  phone_number: string | undefined;
+  attachment: string | undefined;
 }
 
 type RosterFormRequestAtrr = {
   user: {
-    id: string;
     first_name: string;
     last_name: string;
     email: string;
-    bio: string;
+    bio: string | undefined;
     role: string;
-    phone_number?: string;
-    attachment: string;
+    phone_number: string | undefined;
+    attachment: string | undefined;
   }
 }
 
