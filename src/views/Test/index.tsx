@@ -96,16 +96,16 @@ const Test = () => {
     ]
     , [navigate, organization]);
 
-  return(
+  return (
     <>
-      <Summary stats={data?.meta.stats}/>
+      <Summary stats={data?.meta.stats} />
       <div className="py-4">
         <div className="max-w-6xl mx-auto flex justify-end">
-          <button className="bg-white text-red-400 hover:border-red-400"onClick={() => navigate(`/organization/${organization}/test/new`)}> + Create New Test</button>
+          <button className="bg-white text-red-400 hover:border-red-400" onClick={() => navigate(`/organization/${organization}/test/new`)}> + Create New Test</button>
         </div>
       </div>
       <div className="max-w-6xl mx-auto">
-        <Table data={data?.tests || []} isLoading={isLoading} columns={columns}/>
+        <Table data={data?.tests || []} isLoading={isLoading} columns={columns} />
         <Pagination className="mb-8" currentPage={paginationParams.page} onPageChange={onPageChange} totalPages={paginationParams.totalPages} />
       </div>
     </>

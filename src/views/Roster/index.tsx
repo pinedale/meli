@@ -1,8 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import Summary from "../../components/Summary";
-import Modal from "../../components/Modal";
-import RostertFields from "./components/roster-fields";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useFetch } from "../../contexts/fetchProvider";
 import { ColumnDef } from "@tanstack/react-table";
 import useUsers, { type UserItem } from "./components/service";
@@ -19,9 +17,6 @@ const Roster = () => {
     totalPages: 1,
   })
   const { organization } = useFetch();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
-  const [isEditing, setIsEditing] = useState<boolean | undefined>(false);
   const navigate = useNavigate();
   const { data, isLoading } = useUsers({ params: { page: paginationParams.page, items: 20 } });
   const [selectedItem, setSelectedItem] = useState<string>();
@@ -63,17 +58,6 @@ const Roster = () => {
     }))
 
   }
-
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setIsEditing(false);
-    setSelectedItemId(null)
-    navigate(`/organization/${organization}/roster`);
-  };
 
   const columns = useMemo<ColumnDef<UserItem>[]>(() =>
     [
@@ -157,7 +141,7 @@ const Roster = () => {
       <Summary stats={data?.meta.stats} />
       <div className="py-4">
         <div className="max-w-6xl mx-auto flex justify-end">
-          <button className="bg-white text-red-400 hover:border-red-400" onClick={openModal}> + Create New Member</button>
+          <button className="bg-white text-red-400 hover:border-red-400" onClick={() => navigate(`/organization/${organization}/roster/new`)}> + Create New Member</button>
         </div>
       </div>
       <div className="max-w-6xl mx-auto">
@@ -165,9 +149,6 @@ const Roster = () => {
         <Table data={data?.users || []} isLoading={isLoading} columns={columns} />
         { paginationParams.totalPages >= 20 &&  <Pagination className="mb-8" currentPage={paginationParams.page} onPageChange={onPageChange} totalPages={paginationParams.totalPages} />}        
       </div>
-      <Modal onClose={closeModal} isOpen={isModalOpen}>
-        <RostertFields onClose={closeModal} id={selectedItemId} isEditing={isEditing} />
-      </Modal>
     </>
   )
 };
