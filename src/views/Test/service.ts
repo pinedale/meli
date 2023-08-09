@@ -1,6 +1,7 @@
 import { AxiosError } from "axios";
-import { UseQueryResult, useQuery } from "react-query";
+import { UseMutationResult, UseQueryResult, useMutation, useQuery, useQueryClient } from "react-query";
 import { useFetch } from "../../contexts/fetchProvider";
+import { toast } from "react-toastify";
 
 type Params = {
   page: number;
@@ -8,7 +9,7 @@ type Params = {
 }
 
 type TestItem = {
-  id: number;
+  id: string;
   status: string;
   title: string;
   categories_count: number;
@@ -48,5 +49,22 @@ const useTestList = ({ params }: { params: Params }): UseQueryResult<TestRespons
   });
 };
 
-export default useTestList;
+const useDeleteTest = (): UseMutationResult<void, AxiosError, { test_id: string }> => {
+  const { authRequest } = useFetch();
+  const queryClient = useQueryClient();
+
+  return useMutation<void, AxiosError, { test_id: string }>(
+    async ({ test_id }) => {
+      await authRequest.delete(`/tests/${test_id}`);
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['tests']);
+        toast.success('Successfully deleted!');
+      }
+    }
+  );
+};
+
+export {useTestList, useDeleteTest};
 export type {TestItem} 

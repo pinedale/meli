@@ -2,13 +2,14 @@ import { useEffect, useMemo, useState } from "react";
 import Summary from "../../components/Summary";
 import Table from "../../components/Table";
 import { ColumnDef } from "@tanstack/react-table";
-import useTestList, { TestItem } from "./service";
+import { type TestItem, useTestList, useDeleteTest } from "./service";
 import { Pagination, Tooltip } from "flowbite-react";
 import { FaTrash } from "react-icons/fa";
 import { HiEye } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
 import { useFetch } from "../../contexts/fetchProvider";
 import { format } from "date-fns";
+import ModalConfirmation from "../../components/ModalConfirmation";
 
 const Test = () => {
   const [paginationParams, setPaginationParams] = useState({
@@ -18,6 +19,26 @@ const Test = () => {
   const { organization } = useFetch()
   const navigate = useNavigate();
   const { data, isLoading } = useTestList({ params: { page: paginationParams.page, items: 20 } });
+  const [selectedItem, setSelectedItem] = useState<string>();
+  const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
+
+  const { mutateAsync: deleteTest } = useDeleteTest();
+
+  const handleDelete = (item: string) => {
+    setSelectedItem(item)
+    setIsConfirmationModalOpen(true);
+  }
+
+  const closeConfirmationModal = () => {
+    setIsConfirmationModalOpen(false);
+  }
+
+  const confirmDelete = () => {
+    if (selectedItem) {
+      deleteTest({ test_id: selectedItem });
+      setIsConfirmationModalOpen(false);
+    }
+  }
 
   useEffect(() => {
     if (data?.meta.pagination) {
@@ -89,7 +110,13 @@ const Test = () => {
               </button>
             </Tooltip>
             <Tooltip content="Remove">
-              <button type="button" className='px-1'><FaTrash /></button>
+              <button
+                type="button"
+                className='px-1'
+                onClick={() => handleDelete(info.row.original.id)}
+              >
+                <FaTrash />
+              </button>
             </Tooltip>
           </div>
       },
@@ -105,8 +132,9 @@ const Test = () => {
         </div>
       </div>
       <div className="max-w-6xl mx-auto">
+        <ModalConfirmation confirmDelete={confirmDelete} onClose={closeConfirmationModal} isOpen={isConfirmationModalOpen} />
         <Table data={data?.tests || []} isLoading={isLoading} columns={columns} />
-        <Pagination className="mb-8" currentPage={paginationParams.page} onPageChange={onPageChange} totalPages={paginationParams.totalPages} />
+        { paginationParams.totalPages >= 20 &&  <Pagination className="mb-8" currentPage={paginationParams.page} onPageChange={onPageChange} totalPages={paginationParams.totalPages} />}
       </div>
     </>
   )

@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom";
-import useTestList from "../Test/service";
+import { useTestList } from "../Test/service";
 import { useChecklist } from "../Checklist/services";
 import { useGetCourses } from "../Mandatories/services";
 import { useGetBundleDetails } from "../BundleDetails/services";
