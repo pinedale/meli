@@ -59,7 +59,7 @@ const useCreateRoster = (
 const useGetRoster = (id: string | null): UseQueryResult<RosterFormAttr, AxiosError> => {
   const { authRequest } = useFetch();
 
-  return useQuery<RosterFormAttr, AxiosError>(['checklist-details'], async () => {
+  return useQuery<RosterFormAttr, AxiosError>(['users'], async () => {
     const response = await authRequest.get<RosterFormAttr>(`/users/${id}`);
     return response.data
   },{
