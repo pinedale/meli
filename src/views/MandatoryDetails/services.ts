@@ -1,9 +1,9 @@
 import { AxiosError } from "axios";
 import { UseMutationOptions, UseMutationResult, UseQueryResult, useMutation, useQuery, useQueryClient } from "react-query";
-import { useFetch } from "../../../../contexts/fetchProvider";
+import { useFetch } from "../../contexts/fetchProvider";
 import { toast } from "react-toastify";
 
-type Section = {
+type Question = {
   id: number;
   rank: number;
   title: string;
@@ -13,7 +13,7 @@ type ChapterAttr = {
   id: string;
   rank: number;
   title: string;
-  sections?: Array<Section>;
+  questions?: Array<Question>;
 }
 
 type ChapterList = Array<ChapterAttr>
@@ -48,7 +48,6 @@ const useAddMandatoryChapter = (
   options: UseMutationOptions<ChapterAdd, Error, ChapterAdd, unknown>
 ): UseMutationResult<ChapterAdd, Error, ChapterAdd, unknown> => {
   const { authRequest } = useFetch();
-  const queryClient = useQueryClient()
 
   return useMutation(
     async (data) => {
@@ -57,18 +56,33 @@ const useAddMandatoryChapter = (
     },
     {
       ...options,
-      onError: (error) => {
-        toast.error(error.response?.data?.error?.message)
-      },
-      onSuccess: () => {
-        queryClient.invalidateQueries(['mandatory-chapters'])
-        toast.success('Successfully added!');
-      }
     }
   )
 }
 
+type DeleteTestChapterParams = {
+  course_id: string;
+  chapter_id: string;
+}
 
-export { useGetMandatoryChapters, useAddMandatoryChapter }
+const useDeleteMandatoryChapter = (): UseMutationResult<void, AxiosError, DeleteTestChapterParams> => {
+  const { authRequest } = useFetch();
+  const queryClient = useQueryClient();
 
-export type { ChapterAttr, ChapterAdd };
+  return useMutation<void, AxiosError, DeleteTestChapterParams>(
+    async ({ course_id, chapter_id }) => { 
+      await authRequest.delete(`/courses/${course_id}/chapters/${chapter_id}`);
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['mandatory-chapters']);
+        toast.success('Successfully deleted!');
+      }
+    }
+  );
+};
+
+
+export { useGetMandatoryChapters, useAddMandatoryChapter, useDeleteMandatoryChapter }
+
+export type { ChapterAttr, ChapterAdd, DeleteTestChapterParams };

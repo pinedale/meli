@@ -34,7 +34,7 @@ const TestCategoryDetails = () => {
     }
   }
 
-  const colums = useMemo<ColumnDef<Question>[]>(() =>
+  const columns = useMemo<ColumnDef<Question>[]>(() =>
     [
       {
         accessorKey: 'title',
@@ -96,7 +96,7 @@ const TestCategoryDetails = () => {
           <h2 className=" text-2xl text-gray-700">Questions ({data?.questions?.length})</h2>
           <button onClick={() => navigate(`/organization/${organization}/test/${testId}/category/${categoryId}/question/new`)} type="button" className="bg-white text-red-400 hover:border-red-400">+ Add Question</button>
         </div>
-        <Table data={data?.questions || []} columns={colums} isLoading={isLoading}/>
+        <Table data={data?.questions || []} columns={columns} isLoading={isLoading}/>
       </div>
     </div>
   )

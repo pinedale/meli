@@ -3,11 +3,10 @@ import { UseMutationOptions, UseMutationResult, useMutation } from "react-query"
 import { useFetch } from "../../contexts/fetchProvider";
 
 type MandatoryAttr = {
-  id: string;
-  color: string;
-  desc: string;
-  duration_mins: string;
-  kind: string;
+  color: string | undefined;
+  desc: string | undefined;
+  duration_mins: string | undefined;
+  kind: string | undefined;
   passing_score: string;
   title: string;
   status: string;

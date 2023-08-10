@@ -3,11 +3,10 @@ import { UseMutationOptions, UseMutationResult, useMutation } from "react-query"
 import { useFetch } from "../../contexts/fetchProvider";
 
 type TestAttr = {
-  id: string;
   color: string;
-  desc: string;
+  desc: string | undefined;
   duration_mins: string;
-  kind: string;
+  kind: string | undefined;
   passing_score: string;
   title: string;
   status: string;

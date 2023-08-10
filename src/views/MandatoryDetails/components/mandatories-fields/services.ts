@@ -3,14 +3,11 @@ import { UseMutationOptions, UseMutationResult, UseQueryResult, useMutation, use
 import { useFetch } from "../../../../contexts/fetchProvider";
 
 type MandatoryAttr = {
-  id: string;
-  color: string;
-  desc: string;
-  duration_mins: string;
-  kind: string;
+  desc: string | undefined;
+  kind: string | undefined;
   passing_score: string;
   title: string;
-  status: string;
+  status: string | undefined;
 }
 
 type UpdateMandatoryParams = {

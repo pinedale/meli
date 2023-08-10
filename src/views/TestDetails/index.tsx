@@ -123,7 +123,7 @@ const TestDetails: React.FC = () => {
     <div className="left-0 fixed h-screen w-full top-0 bottom-0 bg-white">
       <div className="overflow-y-auto h-full pb-10">
         <ModalConfirmation confirmDelete={confirmDelete} onClose={closeModal} isOpen={isModalOpen}/>
-        <TestFields />
+        <TestFields />  
         <div className="max-w-6xl mx-auto pt-14">
           <div className="flex justify-between mb-8">
             <h2 className="text-2xl text-gray-700">Categories</h2>

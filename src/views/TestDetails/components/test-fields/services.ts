@@ -10,6 +10,7 @@ type TestAttr = {
   passing_score: string;
   title: string;
   status: string;
+  kind: string | undefined;
 }
 
 const useGetTest = (id: string | null | undefined): UseQueryResult<TestAttr, AxiosError> => {
@@ -25,8 +26,9 @@ const useGetTest = (id: string | null | undefined): UseQueryResult<TestAttr, Axi
 
 type TestFormAttr = {
   color: string;
-  desc: string;
+  desc: string | undefined;
   duration_mins: string;
+  kind: string | undefined;
   passing_score: string;
   title: string;
   status: string;

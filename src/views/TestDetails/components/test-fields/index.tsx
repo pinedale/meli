@@ -9,11 +9,13 @@ import { Checkbox } from "flowbite-react";
 import { toast } from "react-toastify";
 import { useFetch } from "../../../../contexts/fetchProvider";
 import { BeatLoader } from "react-spinners";
+import { durationDaysOptions, passingScoreOptions } from "../../../../utils/constants";
 
 const schema = yup.object({
   title: yup.string().required("Required field"),
   passing_score: yup.string().required("Required field"),
-  desc: yup.string().required("Required field"),
+  desc: yup.string().optional(),
+  kind: yup.string().optional(),
   color: yup.string().required("Required field"),
   duration_mins: yup.string().required("Required field"),
   status: yup.string().required("Required field"),
@@ -27,7 +29,7 @@ const TestFields = () => {
   const [color, setColor] = useState("#f47373");
   const [showColorPicker, setShowColorPicker] = useState(false);
 
-  const { register, reset, control, handleSubmit, setValue, getValues, watch } = useForm<TestFormAttr>({
+  const { register, reset, control, handleSubmit, setValue, getValues, watch, formState: { errors } } = useForm<TestFormAttr>({
     defaultValues: {
       title: data?.title,
       passing_score: data?.passing_score,
@@ -35,6 +37,7 @@ const TestFields = () => {
       desc: data?.desc,
       color: data?.color,
       status: data?.status == "active" ? data?.status : "",
+      kind: data?.kind !== null ? data?.kind : "",
     },
     resolver: yupResolver<TestFormAttr>(schema),
   });
@@ -54,30 +57,29 @@ const TestFields = () => {
       toast.success("The test has been updated successfully");
       navigate(`/organization/${organization}/test`)
     },
-    onError: (error) =>{
+    onError: (error) => {
       const errorMessage = error.message
       toast.error(`${errorMessage}`);
     },
   })
 
   const onSubmit = handleSubmit((values) => {
-    
-    const statusString = values.status ? values.status = "active" : "inactive"
+    const statusString = values.status === "active" ? values.status = "active" : "inactive";
     const payload = {
       id: testId,
-      data: {...values, status: statusString},
+      data: { ...values, status: statusString },
     };
     updateTest(payload);
   });
 
-  useEffect(()=>{
+  useEffect(() => {
     setValue("status", data?.status === "active" ? "true" : "")
-  },[data?.status, getValues, setValue, watch])
+  }, [data?.status, getValues, setValue, watch])
 
-  useEffect(()=>{
+  useEffect(() => {
     setValue("color", data?.color ? data?.color : "")
     setColor(data?.color || "");
-  },[data?.color, setValue])
+  }, [data?.color, setValue])
 
   if (isLoading) return <div className="flex items-center"><BeatLoader color="#F98080" className="mx-auto block" /></div>
 
@@ -87,7 +89,7 @@ const TestFields = () => {
         <div>
           <button type="button" onClick={() => navigate(`/organization/${organization}/test`)} className="bg-gray-400 hover:bg-gray-500 text-white w-20">Cancel</button>
         </div>
-        <div><h1 className="text-base text-gray-700">Edit Course</h1></div>
+        <div><h1 className="text-base text-gray-700">Edit Course {`${data?.kind}`}</h1></div>
         <div className="flex flex-row gap-2">
           <div className="flex gap-2 flex-row items-center"><span>Active?</span> <Checkbox value="active" {...register('status')} /></div>
           <button className="bg-red-400 hover:border-red-600 text-white w-20">Save</button>
@@ -104,6 +106,7 @@ const TestFields = () => {
               placeholder="Enter first name"
               {...register('title', { required: 'Title is required' })}
             />
+            <p className="text-xs text-red-app">{errors.title?.message}</p>
           </div>
           <div>
             <label className="text-gray-700 text-xs mb-1 block">Duration</label>
@@ -111,12 +114,13 @@ const TestFields = () => {
               className="w-full bg-gray-100 border rounded px-3 py-2 text-xs text-gray-700"
               {...register("duration_mins")}
             >
-              <option value="1">1 Day</option>
-              <option value="2">2 Days</option>
-              <option value="3">3 Days</option>
-              <option value="4">4 Days</option>
-              <option value="5">5 Days</option>
+              {durationDaysOptions.map((option) => (
+                <option key={option} value={option}>
+                  {option} {option == "1" ? "day" : "days"}
+                </option>
+              ))}
             </select>
+            <p className="text-xs text-red-app">{errors.duration_mins?.message}</p>
           </div>
           <div>
             <label className="text-gray-700 text-xs mb-1 block">Passing Score</label>
@@ -124,49 +128,13 @@ const TestFields = () => {
               className="w-full bg-gray-100 border rounded px-3 py-2 text-xs text-gray-700"
               {...register("passing_score")}
             >
-              <option value="60">60%</option>
-              <option value="61">61%</option>
-              <option value="62">62%</option>
-              <option value="63">63%</option>
-              <option value="64">64%</option>
-              <option value="65">65%</option>
-              <option value="66">66%</option>
-              <option value="66">66%</option>
-              <option value="67">67%</option>
-              <option value="68">68%</option>
-              <option value="69">69%</option>
-              <option value="70">70%</option>
-              <option value="71">71%</option>
-              <option value="72">72%</option>
-              <option value="73">73%</option>
-              <option value="74">74%</option>
-              <option value="75">75%</option>
-              <option value="75">75%</option>
-              <option value="76">76%</option>
-              <option value="77">77%</option>
-              <option value="78">78%</option>
-              <option value="79">79%</option>
-              <option value="80">80%</option>
-              <option value="81">81%</option>
-              <option value="82">82%</option>
-              <option value="83">83%</option>
-              <option value="84">84%</option>
-              <option value="85">85%</option>
-              <option value="86">86%</option>
-              <option value="87">87%</option>
-              <option value="89">89%</option>
-              <option value="90">90%</option>
-              <option value="91">91%</option>
-              <option value="92">92%</option>
-              <option value="93">93%</option>
-              <option value="94">94%</option>
-              <option value="95">95%</option>
-              <option value="96">96%</option>
-              <option value="97">97%</option>
-              <option value="98">98%</option>
-              <option value="99">99%</option>
-              <option value="100">100%</option>
+              {passingScoreOptions.map((option) => (
+                <option key={option} value={option}>
+                  {option}%
+                </option>
+              ))}
             </select>
+            <p className="text-xs text-red-app">{errors.passing_score?.message}</p>
           </div>
           <div className="relative">
             <label className="text-gray-700 text-xs mb-1 block">Color</label>
@@ -191,6 +159,16 @@ const TestFields = () => {
               {...register("color")}
             />
             <div style={{ backgroundColor: color }} className="w-4 h-4 absolute right-3 top-7 rounded"></div>
+          </div>
+          <div>
+            <label className="text-gray-700 text-xs mb-1 block">Kind</label>
+            <input
+              className="w-full bg-gray-100 border rounded px-3 py-2 text-xs text-gray-700"
+              type="text"
+              placeholder="kind"
+              {...register('kind')}
+            />
+            <p className="text-xs text-red-app">{errors.kind?.message}</p>
           </div>
           <div className="col-span-3">
             <label className="text-gray-700 text-xs mb-1 block">Description</label>
