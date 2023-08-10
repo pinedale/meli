@@ -20,12 +20,6 @@ const MandatoryChapters: React.FC = () => {
   const [selectedItem, setSelectedItem] = useState<DeleteMandatoryQuestionParams>();
   const { mutateAsync: deleteTestQuestion } = useDeleteMandatoryQuestion()
 
-  const [addQuestion, setAddQuestion] = useState(false)
-
-  const toggleQuestion = () => {
-    setAddQuestion(!addQuestion)
-  }
-
   const handleDelete = (item: DeleteMandatoryQuestionParams) => {
     setSelectedItem(item)
     setIsModalOpen(true);
@@ -94,7 +88,12 @@ const MandatoryChapters: React.FC = () => {
       <div className="max-w-6xl mx-auto pt-14">
         <div className="flex justify-between mb-8">
           <h2 className=" text-2xl text-gray-700">Questions ({data?.questions?.length})</h2>
-          <button className="bg-white text-red-400 hover:border-red-400" onClick={toggleQuestion}>+ Add Question</button>
+          <button
+            className="bg-white text-red-400 hover:border-red-400"
+            onClick={() => navigate(`/organization/${organization}/mandatories/${mandatoryId}/chapters/${chapterId}/question/new`)}
+          >
+            + Add Question
+          </button>
         </div>
         <Table data={data?.questions || []} columns={columns} isLoading={isLoading} />
       </div>

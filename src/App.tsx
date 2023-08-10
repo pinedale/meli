@@ -13,7 +13,6 @@ import MandatoryDetails from './views/MandatoryDetails';
 import RosterDetails from './views/RosterDetails';
 import TestDetails from './views/TestDetails';
 import MandatoryChapters from './views/MandatoryChapters';
-import MandatoryQuestion from './views/MandatoryQuestion';
 import RosterCourse from './views/RosterCourse';
 import RosterTest from './views/RosterTest';
 import BundleDetails from './views/BundleDetails';
@@ -26,6 +25,8 @@ import TestCategoryDetails from './views/TestCategoryDetails';
 import TestQuestionNew from './views/TestQuestionNew';
 import TestQuestionDetails from './views/TestQuestionDetails';
 import RosterNew from './views/RosterNew';
+import MandatoryQuestionNew from './views/MandatoryQuestionNew';
+import MandatoryQuestionDetails from './views/MandatoryQuestionDetails';
 
 const Layout = () => {
 
@@ -52,8 +53,6 @@ const App = () => (
       <Route path='/organization/:orgId/test' element={<Test />} />
       <Route path='/organization/:orgId/test/:testId' element={<TestDetails />} />
       <Route path='/organization/:orgId/mandatories' element={<Mandatories />} />
-      <Route path='/organization/:orgId/mandatories/:mandatoryId/chapters/:chapterId' element={<MandatoryChapters />} />
-      <Route path='/organization/:orgId/mandatories/:mandatoryId/chapters/:chapterId/question/:questionId' element={<MandatoryQuestion />} />
       <Route path='/organization/:orgId/bundles' element={<Bundles />} />
       <Route path='/organization/:orgId/bundles/new' element={<BundleDetails />} />
       <Route path='/organization/:orgId/bundles/:bundleId' element={<BundleDetails />} />
@@ -61,6 +60,9 @@ const App = () => (
     <Route element={<LayoutWithoutHeader />}>
       <Route path='/organization/:orgId/mandatories/:mandatoryId' element={<MandatoryDetails />} />
       <Route path='/organization/:orgId/mandatories/new' element={<MandatoryNew />} />
+      <Route path='/organization/:orgId/mandatories/:mandatoryId/chapters/:chapterId' element={<MandatoryChapters />} />
+      <Route path='/organization/:orgId/mandatories/:mandatoryId/chapters/:chapterId/question/new' element={<MandatoryQuestionNew />} />
+      <Route path='/organization/:orgId/mandatories/:mandatoryId/chapters/:chapterId/question/:questionId' element={<MandatoryQuestionDetails />} />
       <Route path='/organization/:orgId/roster/new' element={<RosterNew />} />
       <Route path="/organization/:orgId/roster/:rosterId" element={<RosterDetails />} />
       <Route path="/organization/:orgId/roster/:rosterId/invite" element={<RosterInvite />} />

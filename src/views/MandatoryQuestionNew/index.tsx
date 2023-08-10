@@ -7,7 +7,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import Table from "../../components/Table";
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "flowbite-react";
-import { useCreateTestQuestion } from "./services";
+import { useCreateMandatoryQuestion } from "./services";
 import { toast } from "react-toastify";
 import { useQueryClient } from "react-query";
 
@@ -28,16 +28,16 @@ type Answer = {
   title: string;
 }
 
-const TestQuestionNew = () => {
+const MandatoryQuestionNew = () => {
   const { organization } = useFetch();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { testId, categoryId } = useParams();
+  const { mandatoryId, chapterId } = useParams();
   const [addItem, setAddItem] = useState<boolean>(false);
   const [answerList, setAnswerList] = useState<Answer[]>([]);
 
   const handleClose = () => {
-    navigate(`/organization/${organization}/test/${testId}/category/${categoryId}`);
+    navigate(`/organization/${organization}/mandatories/${mandatoryId}/chapters/${chapterId}`);
   }
 
   const toggleAddItem = () => {
@@ -70,15 +70,15 @@ const TestQuestionNew = () => {
     resolver: yupResolver(schema) as any,
   });
 
-  const { mutate: createTestQuesion } = useCreateTestQuestion({
+  const { mutate: createMandatoryQuestion } = useCreateMandatoryQuestion({
     onError: (error) => {
       const errorMessage = error.message
       toast.error(`${errorMessage}`);
     },
     onSuccess: () => {
       toast.success("The question has been created successfully");
-      navigate(`/organization/${organization}/test/${testId}/category/${categoryId}`);
-      queryClient.invalidateQueries(['test-category-details']);
+      navigate(`/organization/${organization}/mandatories/${mandatoryId}/chapters/${chapterId}`);
+      queryClient.invalidateQueries(['courses-chapter-details']);
     }
   })
 
@@ -94,8 +94,8 @@ const TestQuestionNew = () => {
   const onSubmit = handleSubmit((values) => {
     const answersData = answerList.map(obj => obj.title);
     const payload = {
-      testId: testId || "",
-      categoryId: categoryId || "",
+      courseId: mandatoryId || "",
+      chapterId: chapterId || "",
       data: {
         ...values,
         answers: answersData
@@ -103,7 +103,7 @@ const TestQuestionNew = () => {
     };
 
     if (answersData.length >= 2) {
-      createTestQuesion(payload)
+      createMandatoryQuestion(payload)
     } else {
       toast.error("You need to add more than one answer option")
     }
@@ -203,4 +203,4 @@ const TestQuestionNew = () => {
   )
 }
 
-export default TestQuestionNew;
+export default MandatoryQuestionNew;

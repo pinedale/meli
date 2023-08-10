@@ -10,35 +10,35 @@ type QuestionAttr = {
   answers: string[];
 }
 
-const useGetTestQuestionDetails = (testId: string, categoryId: string, questionId: string): UseQueryResult<QuestionAttr, AxiosError> => {
+const useGetMandatoryQuestionDetails = (courseId: string, chapterId: string, questionId: string): UseQueryResult<QuestionAttr, AxiosError> => {
   const { authRequest } = useFetch();
 
-  return useQuery<QuestionAttr, AxiosError>(['test-question-details'], async () => {
-    const response = await authRequest.get<QuestionAttr>(`/tests/${testId}/categories/${categoryId}/questions/${questionId}`);
+  return useQuery<QuestionAttr, AxiosError>(['mandatory-question-details'], async () => {
+    const response = await authRequest.get<QuestionAttr>(`/courses/${courseId}/chapters/${chapterId}/questions/${questionId}`);
     return response.data
   },{
-    enabled: !!testId
+    enabled: !!courseId
   })
 }
 
 type UpdateTestQuestionParams = {
-  testId: string;
-  categoryId: string;
+  courseId: string;
+  chapterId: string;
   questionId: string | undefined;
   data: QuestionAttr;
 }
 
-const useUpdateTestQuestion = (
+const useUpdateMandatoryQuestion = (
   options: UseMutationOptions<QuestionAttr, AxiosError, UpdateTestQuestionParams, unknown>
 ): UseMutationResult<QuestionAttr, AxiosError, UpdateTestQuestionParams, unknown> => {
   const { authRequest } = useFetch();
 
-  return useMutation(async ({ testId, categoryId, questionId, data }) => {
-      const response = await authRequest.patch(`/tests/${testId}/categories/${categoryId}/questions/${questionId}`, {question: data})
+  return useMutation(async ({ courseId, chapterId, questionId, data }) => {
+      const response = await authRequest.patch(`/courses/${courseId}/chapters/${chapterId}/questions/${questionId}`, {question: data})
       return response.data;
     },
     options,
   )
 }
 
-export {useGetTestQuestionDetails, useUpdateTestQuestion};
+export {useGetMandatoryQuestionDetails, useUpdateMandatoryQuestion};
