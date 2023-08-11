@@ -27,6 +27,7 @@ import TestQuestionDetails from './views/TestQuestionDetails';
 import RosterNew from './views/RosterNew';
 import MandatoryQuestionNew from './views/MandatoryQuestionNew';
 import MandatoryQuestionDetails from './views/MandatoryQuestionDetails';
+import ChecklistNew from './views/ChecklistNew';
 
 const Layout = () => {
 
@@ -58,6 +59,7 @@ const App = () => (
       <Route path='/organization/:orgId/bundles/:bundleId' element={<BundleDetails />} />
     </Route>
     <Route element={<LayoutWithoutHeader />}>
+      <Route path='/organization/:orgId/checklist/new' element={<ChecklistNew />} />
       <Route path='/organization/:orgId/mandatories/:mandatoryId' element={<MandatoryDetails />} />
       <Route path='/organization/:orgId/mandatories/new' element={<MandatoryNew />} />
       <Route path='/organization/:orgId/mandatories/:mandatoryId/chapters/:chapterId' element={<MandatoryChapters />} />

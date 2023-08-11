@@ -27,19 +27,25 @@ type ChecklistFormAttr = {
   desc: string;
   color: string;
   kind: string;
+  status: string;
   categories?: Array<Category>;
 }
 
-const useCreateChecklist = (
-  options: UseMutationOptions<ChecklistFormAttr, AxiosError, ChecklistFormAttr, unknown>
-): UseMutationResult<ChecklistFormAttr, AxiosError, ChecklistFormAttr, unknown> => {
+type UpdateChecklistParams = {
+  id: string | undefined;
+  data: ChecklistFormAttr;
+}
+
+const useUpdateChecklist = (
+  options: UseMutationOptions<ChecklistFormAttr, AxiosError, UpdateChecklistParams, unknown>
+): UseMutationResult<ChecklistFormAttr, AxiosError, UpdateChecklistParams, unknown> => {
   const { authRequest } = useFetch();
 
-  return useMutation(async (data) => {
-      const response = await authRequest.post('/checklists', data)
-      return response.data;
-    },
-    options
+  return useMutation(async ({ id, data }) => {
+    const response = await authRequest.patch(`/checklists/${id}`, data)
+    return response.data;
+  },
+    options,
   )
 }
 
@@ -49,12 +55,12 @@ const useGetChecklist = (id: string | null | undefined): UseQueryResult<Checklis
   return useQuery<ChecklistFormAttr, AxiosError>(['checklist-details'], async () => {
     const response = await authRequest.get<ChecklistFormAttr>(`/checklists/${id}`);
     return response.data
-  },{
+  }, {
     enabled: !!id
   })
 }
 
 
-export { useCreateChecklist, useGetChecklist };
+export { useUpdateChecklist, useGetChecklist };
 
 export type { ChecklistFormAttr, Category };

@@ -40,7 +40,7 @@ const Header = () => {
   return (
     <div className="w-full py-3">
       <div className=" w-11/12 mx-auto">
-        <div className="flex justify-between">
+        <div className="flex justify-between items-center">
           <div className="w-[53px] mr-8 pt-2">
             <img src={unaLogo} alt="Meli" className="w-full block" />
           </div>

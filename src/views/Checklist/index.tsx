@@ -1,8 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import Summary from "../../components/Summary";
 
-import Modal from "../../components/Modal";
-import ChecklistFields from "./components/checklist-fields";
 import { useNavigate } from "react-router-dom";
 import { ColumnDef } from "@tanstack/react-table";
 import { ChecklistItem, useChecklist, useDeleteChecklist } from "./services";
@@ -19,7 +17,6 @@ const Checklist = () =>{
     page: 1,
     totalPages: 1,
   })
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
   const { data, isLoading } = useChecklist({ params: { page: paginationParams.page, items: 20 } });
 
@@ -41,20 +38,6 @@ const Checklist = () =>{
     }))
 
   }
-
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-    
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-    navigate(`/organization/${organization}/checklist`)
-  };
-
-  const handleCreateNewChecklist = () => {
-    openModal();
-  };
 
   const {mutateAsync:deleteChecklist} = useDeleteChecklist()
 
@@ -121,17 +104,18 @@ const Checklist = () =>{
       <Summary stats={data?.meta.stats}/>
       <div className="py-4">
         <div className="max-w-6xl mx-auto flex justify-end">
-          <button className="bg-white text-red-400 hover:border-red-400" onClick={handleCreateNewChecklist}> + Create New Checklist</button>
+          <button
+            className="bg-white text-red-400 hover:border-red-400"
+            onClick={() => navigate(`/organization/${organization}/checklist/new`)}
+          >
+            + Create New Checklist
+          </button>
         </div>
       </div>
       <div className="max-w-6xl mx-auto">
         <Table data={data?.checklists || []} isLoading={isLoading} columns={columns}/>
         <Pagination className="mb-8" currentPage={paginationParams.page} onPageChange={onPageChange} totalPages={paginationParams.totalPages} />
       </div>
-      
-      <Modal onClose={closeModal} isOpen={isModalOpen}>
-        <ChecklistFields onClose={closeModal} />
-      </Modal>
     </>
   )
 };
