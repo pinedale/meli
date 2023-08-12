@@ -22,14 +22,14 @@ const schema = yup.object({
 const TestDetails: React.FC = () => {
   const navigate = useNavigate();
   const { organization } = useFetch();
-  const { testId } = useParams()
+  const { testId } = useParams();
   const queryClient = useQueryClient();
   const { data, isFetching } = useGetTestCategories(testId);
-  const [addItem, setAddItem] = useState<boolean>(false)
+  const [addItem, setAddItem] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<{ test_id: string | undefined; category_id: string; }>();
 
-  const { mutateAsync: deleteTest } = useDeleteTestCategory()
+  const { mutateAsync: deleteTest } = useDeleteTestCategory();
 
   const handleDelete = (item: {test_id: string | undefined; category_id: string;}) =>{
     setSelectedItem(item)
@@ -51,7 +51,7 @@ const TestDetails: React.FC = () => {
     setAddItem(!addItem)
   }
 
-  const colums = useMemo<ColumnDef<CategoryItem>[]>(() =>
+  const columns = useMemo<ColumnDef<CategoryItem>[]>(() =>
     [
       {
         accessorKey: 'title',
@@ -129,7 +129,7 @@ const TestDetails: React.FC = () => {
             <h2 className="text-2xl text-gray-700">Categories</h2>
             <button type="button" onClick={toggleAddItem} className="bg-white text-red-400 hover:border-red-400" >+ Add Category</button>
           </div>
-          <Table data={data || []} isLoading={isFetching} columns={colums} />
+          <Table data={data || []} isLoading={isFetching} columns={columns} />
           {
             addItem && (
               <div className="border-2 p-1 rounded-lg mt-1">

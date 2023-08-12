@@ -1,7 +1,7 @@
 import { AxiosError } from "axios";
 import { UseMutationOptions, UseMutationResult, UseQueryResult, useMutation, useQuery, useQueryClient } from "react-query";
-import { useFetch } from "../../../../contexts/fetchProvider";
 import { toast } from "react-toastify";
+import { useFetch } from "../../contexts/fetchProvider";
 
 type Section = {
   id: number;
@@ -13,7 +13,7 @@ type CategoryAttr = {
   id: string;
   rank: number;
   title: string;
-  sections?: Array<Section>;
+  sections: Array<Section>;
 }
 
 type CategoryList = Array<CategoryAttr>
@@ -51,6 +51,7 @@ type Error = {
     data: {
       error:{
         message: string;
+        details: [],
       }
     }
   }
@@ -65,7 +66,6 @@ const useAddChecklistCategory = (
   options: UseMutationOptions<CategoryAdd, Error, CategoryAdd, unknown>
 ): UseMutationResult<CategoryAdd, Error, CategoryAdd, unknown> => {
   const { authRequest } = useFetch();
-  const queryClient = useQueryClient()
 
   return useMutation(
     async (data) => {
@@ -74,13 +74,6 @@ const useAddChecklistCategory = (
     },
     {
       ...options,
-      onError: (error) => {
-        toast.error(error.response?.data?.error?.message)
-      },
-      onSuccess: () =>{
-        queryClient.invalidateQueries(['checklist-categories'])
-        toast.success('Successfully added!');
-      }
     }
   )
 }
