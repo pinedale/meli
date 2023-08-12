@@ -2,16 +2,15 @@ import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "
 import { Tooltip } from "flowbite-react";
 import { FaTrash } from "react-icons/fa";
 import { HiEye } from "react-icons/hi";
-import { Section } from "../table-section/services";
+import { type Question } from "../table-section/services";
 
-const columnHelper = createColumnHelper<Section>();
+const columnHelper = createColumnHelper<Question>();
 
 type TableMainProps = {
-  dataSection: Array<Section>;
+  dataSection: Array<Question>;
 }
 
 const TableMain:React.FC<TableMainProps> = ({dataSection}) => {
-console.log("🚀 ~ file: index.tsx:15 ~ datkkk:", dataSection)
 
   const columns = [
     columnHelper.accessor('title', {
