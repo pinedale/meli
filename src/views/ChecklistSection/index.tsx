@@ -34,7 +34,7 @@ const ChecklistSection: React.FC = () => {
       toast.error(error.response?.data?.error?.message)
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(['checklist-details'])
+      queryClient.invalidateQueries(['checklist-sections'])
       toast.success('Successfully added!');
       reset();
       setAddItem(!addItem);
@@ -95,9 +95,6 @@ const ChecklistSection: React.FC = () => {
               </form>
             </div>
           )
-        }
-        {
-
         }
         <TableSection />
       </div>

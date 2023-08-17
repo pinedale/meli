@@ -1,6 +1,7 @@
-import { UseMutationOptions, UseMutationResult, UseQueryResult, useMutation, useQuery } from "react-query";
+import { UseMutationOptions, UseMutationResult, UseQueryResult, useMutation, useQuery, useQueryClient } from "react-query";
 import { AxiosError } from "axios";
 import { useFetch } from "../../../../contexts/fetchProvider";
+import { toast } from "react-toastify";
 
 type Question = {
   id: string;
@@ -19,7 +20,7 @@ type SectionResponse = {
   sections: Array<Section>
 }
 
-const useGetChecklistSection = (id: string, categoryId: string, ): UseQueryResult<SectionResponse, AxiosError> => {
+const useGetChecklistSection = (id: string, categoryId: string,): UseQueryResult<SectionResponse, AxiosError> => {
   const { authRequest } = useFetch();
 
   return useQuery<SectionResponse, AxiosError>(['checklist-sections'], async () => {
@@ -35,7 +36,7 @@ type QuestionForm = {
 type Error = {
   response: {
     data: {
-      error:{
+      error: {
         message: string;
       }
     }
@@ -61,6 +62,30 @@ const useAddChecklistSectionQuestion = (
   )
 }
 
-export { useGetChecklistSection, useAddChecklistSectionQuestion }
+type DeleteChecklistQuestionParams = {
+  checklistId: string;
+  categoryId: string;
+  sectionId: string;
+  questionId: string;
+}
 
-export type {Section, Question, QuestionForm}
+const useDeleteChecklistQuestion = (): UseMutationResult<void, AxiosError, DeleteChecklistQuestionParams> => {
+  const { authRequest } = useFetch();
+  const queryClient = useQueryClient();
+
+  return useMutation<void, AxiosError, DeleteChecklistQuestionParams>(
+    async ({ checklistId, categoryId, sectionId, questionId }) => {
+      await authRequest.delete(`/checklists/${checklistId}/categories/${categoryId}/sections/${sectionId}/questions/${questionId}`);
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['checklist-sections']);
+        toast.success('Successfully deleted!');
+      }
+    }
+  );
+};
+
+export { useGetChecklistSection, useAddChecklistSectionQuestion, useDeleteChecklistQuestion }
+
+export type { Section, Question, QuestionForm, DeleteChecklistQuestionParams }

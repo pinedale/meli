@@ -8,7 +8,7 @@ type CategoryAttr = {
 type Error = {
   response: {
     data: {
-      error:{
+      error: {
         message: string;
       }
     }
