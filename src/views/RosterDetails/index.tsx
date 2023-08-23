@@ -1,11 +1,11 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useFetch } from "../../contexts/fetchProvider";
-import { useGetUserTest, type TestItem, useGetUserChecklist, type ChecklistItem, useGetUserCourses, type CourseItem, useDeleteMandatory } from "./services";
+import { useGetUserTest, type TestItem, useGetUserChecklist, type ChecklistItem, useGetUserCourses, type CourseItem, useDeleteMandatory, useGetRosterInfo } from "./services";
 import Table from "../../components/Table";
 import { useMemo, useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
-import { Tooltip } from "flowbite-react";
+import { Avatar, Spinner, Tooltip } from "flowbite-react";
 import { HiEye } from "react-icons/hi";
 import { FaTrash } from "react-icons/fa";
 import ModalConfirmation from "../../components/ModalConfirmation";
@@ -19,10 +19,10 @@ const RosterDetails: React.FC = () => {
   const { data: dataCourses, isLoading: coursesLoading } = useGetUserCourses(rosterId);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<{ user_id: string | undefined; course_id: string; }>();
+  const { mutateAsync: deleteMandatory } = useDeleteMandatory();
+  const { data: rosterInfo, isFetching: rosterIsLoading } = useGetRosterInfo(rosterId || '');
 
-  const { mutateAsync: deleteMandatory } = useDeleteMandatory()
-
-  const handleDelete = (item: {user_id: string | undefined; course_id: string;}) =>{
+  const handleDelete = (item: { user_id: string | undefined; course_id: string; }) => {
     setSelectedItem(item)
     setIsModalOpen(true);
   }
@@ -32,7 +32,7 @@ const RosterDetails: React.FC = () => {
   }
 
   const confirmDelete = () => {
-    if(selectedItem){
+    if (selectedItem) {
       deleteMandatory(selectedItem);
       setIsModalOpen(false);
     }
@@ -161,7 +161,7 @@ const RosterDetails: React.FC = () => {
               <button
                 type="button"
                 className='px-1'
-                onClick={() => handleDelete({user_id:rosterId, course_id:info.row.original.id})}
+                onClick={() => handleDelete({ user_id: rosterId, course_id: info.row.original.id })}
               >
                 <FaTrash />
               </button>
@@ -208,14 +208,25 @@ const RosterDetails: React.FC = () => {
             Back
           </button>
         </div>
-        <div><h1 className="text-base text-gray-700">Roster Details</h1></div>
+        <div><h1 className="text-base text-gray-700">{rosterInfo?.first_name} {rosterInfo?.last_name}</h1></div>
         <div>
           <button onClick={() => navigate(`/organization/${organization}/roster/${rosterId}/invite`)} type="button" className="bg-red-400 hover:border-red-600 text-white w-auto">Create new invite</button>
         </div>
       </div>
       <div className="overflow-y-auto h-full pb-10">
-        <ModalConfirmation confirmDelete={confirmDelete} onClose={closeModal} isOpen={isModalOpen}/>
+        <ModalConfirmation confirmDelete={confirmDelete} onClose={closeModal} isOpen={isModalOpen} />
         <div className="max-w-6xl mx-auto pt-14">
+          {rosterIsLoading
+            ? <Spinner
+              aria-label="Extra small spinner example"
+              size="xs"
+            />
+            : <div className=" flex start-0 mb-10">
+              <Avatar rounded size="lg" bordered>
+                <h3>{rosterInfo?.first_name} {rosterInfo?.last_name}</h3>
+              </Avatar>
+            </div>}
+
           <div className="flex justify-between mb-4">
             <h2 className=" text-2xl text-gray-700">Tests ({dataTest?.length})</h2>
           </div>

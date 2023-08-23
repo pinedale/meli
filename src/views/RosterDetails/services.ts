@@ -3,6 +3,16 @@ import { UseMutationResult, UseQueryResult, useMutation, useQuery, useQueryClien
 import { useFetch } from "../../contexts/fetchProvider";
 import { toast } from "react-toastify";
 
+type RosterAttr = {
+  id: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  bio: string;
+  role: string;
+  attachment: string;
+}
+
 type ChecklistItem = {
   id: string;
   title: string;
@@ -39,6 +49,16 @@ type CourseItem = {
 }
 
 type CoursesList = Array<CourseItem>
+
+const useGetRosterInfo = (id: string): UseQueryResult<RosterAttr, Error> => {
+  const { authRequest } = useFetch();
+  return useQuery<RosterAttr, Error>(['user-info'], async () => {
+    const response = await authRequest.get<RosterAttr>(`/users/${id}`);
+    return response.data
+  },{
+    enabled: !!id
+  })
+}
 
 const useGetUserTest = (id: string | null | undefined): UseQueryResult<TestList, AxiosError> => {
   const { authRequest } = useFetch();
@@ -90,5 +110,5 @@ const useDeleteMandatory = (): UseMutationResult<void, AxiosError, { user_id: st
   );
 };
 
-export { useGetUserTest, useGetUserChecklist, useGetUserCourses, useDeleteMandatory };
-export type { TestItem, ChecklistItem, CourseItem } 
+export { useGetUserTest, useGetUserChecklist, useGetUserCourses, useDeleteMandatory, useGetRosterInfo };
+export type { TestItem, ChecklistItem, CourseItem, RosterAttr } 
