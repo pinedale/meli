@@ -1,10 +1,13 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
-import { RosterFormAttr, useCreateRoster } from "./services";
+import { RosterFormAttr, useCreateRoster, useUpdateRoster } from "./services";
 import { toast } from "react-toastify";
 import { useQueryClient } from "react-query";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useGetRosterInfo } from "../RosterDetails/services";
+import { useEffect } from "react";
+import { BeatLoader } from "react-spinners";
 
 const schema = yup.object({
   first_name: yup.string().required("Required field"),
@@ -18,10 +21,20 @@ const schema = yup.object({
 
 const RosterNew = () => {
   const queryClient = useQueryClient();
+  const { rosterId } = useParams();
   const navigate = useNavigate();
+  const { data: rosterInfo, isFetching: rosterIsLoading } = useGetRosterInfo(rosterId || '');
 
-  const { register, handleSubmit } = useForm<RosterFormAttr>({
-    defaultValues: {
+  const { register, handleSubmit, reset } = useForm<RosterFormAttr>({
+    defaultValues: rosterInfo && rosterId ? {
+      first_name: rosterInfo.first_name,
+      last_name: rosterInfo.last_name,
+      email: rosterInfo.email,
+      phone_number: "",
+      role: rosterInfo.role,
+      attachment: "",
+      bio: "",
+    } : {
       first_name: "",
       last_name: "",
       email: "",
@@ -30,11 +43,10 @@ const RosterNew = () => {
       attachment: "",
       bio: "",
     },
-    resolver: yupResolver(schema),
+    resolver: yupResolver<RosterFormAttr>(schema),
   });
 
-
-  const { mutate } = useCreateRoster({
+  const { mutate: createRoster } = useCreateRoster({
     onSuccess: () => {
       toast.success("The member has been created successfully");
       navigate(-1)
@@ -42,19 +54,44 @@ const RosterNew = () => {
     }
   })
 
+  const { mutate: updateRoster } = useUpdateRoster({
+    onSuccess: () => {
+      toast.success("The member has been updated successfully");
+      navigate(-1)
+      queryClient.invalidateQueries(['users'])
+    }
+  })
+
+
   const onSubmit = handleSubmit((values) => {
-    mutate({ user: values });
+    if (rosterId) {
+      const payload = {
+        id: rosterId,
+        data: values
+      }
+      updateRoster(payload);
+    } else {
+      createRoster({ user: values });
+    }
   });
+
+  useEffect(() => {
+    if (rosterId) {
+      reset({ ...rosterInfo, attachment: "", bio: "" })
+    }
+  }, [reset, rosterId, rosterInfo]);
+
+  if (rosterIsLoading) return <div className="flex items-center pt-10"><BeatLoader color="#F98080" className="mx-auto block" /></div>
 
   return (
     <form onSubmit={onSubmit}>
       <div className=" flex justify-between align-middle h-12 border-b border-gray-200 items-center px-5">
         <div>
-          <button onClick={() => navigate(-1)} className=" bg-gray-400 hover:bg-gray-500 text-white w-20">Cancel</button>
+          <button type="button" onClick={() => navigate(-1)} className=" bg-gray-400 hover:bg-gray-500 text-white w-20">Cancel</button>
         </div>
-        <div><h1 className=" text-base text-gray-700">Add new User</h1></div>
+        <div><h1 className=" text-base text-gray-700">{rosterId ? "Edit User" : "Add new User"}</h1></div>
         <div>
-          <button className="bg-red-400 hover:border-red-600 text-white w-20">Save</button>
+          <button type="submit" className="bg-red-400 hover:border-red-600 text-white w-20">Save</button>
         </div>
       </div>
       <div className="max-w-6xl mx-auto pt-14">
@@ -87,7 +124,7 @@ const RosterNew = () => {
               <option value="super_admin">Super Admin</option>
               <option value="admin">Admin</option>
               <option value="recruiter">Recruiter / QA</option>
-              <option value="professional">Healthcara Professional</option>
+              <option value="nurse">Healthcara Professional</option>
             </select>
           </div>
           <div>

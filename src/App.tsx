@@ -67,6 +67,7 @@ const App = () => (
       <Route path='/organization/:orgId/mandatories/:mandatoryId/chapters/:chapterId/question/:questionId' element={<MandatoryQuestionDetails />} />
       <Route path='/organization/:orgId/roster/new' element={<RosterNew />} />
       <Route path="/organization/:orgId/roster/:rosterId" element={<RosterDetails />} />
+      <Route path="/organization/:orgId/roster/:rosterId/edit" element={<RosterNew />} />
       <Route path="/organization/:orgId/roster/:rosterId/invite" element={<RosterInvite />} />
       <Route path='/organization/:orgId/test/new' element={<TestNew />} />
       <Route path='/organization/:orgId/test/:testId/category/:categoryId' element={<TestCategoryDetails />} />

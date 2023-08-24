@@ -12,7 +12,7 @@ import ModalConfirmation from "../../components/ModalConfirmation";
 
 const RosterDetails: React.FC = () => {
   const { organization } = useFetch();
-  const { rosterId } = useParams()
+  const { rosterId } = useParams();
   const navigate = useNavigate();
   const { data: dataTest, isLoading: testLoading } = useGetUserTest(rosterId);
   const { data: dataChecklist, isLoading: checklistLoading } = useGetUserChecklist(rosterId);
@@ -221,10 +221,19 @@ const RosterDetails: React.FC = () => {
               aria-label="Extra small spinner example"
               size="xs"
             />
-            : <div className=" flex start-0 mb-10">
+            : <div className=" flex start-0 mb-10 justify-between align-middle">
               <Avatar rounded size="lg" bordered>
                 <h3>{rosterInfo?.first_name} {rosterInfo?.last_name}</h3>
               </Avatar>
+              <div>
+                <button
+                  type="button"
+                  className="bg-white text-red-400 hover:border-red-400"
+                  onClick={() => navigate(`/organization/${organization}/roster/${rosterId}/edit`)}
+                >
+                  Edit
+                </button>
+              </div>
             </div>}
 
           <div className="flex justify-between mb-4">

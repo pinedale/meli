@@ -53,5 +53,28 @@ const useCreateRoster = (
   )
 }
 
-export { useCreateRoster }
+type UpdateRosterParams = {
+  id: string | undefined;
+  data: RosterFormAttr;
+}
+
+const useUpdateRoster = (
+  options: UseMutationOptions<RosterFormAttr, Error, UpdateRosterParams, unknown>
+): UseMutationResult<RosterFormAttr, Error, UpdateRosterParams, unknown> => {
+  const { authRequest } = useFetch();
+
+  return useMutation(async ({ id, data }) => {
+      const response = await authRequest.patch(`/users/${id}`, data)
+      return response.data;
+    },
+    {
+      ...options,
+      onError: (error) => {
+        toast.error(error.response?.data?.error?.message)
+      },
+    }
+  )
+}
+
+export { useCreateRoster, useUpdateRoster }
 export type { RosterFormAttr };
