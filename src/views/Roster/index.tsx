@@ -3,13 +3,12 @@ import Summary from "../../components/Summary";
 import { useNavigate } from "react-router-dom";
 import { useFetch } from "../../contexts/fetchProvider";
 import { ColumnDef } from "@tanstack/react-table";
-import useUsers, { type UserItem } from "./components/service";
 import { Pagination, Tooltip } from "flowbite-react";
 import { HiEye } from "react-icons/hi";
 import { FaTrash } from "react-icons/fa";
 import Table from "../../components/Table";
 import ModalConfirmation from "../../components/ModalConfirmation";
-import { useDeleteRoster } from "./services";
+import { useGetUsers, type UserItem, useDeleteRoster } from "./services";
 
 const Roster = () => {
   const [paginationParams, setPaginationParams] = useState({
@@ -18,7 +17,7 @@ const Roster = () => {
   })
   const { organization } = useFetch();
   const navigate = useNavigate();
-  const { data, isLoading } = useUsers({ params: { page: paginationParams.page, items: 20 } });
+  const { data, isLoading } = useGetUsers({ params: { page: paginationParams.page, items: 20 } });
   const [selectedItem, setSelectedItem] = useState<string>();
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
 
