@@ -3,12 +3,14 @@ import Summary from "../../components/Summary";
 import { useNavigate } from "react-router-dom";
 import { useFetch } from "../../contexts/fetchProvider";
 import { ColumnDef } from "@tanstack/react-table";
-import { Pagination, Tooltip } from "flowbite-react";
-import { HiEye } from "react-icons/hi";
+import { Pagination, Select, TextInput, Tooltip } from "flowbite-react";
+import { HiEye, HiSearch } from "react-icons/hi";
 import { FaTrash } from "react-icons/fa";
 import Table from "../../components/Table";
 import ModalConfirmation from "../../components/ModalConfirmation";
 import { useGetUsers, type UserItem, useDeleteRoster } from "./services";
+import { useForm } from "react-hook-form";
+import { useQueryClient } from "react-query";
 
 const Roster = () => {
   const [paginationParams, setPaginationParams] = useState({
@@ -17,13 +19,15 @@ const Roster = () => {
   })
   const { organization } = useFetch();
   const navigate = useNavigate();
-  const { data, isLoading } = useGetUsers({ params: { page: paginationParams.page, items: 20 } });
   const [selectedItem, setSelectedItem] = useState<string>();
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
+  const queryClient = useQueryClient();
+  const [selectedRole, setSelectedRole] = useState<string>("");
+  const [selectedSearch, setSelectedSearch] = useState<string>("");
+  const { mutateAsync: deleteRoster } = useDeleteRoster();
+  const { data, isFetching } = useGetUsers({ params: { page: paginationParams.page, items: 20, role: selectedRole, search: selectedSearch } });
 
-  const { mutateAsync: deleteRoster } = useDeleteRoster()
-
-  const handleDelete = (item: string) =>{
+  const handleDelete = (item: string) => {
     setSelectedItem(item)
     setIsConfirmationModalOpen(true);
   }
@@ -44,8 +48,8 @@ const Roster = () => {
   }, [data?.meta.pagination])
 
   const confirmDelete = () => {
-    if(selectedItem){
-      deleteRoster({user_id: selectedItem});
+    if (selectedItem) {
+      deleteRoster({ user_id: selectedItem });
       setIsConfirmationModalOpen(false);
     }
   }
@@ -64,7 +68,7 @@ const Roster = () => {
         accessorKey: 'first_name, last_name',
         header: 'Name',
         size: 150,
-        cell: (info) => 
+        cell: (info) =>
           <div>
             {info.row.original.first_name} {info.row.original.last_name}
           </div>
@@ -83,7 +87,7 @@ const Roster = () => {
         accessorKey: 'checklists',
         header: 'Skills Checklist',
         size: 120,
-        cell: (info) => 
+        cell: (info) =>
           <div className='flex justify-center gap-2'>
             <span>{info.row.original.checklists.finished}-<span className=" text-red-600 text-xs">({info.row.original.checklists.untaken})</span></span>
           </div>
@@ -92,7 +96,7 @@ const Roster = () => {
         accessorKey: 'tests',
         header: 'Tests',
         size: 100,
-        cell: (info) => 
+        cell: (info) =>
           <div className='flex justify-center gap-2'>
             <span>{info.row.original.tests.finished}-<span className=" text-red-600 text-xs">({info.row.original.tests.untaken})</span></span>
           </div>
@@ -101,7 +105,7 @@ const Roster = () => {
         accessorKey: 'courses',
         header: 'Mandatories',
         size: 120,
-        cell: (info) => 
+        cell: (info) =>
           <div className='flex justify-center gap-2'>
             <span>{info.row.original.courses.finished}-<span className=" text-red-600 text-xs">({info.row.original.courses.untaken})</span></span>
           </div>
@@ -135,6 +139,19 @@ const Roster = () => {
     ]
     , [navigate, organization]);
 
+  const { register, handleSubmit } = useForm<{ role: string, search: string }>({
+    defaultValues: {
+      role: "",
+    },
+    mode: "onChange"
+  });
+
+  const onSubmit = handleSubmit((values) => {
+    setSelectedRole(values.role);
+    setSelectedSearch(values.search);
+    queryClient.invalidateQueries(['users']);
+  });
+
   return (
     <>
       <Summary stats={data?.meta.stats} />
@@ -144,9 +161,35 @@ const Roster = () => {
         </div>
       </div>
       <div className="max-w-6xl mx-auto">
-        <ModalConfirmation confirmDelete={confirmDelete} onClose={closeConfirmationModal} isOpen={isConfirmationModalOpen}/>
-        <Table data={data?.users || []} isLoading={isLoading} columns={columns} />
-        { paginationParams.totalPages >= 20 &&  <Pagination className="mb-8" currentPage={paginationParams.page} onPageChange={onPageChange} totalPages={paginationParams.totalPages} />}        
+        <ModalConfirmation confirmDelete={confirmDelete} onClose={closeConfirmationModal} isOpen={isConfirmationModalOpen} />
+        <form onChange={onSubmit}>
+          <div className="grid grid-cols-4 mb-4 gap-4">
+            <div>
+              <Select
+                {...register("role")}
+              >
+                <option value="">All</option>
+                <option value="super_admin">Super Admin</option>
+                <option value="admin">Admin</option>
+                <option value="recruiter">Recruiter / QA</option>
+                <option value="nurse">Healthcare Professional</option>
+              </Select>
+            </div>
+            <div>
+              <TextInput
+                icon={HiSearch}
+                id="email4"
+                placeholder="Search users"
+                required
+                type="email"
+                {...register("search")}
+              />
+            </div>
+          </div>
+        </form>
+        {data?.users?.length && data?.users?.length > 0 ? <Table data={data?.users || []} isLoading={isFetching} columns={columns} /> : <p>There is no user to display</p>}
+        
+        {paginationParams.totalPages >= 20 && <Pagination className="mb-8" currentPage={paginationParams.page} onPageChange={onPageChange} totalPages={paginationParams.totalPages} />}
       </div>
     </>
   )

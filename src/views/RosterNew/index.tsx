@@ -124,7 +124,7 @@ const RosterNew = () => {
               <option value="super_admin">Super Admin</option>
               <option value="admin">Admin</option>
               <option value="recruiter">Recruiter / QA</option>
-              <option value="nurse">Healthcara Professional</option>
+              <option value="nurse">Healthcare Professional</option>
             </select>
           </div>
           <div>

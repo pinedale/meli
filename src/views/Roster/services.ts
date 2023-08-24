@@ -6,6 +6,8 @@ import { toast } from "react-toastify";
 type Params = {
   page: number;
   items: number;
+  role: string;
+  search: string;
 }
 
 type Test = {
@@ -68,7 +70,7 @@ type UserResponse = {
 const useGetUsers = ({ params }: { params: Params }): UseQueryResult<UserResponse, AxiosError> => {
   const { authRequest } = useFetch();
 
-  return useQuery<UserResponse, AxiosError>(['users', params.page, params.items], async () => {
+  return useQuery<UserResponse, AxiosError>(['users', params.page, params.items, params.role, params.search], async () => {
     const response = await authRequest.get<UserResponse>('/users', { params });
 
     return response.data;
