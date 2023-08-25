@@ -155,40 +155,38 @@ const Roster = () => {
   return (
     <>
       <Summary stats={data?.meta.stats} />
-      <div className="py-4">
-        <div className="max-w-6xl mx-auto flex justify-end">
-          <button className="bg-white text-red-400 hover:border-red-400" onClick={() => navigate(`/organization/${organization}/roster/new`)}> + Create New Member</button>
-        </div>
-      </div>
       <div className="max-w-6xl mx-auto">
         <ModalConfirmation confirmDelete={confirmDelete} onClose={closeConfirmationModal} isOpen={isConfirmationModalOpen} />
         <form onChange={onSubmit}>
-          <div className="grid grid-cols-4 mb-4 gap-4">
-            <div>
-              <Select
-                {...register("role")}
-              >
-                <option value="">All</option>
-                <option value="super_admin">Super Admin</option>
-                <option value="admin">Admin</option>
-                <option value="recruiter">Recruiter / QA</option>
-                <option value="nurse">Healthcare Professional</option>
-              </Select>
+          <div className="flex justify-between pt-4 mb-4">
+            <div className="grid grid-cols-4 gap-4">
+              <div>
+                <Select
+                  {...register("role")}
+                >
+                  <option value="">All</option>
+                  <option value="super_admin">Super Admin</option>
+                  <option value="admin">Admin</option>
+                  <option value="recruiter">Recruiter / QA</option>
+                  <option value="nurse">Healthcare Professional</option>
+                </Select>
+              </div>
+              <div>
+                <TextInput
+                  icon={HiSearch}
+                  id="email4"
+                  placeholder="Search users"
+                  required
+                  type="email"
+                  {...register("search")}
+                />
+              </div>
             </div>
-            <div>
-              <TextInput
-                icon={HiSearch}
-                id="email4"
-                placeholder="Search users"
-                required
-                type="email"
-                {...register("search")}
-              />
-            </div>
+            <button className="bg-white text-red-400 hover:border-red-400" onClick={() => navigate(`/organization/${organization}/roster/new`)}> + Create New Member</button>
           </div>
         </form>
         {data?.users?.length && data?.users?.length > 0 ? <Table data={data?.users || []} isLoading={isFetching} columns={columns} /> : <p>There is no user to display</p>}
-        
+
         {paginationParams.totalPages >= 20 && <Pagination className="mb-8" currentPage={paginationParams.page} onPageChange={onPageChange} totalPages={paginationParams.totalPages} />}
       </div>
     </>

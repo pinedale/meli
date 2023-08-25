@@ -49,26 +49,47 @@ const RosterDetails: React.FC = () => {
         accessorKey: 'status, ended_at',
         header: 'Status',
         size: 120,
-        cell: (info) =>
-          <div className='flex gap-2'>
-            <span>
-              {info.row.original.status !== "untaken" ? info.row.original.status : <p><b className="text-red-600">Invite Sent</b> - {format(new Date(info.row.original.assigned_on), 'PPpp')}</p>}
-              {info.row.original.ended_at ? `- ${format(new Date(info.row.original.ended_at), 'PPpp')}` : ''}
-              {info.row.original.status == "started" ? `- ${format(new Date(info.row.original.started_at), 'PPpp')}` : ''}
-            </span>
-          </div>
+        cell: (info) => {
+          let itemStatus;
+          console.log("🚀 ~ file: index.tsx:54 ~ itemStatus:", itemStatus)
+          switch (info.row.original.status) {
+            case "finished":
+              itemStatus = <b>Complete - </b>;
+              break
+            case "started":
+              itemStatus = <span className=" font-bold text-blue-400">In Progress - </span>;
+              break
+            case "untaken":
+              itemStatus = <span className=" font-bold text-red-500">Invite Sent - </span>;
+              break
+            default:
+              itemStatus = "Unknown Status";
+              break
+          }
+          return (
+            <div className='flex gap-2'>
+              <span>
+                {itemStatus}
+                {format(new Date(info.row.original.assigned_on), 'PPpp')}
+              </span>
+            </div>
+          )
+        }
       },
       {
         accessorKey: 'score, passed, status',
         header: 'Score',
-        size: 220,
+        size: 80,
         cell: (info) => {
           const hasScore = info.row.original.score ?? '-'
           const pass = info.row.original.passed ? (
             <span className="text-green-400">Pass</span>
           ) : (
-            <span className="text-red-600">Did Not Pass</span>
+            <>{info.row.original.status !== "started" ? <span className="text-red-600">Did Not Pass</span> : ""} </>
           )
+          if (info.row.original.status === "started") {
+            return <span>-</span>
+          }
           return (
             <div className='flex gap-2'>
               <b>
@@ -80,7 +101,7 @@ const RosterDetails: React.FC = () => {
       {
         accessorKey: 'id, status',
         header: 'Actions',
-        size: 80,
+        size: 50,
         cell: (info) =>
           <div className='flex text-base gap-2'>
             {info.row.original.status !== "untaken" && (
@@ -111,14 +132,32 @@ const RosterDetails: React.FC = () => {
         accessorKey: 'status, ended_at',
         header: 'Status',
         size: 120,
-        cell: (info) =>
-          <div className='flex gap-2'>
-            <span>
-              {info.row.original.status !== "untaken" ? info.row.original.status : <p><b className="text-red-600">Invite Sent</b> - {format(new Date(info.row.original.assigned_on), 'PPpp')}</p>}
-              {info.row.original.ended_at ? `- ${format(new Date(info.row.original.ended_at), 'PPpp')}` : ''}
-              {info.row.original.status == "started" ? `- ${format(new Date(info.row.original.started_at), 'PPpp')}` : ''}
-            </span>
-          </div>
+        cell: (info) => {
+          let itemStatus;
+          console.log("🚀 ~ file: index.tsx:54 ~ itemStatus:", itemStatus)
+          switch (info.row.original.status) {
+            case "finished":
+              itemStatus = <b>Complete - </b>;
+              break
+            case "started":
+              itemStatus = <span className=" font-bold text-blue-400">In Progress - </span>;
+              break
+            case "untaken":
+              itemStatus = <span className=" font-bold text-red-500">Invite Sent - </span>;
+              break
+            default:
+              itemStatus = "Unknown Status";
+              break
+          }
+          return (
+            <div className='flex gap-2'>
+              <span>
+                {itemStatus}
+                {format(new Date(info.row.original.assigned_on), 'PPpp')}
+              </span>
+            </div>
+          )
+        }
       },
       {
         accessorKey: 'score, passed, status',
@@ -129,8 +168,11 @@ const RosterDetails: React.FC = () => {
           const pass = info.row.original.passed ? (
             <span className="text-green-400">Pass</span>
           ) : (
-            <span className="text-red-600">Did Not Pass</span>
+            <>{info.row.original.status !== "started" ? <span className="text-red-600">Did Not Pass</span> : ""} </>
           )
+          if (info.row.original.status === "started") {
+            return <span>-</span>
+          }
           return (
             <div className='flex gap-2'>
               <b>
@@ -142,7 +184,7 @@ const RosterDetails: React.FC = () => {
       {
         accessorKey: 'id, status',
         header: 'Actions',
-        size: 80,
+        size: 50,
         cell: (info) =>
           <div className='flex text-base gap-2'>
             {info.row.original.status !== "untaken" && (

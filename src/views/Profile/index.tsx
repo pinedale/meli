@@ -76,7 +76,7 @@ const Profile = () => {
           <div className="flex justify-between mb-8">
             <h2 className="text-2xl text-gray-700">Account Details</h2>
             <div className="flex gap-3">
-              <button>Change Password</button>
+              <button type="button">Change Password</button>
               <button type="button" onClick={editProfile} className="bg-red-400 hover:border-red-600 text-white">Edit Account</button>
             </div>
           </div>
