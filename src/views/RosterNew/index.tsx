@@ -8,6 +8,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useGetRosterInfo } from "../RosterDetails/services";
 import { useEffect } from "react";
 import { BeatLoader } from "react-spinners";
+import { useFetch } from "../../contexts/fetchProvider";
 
 const schema = yup.object({
   first_name: yup.string().required("Required field"),
@@ -24,6 +25,8 @@ const RosterNew = () => {
   const { rosterId } = useParams();
   const navigate = useNavigate();
   const { data: rosterInfo, isFetching: rosterIsLoading } = useGetRosterInfo(rosterId || '');
+
+  const { roleType } = useFetch()
 
   const { register, handleSubmit, reset } = useForm<RosterFormAttr>({
     defaultValues: rosterInfo && rosterId ? {
@@ -121,10 +124,26 @@ const RosterNew = () => {
               className="w-full bg-gray-100 border rounded px-3 py-2 text-xs text-gray-700"
               {...register("role")}
             >
-              <option value="super_admin">Super Admin</option>
-              <option value="admin">Admin</option>
-              <option value="recruiter">Recruiter / QA</option>
-              <option value="nurse">Healthcare Professional</option>
+              {roleType === "super_admin" && (
+                <>
+                  <option value="admin">Admin</option>
+                  <option value="recruiter">Recruiter / QA</option>
+                  <option value="nurse">Healthcare Professional</option>
+                </>
+              )}
+
+              {roleType === "admin" && (
+                <>
+                  <option value="recruiter">Recruiter / QA</option>
+                  <option value="nurse">Healthcare Professional</option>
+                </>
+              )}
+
+              {roleType === "recruiter" && (
+                <>
+                  <option value="nurse">Healthcare Professional</option>
+                </>
+              )}
             </select>
           </div>
           <div>

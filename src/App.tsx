@@ -46,8 +46,7 @@ const App = () => (
     <Route element={<RequiredAuthRoute />}>
       <Route path='/profile' element={<Profile />} />
       <Route path='/organization/:orgId/roster' element={<Roster />} />
-      <Route path="/organization/:orgId/roster/:rosterId/course/:courseId" element={<RosterCourse />} />
-      <Route path="/organization/:orgId/roster/:rosterId/test/:testId" element={<RosterTest />} />
+      
       <Route path='/organization/:orgId/checklist' element={<Checklist />} />
       <Route path='/organization/:orgId/checklist/:checklistId' element={<ChecklistDetails />} />
       <Route path='/organization/:orgId/checklist/:checklistId/categories/:categoryId' element={<ChecklistSection />} />
@@ -69,6 +68,8 @@ const App = () => (
       <Route path="/organization/:orgId/roster/:rosterId" element={<RosterDetails />} />
       <Route path="/organization/:orgId/roster/:rosterId/edit" element={<RosterNew />} />
       <Route path="/organization/:orgId/roster/:rosterId/invite" element={<RosterInvite />} />
+      <Route path="/organization/:orgId/roster/:rosterId/course/:courseId" element={<RosterCourse />} />
+      <Route path="/organization/:orgId/roster/:rosterId/test/:testId" element={<RosterTest />} />
       <Route path='/organization/:orgId/test/new' element={<TestNew />} />
       <Route path='/organization/:orgId/test/:testId/category/:categoryId' element={<TestCategoryDetails />} />
       <Route path='/organization/:orgId/test/:testId/category/:categoryId/question/new' element={<TestQuestionNew />} />

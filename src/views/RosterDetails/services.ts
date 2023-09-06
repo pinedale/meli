@@ -2,6 +2,18 @@ import { AxiosError } from "axios";
 import { UseMutationResult, UseQueryResult, useMutation, useQuery, useQueryClient } from "react-query";
 import { useFetch } from "../../contexts/fetchProvider";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+
+type Error = {
+  response: {
+    status: number;
+    data: {
+      error: {
+        message: string;
+      }
+    }
+  }
+}
 
 type RosterAttr = {
   id: string;
@@ -20,6 +32,7 @@ type ChecklistItem = {
   ended_at: string;
   status: string;
   assigned_on: string;
+  score: string;
 }
 
 type ChecklistList = Array<ChecklistItem>
@@ -52,11 +65,18 @@ type CoursesList = Array<CourseItem>
 
 const useGetRosterInfo = (id: string): UseQueryResult<RosterAttr, Error> => {
   const { authRequest } = useFetch();
+  const navigate = useNavigate();
   return useQuery<RosterAttr, Error>(['user-info'], async () => {
     const response = await authRequest.get<RosterAttr>(`/users/${id}`);
     return response.data
   },{
-    enabled: !!id
+    enabled: !!id,
+    onError: (error) => {
+      if (error.response.status === 401) {
+        sessionStorage.clear();
+        navigate("/")
+      }
+    }
   })
 }
 

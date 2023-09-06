@@ -7,14 +7,6 @@ type Props = {
 }
 
 const AuthProvider = ({ children }: Props) => {
-  // const [user, setUser] = useState()
-
-
-  // const userInfo = {
-  //   user,
-  //   setUser,
-  // };
-
 
   return (
     <UserContext.Provider value="">

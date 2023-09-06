@@ -9,9 +9,10 @@ import { Avatar, Spinner, Tooltip } from "flowbite-react";
 import { HiEye } from "react-icons/hi";
 import { FaTrash } from "react-icons/fa";
 import ModalConfirmation from "../../components/ModalConfirmation";
+import { roles } from "../../utils/constants";
 
 const RosterDetails: React.FC = () => {
-  const { organization } = useFetch();
+  const { organization, roleType } = useFetch();
   const { rosterId } = useParams();
   const navigate = useNavigate();
   const { data: dataTest, isLoading: testLoading } = useGetUserTest(rosterId);
@@ -21,6 +22,14 @@ const RosterDetails: React.FC = () => {
   const [selectedItem, setSelectedItem] = useState<{ user_id: string | undefined; course_id: string; }>();
   const { mutateAsync: deleteMandatory } = useDeleteMandatory();
   const { data: rosterInfo, isFetching: rosterIsLoading } = useGetRosterInfo(rosterId || '');
+
+  const userRosterInfo: "super_admin" | "admin" | "recruiter" | "hcp" =
+    (rosterInfo?.role as keyof typeof roles) || "super_admin";
+  const userLoggedIn: "super_admin" | "admin" | "recruiter" | "hcp" =
+    (roleType as keyof typeof roles) || "super_admin";
+
+  const valueUserInfo = roles[userRosterInfo];
+  const valueLoggeedIn = roles[userLoggedIn];
 
   const handleDelete = (item: { user_id: string | undefined; course_id: string; }) => {
     setSelectedItem(item)
@@ -51,7 +60,6 @@ const RosterDetails: React.FC = () => {
         size: 120,
         cell: (info) => {
           let itemStatus;
-          console.log("🚀 ~ file: index.tsx:54 ~ itemStatus:", itemStatus)
           switch (info.row.original.status) {
             case "finished":
               itemStatus = <b>Complete - </b>;
@@ -134,7 +142,6 @@ const RosterDetails: React.FC = () => {
         size: 120,
         cell: (info) => {
           let itemStatus;
-          console.log("🚀 ~ file: index.tsx:54 ~ itemStatus:", itemStatus)
           switch (info.row.original.status) {
             case "finished":
               itemStatus = <b>Complete - </b>;
@@ -224,19 +231,69 @@ const RosterDetails: React.FC = () => {
         accessorKey: 'status',
         header: 'Status',
         size: 120,
+        cell: (info) => {
+          let itemStatus;
+          switch (info.row.original.status) {
+            case "finished":
+              itemStatus = <b>Complete - </b>;
+              break
+            case "started":
+              itemStatus = <span className=" font-bold text-blue-400">In Progress - </span>;
+              break
+            case "untaken":
+              itemStatus = <span className=" font-bold text-red-500">Invite Sent - </span>;
+              break
+            default:
+              itemStatus = "Unknown Status";
+              break
+          }
+          return (
+            <div className='flex gap-2'>
+              <span>
+                {itemStatus}
+                {format(new Date(info.row.original.assigned_on), 'PPpp')}
+              </span>
+            </div>
+          )
+        }
+      },
+      {
+        accessorKey: 'score',
+        header: 'Score',
+        size: 80,
+        cell: (info) => <span>{info.row.original.score ? info.row.original.score : "-"}</span>
+      },
+      {
+        accessorKey: 'id, status',
+        header: 'Actions',
+        size: 50,
         cell: (info) =>
-          <div className='flex gap-2'>
-            <span>
-              {info.row.original.status !== "untaken"
-                ? info.row.original.status
-                : <p><b className="text-red-600">Invite Sent</b> - {format(new Date(info.row.original.assigned_on), 'PPpp')}</p>}
-              {info.row.original.ended_at ? `- ${format(new Date(info.row.original.ended_at), 'PPpp')}` : ''}
-              {info.row.original.status == "started" ? `- ${format(new Date(info.row.original.started_at), 'PPpp')}` : ''}
-            </span>
+          <div className='flex text-base gap-2'>
+            {info.row.original.status !== "untaken" && (
+              <Tooltip content="View results">
+                <button
+                  data-tooltip-target="tooltip-dark"
+                  type="button"
+                  className='px-1'
+                  onClick={() => navigate(`/organization/${organization}/roster/${rosterId}/checklist/${info.row.original.id}`)}
+                >
+                  <HiEye />
+                </button>
+              </Tooltip>
+            )}
+            <Tooltip content="Delete">
+              <button
+                type="button"
+                className='px-1'
+                onClick={() => handleDelete({ user_id: rosterId, course_id: info.row.original.id })}
+              >
+                <FaTrash />
+              </button>
+            </Tooltip>
           </div>
-      }
+      },
     ]
-    , []);
+    , [navigate, organization, rosterId]);
 
   return (
     <div className="left-0 fixed h-screen w-full top-0 bottom-0 bg-white">
@@ -268,13 +325,15 @@ const RosterDetails: React.FC = () => {
                 <h3>{rosterInfo?.first_name} {rosterInfo?.last_name}</h3>
               </Avatar>
               <div>
-                <button
-                  type="button"
-                  className="bg-white text-red-400 hover:border-red-400"
-                  onClick={() => navigate(`/organization/${organization}/roster/${rosterId}/edit`)}
-                >
-                  Edit
-                </button>
+                {valueLoggeedIn > valueUserInfo && (
+                  <button
+                    type="button"
+                    className="bg-white text-red-400 hover:border-red-400"
+                    onClick={() => navigate(`/organization/${organization}/roster/${rosterId}/edit`)}
+                  >
+                    Edit
+                  </button>
+                )}
               </div>
             </div>}
 

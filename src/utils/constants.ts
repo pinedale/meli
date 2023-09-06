@@ -44,3 +44,11 @@ export const durationDaysOptions = [
   "351", "352", "353", "354", "355", "356", "357", "358", "359", "360",
   "361", "362", "363", "364", "365",
 ];
+
+
+export const roles = {
+  super_admin: 4,
+  admin: 3,
+  recruiter: 2,
+  hcp: 1,
+};

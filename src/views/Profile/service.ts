@@ -25,7 +25,7 @@ type Error = {
   response: {
     status: number;
     data: {
-      error:{
+      error: {
         message: string;
       }
     }
@@ -39,12 +39,14 @@ const useProfile = (): UseQueryResult<ProfileInfoAttr, Error> => {
   return useQuery<ProfileInfoAttr, Error>(['profile'], async () => {
     const response = await authRequest.get<ProfileInfoAttr>('/profile');
     return response.data
-  }, {onError: (error) => {
-    if(error.response.status === 401){
-      sessionStorage.clear();
-      navigate("/")
+  }, {
+    onError: (error) => {
+      if (error.response.status === 401) {
+        sessionStorage.clear();
+        navigate("/")
+      }
     }
-  }})
+  })
 }
 
 
@@ -65,4 +67,4 @@ const useUpdateProfile = (
 }
 
 export { useProfile, useUpdateProfile };
-export type {RoleItem}
+export type { RoleItem }
