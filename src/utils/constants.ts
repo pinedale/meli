@@ -50,5 +50,5 @@ export const roles = {
   super_admin: 4,
   admin: 3,
   recruiter: 2,
-  hcp: 1,
+  nurse: 1,
 };

@@ -182,7 +182,7 @@ const Roster = () => {
                 />
               </div>
             </div>
-            <button className="bg-white text-red-400 hover:border-red-400" onClick={() => navigate(`/organization/${organization}/roster/new`)}> + Create New Member</button>
+            <button type="button" className="bg-white text-red-400 hover:border-red-400" onClick={() => navigate(`/organization/${organization}/roster/new`)}> + Create New Member</button>
           </div>
         </form>
         {data?.users?.length && data?.users?.length > 0 ? <Table data={data?.users || []} isLoading={isFetching} columns={columns} /> : <p>There is no user to display</p>}

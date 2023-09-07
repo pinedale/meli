@@ -23,9 +23,9 @@ const RosterDetails: React.FC = () => {
   const { mutateAsync: deleteMandatory } = useDeleteMandatory();
   const { data: rosterInfo, isFetching: rosterIsLoading } = useGetRosterInfo(rosterId || '');
 
-  const userRosterInfo: "super_admin" | "admin" | "recruiter" | "hcp" =
+  const userRosterInfo: "super_admin" | "admin" | "recruiter" | "nurse" =
     (rosterInfo?.role as keyof typeof roles) || "super_admin";
-  const userLoggedIn: "super_admin" | "admin" | "recruiter" | "hcp" =
+  const userLoggedIn: "super_admin" | "admin" | "recruiter" | "nurse" =
     (roleType as keyof typeof roles) || "super_admin";
 
   const valueUserInfo = roles[userRosterInfo];
