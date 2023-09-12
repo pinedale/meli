@@ -15,6 +15,7 @@ const Test = () => {
   const [paginationParams, setPaginationParams] = useState({
     page: 1,
     totalPages: 1,
+    totalItems: 0,
   })
   const { organization } = useFetch()
   const navigate = useNavigate();
@@ -46,6 +47,7 @@ const Test = () => {
         ...prev,
         page: data.meta.pagination.page,
         totalPages: data.meta.pagination.last,
+        totalItems: data.meta.pagination.count,
       }))
     }
 
@@ -134,7 +136,7 @@ const Test = () => {
       <div className="max-w-6xl mx-auto">
         <ModalConfirmation confirmDelete={confirmDelete} onClose={closeConfirmationModal} isOpen={isConfirmationModalOpen} />
         <Table data={data?.tests || []} isLoading={isLoading} columns={columns} />
-        { paginationParams.totalPages >= 20 &&  <Pagination className="mb-8" currentPage={paginationParams.page} onPageChange={onPageChange} totalPages={paginationParams.totalPages} />}
+        {paginationParams.totalItems >= 20 && <Pagination className="mb-8" currentPage={paginationParams.page} onPageChange={onPageChange} totalPages={paginationParams.totalPages} />}
       </div>
     </>
   )

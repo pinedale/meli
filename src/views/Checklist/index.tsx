@@ -16,6 +16,7 @@ const Checklist = () =>{
   const [paginationParams, setPaginationParams] = useState({
     page: 1,
     totalPages: 1,
+    totalItems: 0,
   })
   const navigate = useNavigate();
   const { data, isLoading } = useChecklist({ params: { page: paginationParams.page, items: 20 } });
@@ -26,6 +27,7 @@ const Checklist = () =>{
         ...prev,
         page: data.meta.pagination.page,
         totalPages: data.meta.pagination.last,
+        totalItems: data.meta.pagination.count,
       }))
     }
 
@@ -114,7 +116,7 @@ const Checklist = () =>{
       </div>
       <div className="max-w-6xl mx-auto">
         <Table data={data?.checklists || []} isLoading={isLoading} columns={columns}/>
-        <Pagination className="mb-8" currentPage={paginationParams.page} onPageChange={onPageChange} totalPages={paginationParams.totalPages} />
+        {paginationParams.totalItems >= 20 && <Pagination className="mb-8" currentPage={paginationParams.page} onPageChange={onPageChange} totalPages={paginationParams.totalPages} />}
       </div>
     </>
   )

@@ -16,6 +16,7 @@ const Roster = () => {
   const [paginationParams, setPaginationParams] = useState({
     page: 1,
     totalPages: 1,
+    totalItems: 0,
   })
   const { organization } = useFetch();
   const navigate = useNavigate();
@@ -42,6 +43,7 @@ const Roster = () => {
         ...prev,
         page: data.meta.pagination.page,
         totalPages: data.meta.pagination.last,
+        totalItems: data.meta.pagination.count,
       }))
     }
 
@@ -186,8 +188,7 @@ const Roster = () => {
           </div>
         </form>
         {data?.users?.length && data?.users?.length > 0 ? <Table data={data?.users || []} isLoading={isFetching} columns={columns} /> : <p>There is no user to display</p>}
-
-        {paginationParams.totalPages >= 20 && <Pagination className="mb-8" currentPage={paginationParams.page} onPageChange={onPageChange} totalPages={paginationParams.totalPages} />}
+        {paginationParams.totalItems >= 20 && <Pagination className="mb-8" currentPage={paginationParams.page} onPageChange={onPageChange} totalPages={paginationParams.totalPages} />}
       </div>
     </>
   )
