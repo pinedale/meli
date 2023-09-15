@@ -5,6 +5,7 @@ files:
     destination: /var/www/unaadmin-v2
   - source: dist/assets/
     destination: /var/www/unaadmin-v2/assets
+file_exists_behavior: OVERWRITE
 permissions:
   - object: /var/www/unaadmin-v2/
     owner: ubuntu
