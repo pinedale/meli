@@ -1,10 +1,10 @@
 version: 0.0
 os: linux
 files:
-  - source: /
+  - source: dist/**/*
     destination: /var/www/una-admin-v2
 permissions:
-  - object: /var/www/una-admin-v2
+  - object: /var/www/una-admin-v2/
     owner: ubuntu
     group: ubuntu
 
