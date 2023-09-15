@@ -2,11 +2,11 @@ version: 0.0
 os: linux
 files:
   - source: dist/index.html
-    destination: /var/www/una-admin-v2/index.html
+    destination: /var/www/unaadmin-v2/index.html
   - source: dist/assets/
-    destination: /var/www/una-admin-v2/assets
+    destination: /var/www/unaadmin-v2/assets
 permissions:
-  - object: /var/www/una-admin-v2/
+  - object: /var/www/unaadmin-v2/
     owner: ubuntu
     group: ubuntu
 
