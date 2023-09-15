@@ -2,7 +2,7 @@ version: 0.0
 os: linux
 files:
   - source: dist/index.html
-    destination: /var/www/unaadmin-v2/index.html
+    destination: /var/www/unaadmin-v2
   - source: dist/assets/
     destination: /var/www/unaadmin-v2/assets
 permissions:
