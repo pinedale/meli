@@ -1,8 +1,10 @@
 version: 0.0
 os: linux
 files:
-  - source: dist/**/*
-    destination: /var/www/una-admin-v2
+  - source: dist/index.html
+    destination: /var/www/una-admin-v2/index.html
+  - source: dist/assets/
+    destination: /var/www/una-admin-v2/assets
 permissions:
   - object: /var/www/una-admin-v2/
     owner: ubuntu
