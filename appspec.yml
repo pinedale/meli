@@ -5,7 +5,8 @@ files:
     destination: /var/www/una-admin-v2
 permissions:
   - object: /var/www/una-admin-v2
-    pattern: **
+    pattern:
+      - "**"
     owner: ubuntu
     group: ubuntu
 
