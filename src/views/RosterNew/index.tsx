@@ -28,7 +28,7 @@ const RosterNew = () => {
 
   const { roleType } = useFetch()
 
-  const { register, handleSubmit, reset } = useForm<RosterFormAttr>({
+  const { register, handleSubmit, reset, formState: { errors } } = useForm<RosterFormAttr>({
     defaultValues: rosterInfo && rosterId ? {
       first_name: rosterInfo.first_name,
       last_name: rosterInfo.last_name,
@@ -126,6 +126,7 @@ const RosterNew = () => {
             >
               {roleType === "super_admin" && (
                 <>
+                  <option>Select Role</option>
                   <option value="admin">Admin</option>
                   <option value="recruiter">Recruiter / QA</option>
                   <option value="nurse">Healthcare Professional</option>
@@ -145,6 +146,7 @@ const RosterNew = () => {
                 </>
               )}
             </select>
+            <p className="text-xs text-red-app">{errors.role?.message}</p>
           </div>
           <div>
             <label className="text-gray-700 text-xs mb-1 block">First Name</label>
@@ -154,6 +156,7 @@ const RosterNew = () => {
               placeholder="Enter first name"
               {...register('first_name', { required: 'required' })}
             />
+            <p className="text-xs text-red-app">{errors.first_name?.message}</p>
           </div>
           <div>
             <label className="text-gray-700 text-xs mb-1 block">Last Name</label>
@@ -163,6 +166,7 @@ const RosterNew = () => {
               placeholder="Enter last name"
               {...register('last_name', { required: 'required' })}
             />
+            <p className="text-xs text-red-app">{errors.last_name?.message}</p>
           </div>
           <div>
             <label className="text-gray-700 text-xs mb-1 block">Email</label>
@@ -172,6 +176,7 @@ const RosterNew = () => {
               placeholder="Enter email"
               {...register('email', { required: 'required' })}
             />
+            <p className="text-xs text-red-app">{errors.email?.message}</p>
           </div>
           <div>
             <label className="text-gray-700 text-xs mb-1 block">Phone</label>

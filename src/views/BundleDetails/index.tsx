@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { useTestList } from "../Test/service";
 import { useCreateBundle, useGetBundleDetails, useUpdateBundle } from "./services";
 import { useEffect } from "react";
-import { useChecklist } from "../Checklist/services";
+import { useGetChecklist } from "../Checklist/services";
 import BundleItemList from "./components/item-lists";
 import { useGetCourses } from "../Mandatories/services";
 import { toast } from "react-toastify";
@@ -14,7 +14,7 @@ const BundleDetails = () => {
   const { organization } = useFetch();
   const { bundleId } = useParams()
   const { data: testData, isLoading: testLoading } = useTestList({ params: { page: 1, items: 9999 } });
-  const { data: checklistData, isLoading: checklistLoading } = useChecklist({ params: { page: 1, items: 9999 } });
+  const { data: checklistData, isLoading: checklistLoading } = useGetChecklist({ params: { page: 1, items: 9999 } });
   const { data: mandatoryData, isLoading: mandatoryLoading } = useGetCourses({ params: { page: 1, items: 9999 } });
   const { data: bundleDetails } = useGetBundleDetails(bundleId ?? "");
 

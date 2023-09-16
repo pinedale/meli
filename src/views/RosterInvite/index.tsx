@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useTestList } from "../Test/service";
-import { useChecklist } from "../Checklist/services";
+import { useGetChecklist } from "../Checklist/services";
 import { useGetCourses } from "../Mandatories/services";
 import { useGetBundleDetails } from "../BundleDetails/services";
 import { useForm } from "react-hook-form";
@@ -17,7 +17,7 @@ const RosterInvite = () => {
   const { rosterId } = useParams()
   const navigate = useNavigate();
   const { data: testData, isLoading: testLoading } = useTestList({ params: { page: 1, items: 9999 } });
-  const { data: checklistData, isLoading: checklistLoading } = useChecklist({ params: { page: 1, items: 9999 } });
+  const { data: checklistData, isLoading: checklistLoading } = useGetChecklist({ params: { page: 1, items: 9999 } });
   const { data: mandatoryData, isLoading: mandatoryLoading } = useGetCourses({ params: { page: 1, items: 9999 } });
   const { data: bundleList } = useBundleList({ params: { page: 1, items: 9999 } });
   const [selectedBundleId, setSelectedBundleId] = useState<string>();

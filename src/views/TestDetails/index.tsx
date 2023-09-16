@@ -31,7 +31,7 @@ const TestDetails: React.FC = () => {
 
   const { mutateAsync: deleteTest } = useDeleteTestCategory();
 
-  const handleDelete = (item: {test_id: string | undefined; category_id: string;}) =>{
+  const handleDelete = (item: { test_id: string | undefined; category_id: string; }) => {
     setSelectedItem(item)
     setIsModalOpen(true);
   }
@@ -41,7 +41,7 @@ const TestDetails: React.FC = () => {
   }
 
   const confirmDelete = () => {
-    if(selectedItem){
+    if (selectedItem) {
       deleteTest(selectedItem);
       setIsModalOpen(false);
     }
@@ -72,41 +72,41 @@ const TestDetails: React.FC = () => {
         header: 'Actions',
         size: 80,
         cell: (info) =>
-				<div className='flex text-base gap-2'>
-					<Tooltip content="View category details">
-						<button
-							onClick={() => navigate(`/organization/${organization}/test/${testId}/category/${info.row.original.id}`)}
-							data-tooltip-target="tooltip-dark"
-							type="button" className='px-1'
-						>
-							<HiEye />
-						</button>
-					</Tooltip>
-					<Tooltip content="Delete">
-						<button
-							type="button"
-							className='px-1'
-              onClick={() => handleDelete({test_id:testId, category_id:info.row.original.id})}
-						>
-							<FaTrash />
-						</button>
-					</Tooltip>
-				</div>
+          <div className='flex text-base gap-2'>
+            <Tooltip content="View category details">
+              <button
+                onClick={() => navigate(`/organization/${organization}/test/${testId}/category/${info.row.original.id}`)}
+                data-tooltip-target="tooltip-dark"
+                type="button" className='px-1'
+              >
+                <HiEye />
+              </button>
+            </Tooltip>
+            <Tooltip content="Delete">
+              <button
+                type="button"
+                className='px-1'
+                onClick={() => handleDelete({ test_id: testId, category_id: info.row.original.id })}
+              >
+                <FaTrash />
+              </button>
+            </Tooltip>
+          </div>
       },
     ]
     , [navigate, organization, testId]);
 
-    const { mutate } = useAddTestCategory(testId ?? '', {
-      onError: (error) => {
-        toast.error(error.response?.data?.error?.message)
-      },
-      onSuccess: () => {
-        queryClient.invalidateQueries(['test-categories'])
-        toast.success('Successfully added!');
-        reset();
-        setAddItem(!addItem);
-      }
-    })
+  const { mutate } = useAddTestCategory(testId ?? '', {
+    onError: (error) => {
+      toast.error(error.response?.data?.error?.message)
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(['test-categories'])
+      toast.success('Successfully added!');
+      reset();
+      setAddItem(!addItem);
+    }
+  })
 
   const { register, handleSubmit, reset } = useForm<CategoryAttr>({
     defaultValues: {
@@ -122,17 +122,16 @@ const TestDetails: React.FC = () => {
   return (
     <div className="left-0 fixed h-screen w-full top-0 bottom-0 bg-white">
       <div className="overflow-y-auto h-full pb-10">
-        <ModalConfirmation confirmDelete={confirmDelete} onClose={closeModal} isOpen={isModalOpen}/>
-        <TestFields />  
+        <ModalConfirmation confirmDelete={confirmDelete} onClose={closeModal} isOpen={isModalOpen} />
+        <TestFields />
         <div className="max-w-6xl mx-auto pt-14">
-          <div className="flex justify-between mb-8">
+          <div className="flex justify-between mb-5">
             <h2 className="text-2xl text-gray-700">Categories</h2>
             <button type="button" onClick={toggleAddItem} className="bg-white text-red-400 hover:border-red-400" >+ Add Category</button>
           </div>
-          <Table data={data || []} isLoading={isFetching} columns={columns} />
           {
             addItem && (
-              <div className="border-2 p-1 rounded-lg mt-1">
+              <div className="border-2 p-1 rounded-lg mt-1 mb-2">
                 <form onSubmit={onSubmit}>
                   <div className="flex">
                     <input
@@ -150,6 +149,15 @@ const TestDetails: React.FC = () => {
               </div>
             )
           }
+          {data && data?.length > 0 ?
+            <>
+              <Table data={data || []} isLoading={isFetching} columns={columns} />
+            </> : (
+              <div className="border-t border-gray-300 pt-2">
+                <p className=" italic">No categories have been added.</p>
+              </div>
+            )}
+
         </div>
       </div>
     </div>

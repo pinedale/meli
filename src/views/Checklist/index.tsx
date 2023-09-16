@@ -3,7 +3,7 @@ import Summary from "../../components/Summary";
 
 import { useNavigate } from "react-router-dom";
 import { ColumnDef } from "@tanstack/react-table";
-import { ChecklistItem, useChecklist, useDeleteChecklist } from "./services";
+import { ChecklistItem, useGetChecklist, useDeleteChecklist } from "./services";
 import { format } from "date-fns";
 import { Pagination, Tooltip } from "flowbite-react";
 import { HiEye } from "react-icons/hi";
@@ -19,7 +19,7 @@ const Checklist = () =>{
     totalItems: 0,
   })
   const navigate = useNavigate();
-  const { data, isLoading } = useChecklist({ params: { page: paginationParams.page, items: 20 } });
+  const { data, isLoading } = useGetChecklist({ params: { page: paginationParams.page, items: 20 } });
 
   useEffect(() => {
     if (data?.meta.pagination) {

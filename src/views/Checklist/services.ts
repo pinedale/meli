@@ -41,7 +41,7 @@ type ChecklistResponse = {
   };
 }
 
-const useChecklist = ({ params }: { params: Params }): UseQueryResult<ChecklistResponse, AxiosError> => {
+const useGetChecklist = ({ params }: { params: Params }): UseQueryResult<ChecklistResponse, AxiosError> => {
   const { authRequest } = useFetch();
 
   return useQuery<ChecklistResponse, AxiosError>(['checklist', params.page, params.items], async () => {
@@ -70,5 +70,5 @@ const useDeleteChecklist = (): UseMutationResult<void, AxiosError, number> => {
 };
 
 
-export { useChecklist, useDeleteChecklist };
+export { useGetChecklist, useDeleteChecklist };
 export type { ChecklistItem } 

@@ -57,6 +57,7 @@ const ChecklistFields = () => {
     },
     onSuccess: () => {
       toast.success("The Checklist has been updated successfully");
+      navigate(-1);
     }
   })
 

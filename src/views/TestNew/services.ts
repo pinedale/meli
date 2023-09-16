@@ -1,4 +1,3 @@
-import { AxiosError } from "axios";
 import { UseMutationOptions, UseMutationResult, useMutation } from "react-query";
 import { useFetch } from "../../contexts/fetchProvider";
 
@@ -12,9 +11,20 @@ type TestAttr = {
   status: string;
 }
 
+type Error = {
+  response: {
+    data: {
+      error: {
+        message: string;
+        details: [0];
+      }
+    }
+  }
+}
+
 const useCreateTest = (
-  options: UseMutationOptions<TestAttr, AxiosError, TestAttr, unknown>
-): UseMutationResult<TestAttr, AxiosError, TestAttr, unknown> => {
+  options: UseMutationOptions<TestAttr, Error, TestAttr, unknown>
+): UseMutationResult<TestAttr, Error, TestAttr, unknown> => {
   const { authRequest } = useFetch
   ();
 

@@ -43,8 +43,7 @@ const TestNew = () => {
 
   const { mutate } = useCreateTest({
     onError: (error) => {
-      const errorMessage = error.message
-      toast.error(`${errorMessage}`);
+      toast.error(`${error.response?.data?.error?.details[0]}`);
     },
     onSuccess: () => {
       toast.success("The test has been created successfully");
@@ -89,6 +88,7 @@ const TestNew = () => {
               className="w-full bg-gray-100 border rounded px-3 py-2 text-xs text-gray-700"
               {...register("duration_mins")}
             >
+              <option>Select duration</option>
               {durationDaysOptions.map((option) => (
                 <option key={option} value={option}>
                   {option} {option == "1" ? "day" : "days"}
@@ -103,6 +103,7 @@ const TestNew = () => {
               className="w-full bg-gray-100 border rounded px-3 py-2 text-xs text-gray-700"
               {...register("passing_score")}
             >
+              <option>Select passing score</option>
               {passingScoreOptions.map((option) => (
                 <option key={option} value={option}>
                   {option}%

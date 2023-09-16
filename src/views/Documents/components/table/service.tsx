@@ -22,7 +22,7 @@ type ChecklistItem = {
 
 type Checklist = Array<ChecklistItem>
 
-const useChecklist = ({ params }: { params: Params }): UseQueryResult<Checklist, AxiosError> => {
+const useGetChecklist = ({ params }: { params: Params }): UseQueryResult<Checklist, AxiosError> => {
   const { authRequest } = useFetch();
 
   return useQuery<Checklist, AxiosError>(['documents', params.page, params.items], async () => {
@@ -36,5 +36,5 @@ const useChecklist = ({ params }: { params: Params }): UseQueryResult<Checklist,
     staleTime: 5000,
   });
 };
-export default useChecklist;
+export default useGetChecklist;
 export type {ChecklistItem} 
