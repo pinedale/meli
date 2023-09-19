@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useFetch } from "../../contexts/fetchProvider";
-import { useGetUserTest, type TestItem, useGetUserChecklist, type ChecklistItem, useGetUserCourses, type CourseItem, useDeleteMandatory, useGetRosterInfo } from "./services";
+import { useGetUserTest, type TestItem, useGetUserChecklist, type ChecklistItem, useGetUserCourses, type CourseItem, useDeleteMandatory, useGetRosterInfo, useDeleteChecklist } from "./services";
 import Table from "../../components/Table";
 import { useMemo, useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
@@ -19,8 +19,10 @@ const RosterDetails: React.FC = () => {
   const { data: dataChecklist, isLoading: checklistLoading } = useGetUserChecklist(rosterId);
   const { data: dataCourses, isLoading: coursesLoading } = useGetUserCourses(rosterId);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedItem, setSelectedItem] = useState<{ user_id: string | undefined; course_id: string; }>();
+  const [selectedItem, setSelectedItem] = useState<{ user_id: string; item_id: string; }>();
+  const [selectedType, setSelectedType] = useState<string>();
   const { mutateAsync: deleteMandatory } = useDeleteMandatory();
+  const {mutateAsync: deleteChecklist} =  useDeleteChecklist();
   const { data: rosterInfo, isFetching: rosterIsLoading } = useGetRosterInfo(rosterId || '');
 
   const userRosterInfo: "super_admin" | "admin" | "recruiter" | "nurse" =
@@ -31,8 +33,9 @@ const RosterDetails: React.FC = () => {
   const valueUserInfo = roles[userRosterInfo];
   const valueLoggeedIn = roles[userLoggedIn];
 
-  const handleDelete = (item: { user_id: string | undefined; course_id: string; }) => {
-    setSelectedItem(item)
+  const handleDelete = (item: { user_id: string; item_id: string;}, type: string) => {
+    setSelectedItem(item);
+    setSelectedType(type);
     setIsModalOpen(true);
   }
 
@@ -41,8 +44,12 @@ const RosterDetails: React.FC = () => {
   }
 
   const confirmDelete = () => {
-    if (selectedItem) {
+    if(selectedType === "course" && selectedItem){
       deleteMandatory(selectedItem);
+      setIsModalOpen(false);
+    }
+    if(selectedType === "checklist" && selectedItem){
+      deleteChecklist(selectedItem);
       setIsModalOpen(false);
     }
   }
@@ -210,7 +217,7 @@ const RosterDetails: React.FC = () => {
               <button
                 type="button"
                 className='px-1'
-                onClick={() => handleDelete({ user_id: rosterId, course_id: info.row.original.id })}
+                onClick={() => handleDelete({ user_id: rosterId || "", item_id: info.row.original.id }, "course")}
               >
                 <FaTrash />
               </button>
@@ -285,7 +292,7 @@ const RosterDetails: React.FC = () => {
               <button
                 type="button"
                 className='px-1'
-                onClick={() => handleDelete({ user_id: rosterId, course_id: info.row.original.id })}
+                onClick={() => handleDelete({ user_id: rosterId || "", item_id: info.row.original.id }, "checklist")}
               >
                 <FaTrash />
               </button>

@@ -94,7 +94,7 @@ const ChecklistFields = () => {
               <span>Active?</span>
               <Checkbox value="active" {...register('status')} />
             </div>
-            <button className="bg-red-400 hover:border-red-600 text-white w-20">Save</button>
+            <button type="submit" className="bg-red-400 hover:border-red-600 text-white w-20">Save</button>
           </div>
         </div>
         <div className="max-w-6xl mx-auto pt-14">

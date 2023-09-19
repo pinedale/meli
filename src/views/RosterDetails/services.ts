@@ -113,13 +113,13 @@ const useGetUserCourses = (id: string | null | undefined): UseQueryResult<Course
   })
 }
 
-const useDeleteMandatory = (): UseMutationResult<void, AxiosError, { user_id: string | undefined, course_id: string }> => {
+const useDeleteMandatory = (): UseMutationResult<void, AxiosError, { user_id: string, item_id: string }> => {
   const { authRequest } = useFetch();
   const queryClient = useQueryClient();
 
-  return useMutation<void, AxiosError, { user_id: string | undefined; course_id: string }>(
-    async ({ user_id, course_id }) => { 
-      await authRequest.delete(`/users/${user_id}/courses/${course_id}`);
+  return useMutation<void, AxiosError, { user_id: string; item_id: string }>(
+    async ({ user_id, item_id }) => { 
+      await authRequest.delete(`/users/${user_id}/courses/${item_id}`);
     },
     {
       onSuccess: () => {
@@ -130,5 +130,22 @@ const useDeleteMandatory = (): UseMutationResult<void, AxiosError, { user_id: st
   );
 };
 
-export { useGetUserTest, useGetUserChecklist, useGetUserCourses, useDeleteMandatory, useGetRosterInfo };
+const useDeleteChecklist = (): UseMutationResult<void, AxiosError, { user_id: string, item_id: string }> => {
+  const { authRequest } = useFetch();
+  const queryClient = useQueryClient();
+
+  return useMutation<void, AxiosError, { user_id: string; item_id: string }>(
+    async ({ user_id, item_id }) => { 
+      await authRequest.delete(`/users/${user_id}/checklists/${item_id}`);
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['user-checklist']);
+        toast.success('Successfully deleted!');
+      }
+    }
+  );
+};
+
+export { useGetUserTest, useGetUserChecklist, useGetUserCourses, useDeleteMandatory, useGetRosterInfo, useDeleteChecklist };
 export type { TestItem, ChecklistItem, CourseItem, RosterAttr } 
