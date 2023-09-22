@@ -5,7 +5,7 @@ import { useFetch } from "../../contexts/fetchProvider"
 
 const Menu = () => {
   const { organization } = useFetch()
-  console.log("🚀 ~ file: index.tsx:8 ~ Menu ~ organization:", organization)
+
   return (
     <div className="mx-auto border-gray-300 border-b border-t items-center flex justify-center">
       <ul className="flex">

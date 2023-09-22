@@ -18,7 +18,8 @@ type LoginForm = {
 }
 
 const Login: React.FC = () => {
-  const { saveToken, organization } = useFetch()
+  const { saveToken, organization, getToken } = useFetch();
+  const token = getToken();
   const { register, handleSubmit, formState: { errors } } = useForm<LoginForm>({
     defaultValues: {
       email: "",
@@ -43,7 +44,7 @@ const Login: React.FC = () => {
     mutate(values)
   });
 
-  if (organization) {
+  if (token) {
     return <Navigate to={`/organization/${organization}/roster`} />;
   }
 

@@ -18,9 +18,9 @@ const schema = yup.object({
 })
 
 type Question = {
-  id: string;
-  title: string;
-  rank: string;
+	id: string;
+	title: string;
+	rank: string;
 	section_id?: string;
 }
 
@@ -31,24 +31,24 @@ const TableSection: React.FC = () => {
 	const queryClient = useQueryClient();
 	const [sectionId, setSectionId] = useState<string>();
 	const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedItem, setSelectedItem] = useState<DeleteChecklistQuestionParams>();
+	const [selectedItem, setSelectedItem] = useState<DeleteChecklistQuestionParams>();
 	const { mutateAsync: deleteChecklistQuestion } = useDeleteChecklistQuestion();
 
 	const handleDelete = (item: DeleteChecklistQuestionParams) => {
-    setSelectedItem(item)
-    setIsModalOpen(true);
-  }
+		setSelectedItem(item)
+		setIsModalOpen(true);
+	}
 
-  const closeModal = () => {
-    setIsModalOpen(false);
-  }
+	const closeModal = () => {
+		setIsModalOpen(false);
+	}
 
-  const confirmDelete = () => {
-    if (selectedItem) {
-      deleteChecklistQuestion(selectedItem);
-      setIsModalOpen(false);
-    }
-  }
+	const confirmDelete = () => {
+		if (selectedItem) {
+			deleteChecklistQuestion(selectedItem);
+			setIsModalOpen(false);
+		}
+	}
 
 	const columns = useMemo<ColumnDef<Question>[]>(() =>
 		[
@@ -126,12 +126,11 @@ const TableSection: React.FC = () => {
 			...question,
 			section_id: section.id,
 		})),
-	}))|| [];
-	console.log("🚀 ~ file: index.tsx:123 ~ constnewArray:Section[]=data?.map ~ newArray:", newSectionData)
+	})) || [];
 
 	if (isLoading) return <div className="flex items-center"><BeatLoader color="#F98080" className="mx-auto block" /></div>
 
-	if ( data?.sections.length == 0) return <p>No sections have been added to this category. Click the + Add New Section button on the bottom right of the page.</p>
+	if (data?.sections.length == 0) return <p>No sections have been added to this category. Click the + Add New Section button on the bottom right of the page.</p>
 
 	return (
 		<div>
@@ -147,7 +146,7 @@ const TableSection: React.FC = () => {
 								onClick={() => toggleAddItem(item.id)}
 								className="border-red-500 hover:border-red-500 text-red-app focus:outline-none focus:shadow-none focus:ring-0"
 							>
-								+ Add Itemss
+								+ Add Item
 							</Button>
 						</div>
 						<div className="overflow-hidden mb-10">

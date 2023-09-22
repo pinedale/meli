@@ -16,7 +16,6 @@ const RosterTest = () => {
     const incorrectQuestionsInCategory = item.questions.filter((question: Question) => !question.is_correct);
     return acc.concat(incorrectQuestionsInCategory);
   }, []);
-  console.log("🚀 ~ file: index.tsx:18 ~ constincorrectQuestions:Question[]|undefined=data?.categories.reduce ~ incorrectQuestions:", incorrectQuestions)
 
   const resultQuestions = data?.categories?.map(category =>{
     const totalQuestions = category.questions.length;
